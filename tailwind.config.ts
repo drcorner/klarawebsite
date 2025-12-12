@@ -81,10 +81,30 @@ export default {
           busy: "rgb(239 68 68)",
           offline: "rgb(156 163 175)",
         },
+        gold: {
+          DEFAULT: "#C9A962",
+          muted: "#D4BC82",
+          dark: "#B8943D",
+        },
+        cream: {
+          DEFAULT: "#FAF8F5",
+          dark: "#F0EDEA",
+          darker: "#E8E4E0",
+        },
+        teal: {
+          DEFAULT: "#1E4D4A",
+          hover: "#163B39",
+          light: "#2A6B66",
+        },
+        charcoal: {
+          DEFAULT: "#2D2A27",
+          muted: "#5C5652",
+          light: "#8A847E",
+        },
       },
       fontFamily: {
-        sans: ["var(--font-sans)"],
-        serif: ["var(--font-serif)"],
+        sans: ["'IBM Plex Sans'", "var(--font-sans)", "sans-serif"],
+        serif: ["'Source Serif 4'", "Georgia", "serif"],
         mono: ["var(--font-mono)"],
       },
       keyframes: {
