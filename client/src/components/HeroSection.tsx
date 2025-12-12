@@ -27,8 +27,8 @@ export default function HeroSection() {
             Help the Church Respond.
           </h1>
           <p className="mt-6 text-lg md:text-xl text-cream-dark/90 leading-relaxed">
-            Curriculum for pastors. Guides for parents. Programs for the generations who will 
-            live with AI longest. Join us from the start.
+            We're building curriculum for pastors, guides for parents, and programs that develop 
+            the next generation of Christian leaders. Join us from the start.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
             <Link href="/get-involved">

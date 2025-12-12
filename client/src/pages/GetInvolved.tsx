@@ -36,7 +36,7 @@ export default function GetInvolved() {
   };
 
   const shareUrl = encodeURIComponent("https://klaraproject.org");
-  const shareText = encodeURIComponent("Check out The Klara Project - equipping churches for the AI age.");
+  const shareText = encodeURIComponent("Check out Klara Project - equipping churches for the AI age.");
 
   return (
     <div className="min-h-screen bg-cream">

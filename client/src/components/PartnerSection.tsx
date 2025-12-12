@@ -101,7 +101,7 @@ export default function PartnerSection() {
                 />
               </div>
               <p className="text-sm text-charcoal-muted">
-                We'll send you the white paper and occasional updates on The Klara Project's work. 
+                We'll send you the white paper and occasional updates on Klara Project's work. 
                 You can unsubscribe at any time.
               </p>
               <Button 

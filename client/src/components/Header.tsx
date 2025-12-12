@@ -6,7 +6,7 @@ import Logo from "./Logo";
 
 const navItems = [
   { label: "Home", href: "/" },
-  { label: "Why The Klara Project?", href: "/why-klara-project" },
+  { label: "Why Klara Project?", href: "/why-klara-project" },
   { label: "Resources", href: "/resources" },
   { label: "Get Involved", href: "/get-involved" },
 ];

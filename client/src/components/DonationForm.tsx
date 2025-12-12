@@ -168,7 +168,7 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
 
       <div className="bg-cream-dark border border-border rounded-lg p-4 text-center">
         <p className="text-charcoal-muted text-sm">
-          The Klara Project has applied for 501(c)(3) tax-exempt status. Upon approval, 
+          Klara Project has applied for 501(c)(3) tax-exempt status. Upon approval, 
           donations will be tax-deductible retroactive to our date of incorporation. 
           We will notify donors when approval is received.
         </p>

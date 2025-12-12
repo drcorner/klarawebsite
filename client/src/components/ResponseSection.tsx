@@ -12,7 +12,7 @@ export default function ResponseSection() {
           </h2>
           
           <p className="text-charcoal leading-relaxed text-lg mb-6">
-            The Klara Project takes a two-part approach. First, we <strong>equip</strong> churches 
+            Klara Project takes a two-part approach. First, we <strong>equip</strong> churches 
             with practical resources—curricula, conversation guides, and pastoral frameworks that 
             help congregations think clearly about AI.
           </p>

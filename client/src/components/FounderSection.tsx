@@ -9,7 +9,7 @@ export default function FounderSection() {
             <div className="absolute -left-4 top-0 bottom-0 w-1 bg-gold rounded-full" />
             <img 
               src={founderImage} 
-              alt="Dr. Anthony R. Pisani, Founder of The Klara Project" 
+              alt="Dr. Anthony R. Pisani, Founder of Klara Project" 
               className="w-full max-w-md mx-auto lg:mx-0 rounded-lg shadow-lg"
             />
             <p className="mt-2 text-charcoal-light text-xs text-center lg:text-left">
@@ -23,7 +23,7 @@ export default function FounderSection() {
             </h2>
             
             <p className="text-charcoal leading-relaxed mb-4">
-              The idea for The Klara Project was born when Dr. Pisani taught a Sunday school class 
+              The idea for Klara Project was born when Dr. Pisani taught a Sunday school class 
               on faith and AI and watched people young and old leave encouraged—strengthened in their 
               faith and in the reality that the core of our humanity is relationship with God, not 
               our reason or abilities.
@@ -44,7 +44,7 @@ export default function FounderSection() {
             </p>
             
             <p className="text-charcoal-muted leading-relaxed text-sm italic">
-              The Klara Project is co-located with SafeSide's full-service production studio, 
+              Klara Project is co-located with SafeSide's full-service production studio, 
               providing immediate access to professional video production and communications infrastructure.
             </p>
           </div>

@@ -6,7 +6,7 @@ import Logo from "./Logo";
 
 const navLinks = [
   { label: "Home", href: "/" },
-  { label: "Why The Klara Project?", href: "/why-klara-project" },
+  { label: "Why Klara Project?", href: "/why-klara-project" },
   { label: "Resources", href: "/resources" },
   { label: "Get Involved", href: "/get-involved" },
   { label: "Donate", href: "/donate" },
@@ -80,10 +80,10 @@ export default function Footer() {
 
         <div className="border-t border-charcoal-light/30 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-cream-dark/50 text-sm text-center md:text-left">
-            © 2025 The Klara Project. All rights reserved.
+            © 2025 Klara Project. All rights reserved.
             <br className="md:hidden" />
             <span className="hidden md:inline"> · </span>
-            The Klara Project operates Christians for Responsible AI and Robotics.
+            Klara Project operates Christians for Responsible AI and Robotics.
           </p>
           <nav className="flex gap-4">
             {legalLinks.map((link) => (

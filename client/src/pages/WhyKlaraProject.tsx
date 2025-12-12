@@ -33,7 +33,7 @@ export default function WhyKlaraProject() {
       <Header />
       <main>
         <PageHero 
-          title="Why The Klara Project?" 
+          title="Why Klara Project?" 
           subtitle="Filling a gap no one else is filling"
           variant="image"
           imageSrc={churchImage}
@@ -48,7 +48,7 @@ export default function WhyKlaraProject() {
               <p className="text-charcoal leading-relaxed mb-4">
                 Other faith-based organizations address technology ethics at the policy or academic level. 
                 The Ethics and Religious Liberty Commission, the Center for Public Justice, various Catholic 
-                initiatives—we welcome their work. But The Klara Project fills a different gap.
+                initiatives—we welcome their work. But Klara Project fills a different gap.
               </p>
               <p className="text-charcoal leading-relaxed mb-4">
                 We focus on <strong>practical equipping for local churches</strong> while building toward 

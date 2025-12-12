@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card";
 
 export default function DonateThankYou() {
   const shareUrl = encodeURIComponent("https://klaraproject.org");
-  const shareText = encodeURIComponent("I just supported The Klara Project - equipping churches for the AI age. Join me!");
+  const shareText = encodeURIComponent("I just supported Klara Project - equipping churches for the AI age. Join me!");
 
   return (
     <div className="min-h-screen bg-cream">

@@ -46,7 +46,7 @@ export default function TermsOfService() {
               </h2>
               <p className="text-charcoal leading-relaxed mb-6">
                 All content on this website, including text, graphics, logos, and downloadable 
-                resources, is the property of The Klara Project and is protected by copyright 
+                resources, is the property of Klara Project and is protected by copyright 
                 laws. Our resources may be shared within church settings with proper attribution 
                 but may not be sold or used for commercial purposes.
               </p>
@@ -55,7 +55,7 @@ export default function TermsOfService() {
                 Donations
               </h2>
               <p className="text-charcoal leading-relaxed mb-4">
-                Donations to The Klara Project are generally non-refundable. However, we understand 
+                Donations to Klara Project are generally non-refundable. However, we understand 
                 that circumstances may change. If you have concerns about a donation, please 
                 contact us at{" "}
                 <a href="mailto:info@klaraproject.org" className="text-teal underline">
@@ -64,7 +64,7 @@ export default function TermsOfService() {
                 , and we will work with you to address your situation.
               </p>
               <p className="text-charcoal leading-relaxed mb-6">
-                The Klara Project has applied for 501(c)(3) tax-exempt status. Upon approval, 
+                Klara Project has applied for 501(c)(3) tax-exempt status. Upon approval, 
                 donations will be tax-deductible retroactive to our date of incorporation.
               </p>
 
