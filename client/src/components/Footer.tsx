@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { Mail } from "lucide-react";
+import { Mail, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Logo from "./Logo";
@@ -19,27 +19,24 @@ const legalLinks = [
 
 export default function Footer() {
   return (
-    <footer className="bg-charcoal text-cream-dark">
-      <div className="max-w-7xl mx-auto px-6 md:px-10 py-16 md:py-20">
+    <footer className="bg-charcoal text-cream">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div className="lg:col-span-2">
             <Logo variant="light" />
-            <p className="mt-4 text-cream-dark/80 font-serif italic">
-              Clarity for Christians in the Age of AI
-            </p>
-            <p className="mt-4 text-cream-dark/70 text-sm leading-relaxed max-w-md">
+            <p className="mt-4 text-cream/60 text-sm leading-relaxed max-w-md">
               Equipping churches with practical resources. Engaging the culture to ensure 
               Christian perspectives shape technology development.
             </p>
           </div>
 
           <div>
-            <h4 className="font-semibold text-cream mb-4">Navigation</h4>
+            <h4 className="font-semibold text-cream mb-4 text-sm uppercase tracking-wide">Navigation</h4>
             <nav className="flex flex-col gap-2">
               {navLinks.map((link) => (
                 <Link key={link.href} href={link.href}>
                   <span 
-                    className="text-cream-dark/70 hover:text-cream transition-colors text-sm"
+                    className="text-cream/60 hover:text-teal-light transition-colors text-sm"
                     data-testid={`footer-nav-${link.label.toLowerCase().replace(/\s+/g, '-')}`}
                   >
                     {link.label}
@@ -50,46 +47,47 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold text-cream mb-4">Stay Informed</h4>
-            <p className="text-cream-dark/70 text-sm mb-4">
-              Get updates on resources and opportunities to engage.
+            <h4 className="font-semibold text-cream mb-4 text-sm uppercase tracking-wide">Stay Informed</h4>
+            <p className="text-cream/60 text-sm mb-4">
+              Get updates on resources and opportunities.
             </p>
             <div className="flex gap-2">
               <Input 
                 type="email" 
                 placeholder="Your email" 
-                className="bg-charcoal-muted/50 border-charcoal-light/30 text-cream placeholder:text-cream-dark/50"
+                className="bg-cream/10 border-cream/20 text-cream placeholder:text-cream/40 rounded-full text-sm"
                 data-testid="input-footer-email"
               />
-              <Button className="bg-teal text-cream shrink-0" data-testid="button-footer-subscribe">
-                <Mail className="h-4 w-4" />
+              <Button size="icon" className="bg-teal-light text-cream shrink-0 rounded-full" data-testid="button-footer-subscribe">
+                <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
             <div className="mt-6">
-              <h4 className="font-semibold text-cream mb-2">Contact</h4>
+              <h4 className="font-semibold text-cream mb-2 text-sm uppercase tracking-wide">Contact</h4>
               <a 
                 href="mailto:info@klaraproject.org" 
-                className="text-cream-dark/70 hover:text-cream transition-colors text-sm"
+                className="text-teal-light hover:text-teal-light/80 transition-colors text-sm inline-flex items-center gap-1"
                 data-testid="link-contact-email"
               >
+                <Mail className="h-4 w-4" />
                 info@klaraproject.org
               </a>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-charcoal-light/30 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-cream-dark/50 text-sm text-center md:text-left">
+        <div className="border-t border-cream/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-cream/40 text-sm text-center md:text-left">
             © 2025 Klara Project. All rights reserved.
-            <br className="md:hidden" />
             <span className="hidden md:inline"> · </span>
-            Klara Project operates Christians for Responsible AI and Robotics.
+            <br className="md:hidden" />
+            Operating Christians for Responsible AI and Robotics.
           </p>
           <nav className="flex gap-4">
             {legalLinks.map((link) => (
               <Link key={link.href} href={link.href}>
                 <span 
-                  className="text-cream-dark/50 hover:text-cream transition-colors text-sm"
+                  className="text-cream/40 hover:text-cream transition-colors text-sm"
                   data-testid={`footer-legal-${link.label.toLowerCase().replace(/\s+/g, '-')}`}
                 >
                   {link.label}
