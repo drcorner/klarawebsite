@@ -23,16 +23,16 @@ export default function Header() {
           <nav className="hidden md:flex items-center gap-1">
             {navItems.map((item) => (
               <Link key={item.href} href={item.href}>
-                <button
-                  className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
-                    location === item.href 
-                      ? "bg-teal text-cream" 
-                      : "text-charcoal-muted hover:text-charcoal hover:bg-charcoal/5"
+                <Button
+                  variant={location === item.href ? "secondary" : "ghost"}
+                  size="sm"
+                  className={`rounded-full ${
+                    location === item.href ? "bg-teal text-cream" : ""
                   }`}
                   data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
                 >
                   {item.label}
-                </button>
+                </Button>
               </Link>
             ))}
             <Link href="/donate">
@@ -62,27 +62,29 @@ export default function Header() {
         <div className="md:hidden fixed inset-0 top-16 bg-cream z-40">
           <nav className="flex flex-col p-6 gap-1">
             <Link href="/">
-              <button
-                className={`w-full text-left px-4 py-3 rounded-xl text-lg font-medium transition-colors ${
-                  location === "/" ? "bg-teal text-cream" : "text-charcoal"
+              <Button
+                variant={location === "/" ? "secondary" : "ghost"}
+                className={`w-full justify-start text-lg rounded-xl ${
+                  location === "/" ? "bg-teal text-cream" : ""
                 }`}
                 onClick={() => setIsMenuOpen(false)}
                 data-testid="mobile-nav-home"
               >
                 Home
-              </button>
+              </Button>
             </Link>
             {navItems.map((item) => (
               <Link key={item.href} href={item.href}>
-                <button
-                  className={`w-full text-left px-4 py-3 rounded-xl text-lg font-medium transition-colors ${
-                    location === item.href ? "bg-teal text-cream" : "text-charcoal"
+                <Button
+                  variant={location === item.href ? "secondary" : "ghost"}
+                  className={`w-full justify-start text-lg rounded-xl ${
+                    location === item.href ? "bg-teal text-cream" : ""
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                   data-testid={`mobile-nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
                 >
                   {item.label}
-                </button>
+                </Button>
               </Link>
             ))}
             <Link href="/donate">

@@ -1,6 +1,4 @@
-import { useState } from "react";
-import { ChevronLeft, ChevronRight, User, Briefcase, Heart, MessageCircle, GraduationCap, Users, Code, Church } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { User, Briefcase, Heart, MessageCircle, GraduationCap, Users, Code, Church } from "lucide-react";
 
 const challenges = [
   {
@@ -54,15 +52,8 @@ const challenges = [
 ];
 
 export default function ChallengeSection() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const visibleCards = 3;
-  const maxIndex = Math.max(0, challenges.length - visibleCards);
-
-  const next = () => setCurrentIndex(i => Math.min(i + 1, maxIndex));
-  const prev = () => setCurrentIndex(i => Math.max(i - 1, 0));
-
   return (
-    <section id="challenge-section" className="bg-gradient-to-b from-cream to-cream-dark py-20 md:py-28 overflow-hidden">
+    <section id="challenge-section" className="bg-gradient-to-b from-cream to-cream-dark py-20 md:py-28">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="text-center mb-12">
           <span className="inline-block px-4 py-1.5 rounded-full bg-coral/10 text-coral text-sm font-semibold mb-4">
@@ -76,65 +67,25 @@ export default function ChallengeSection() {
           </p>
         </div>
 
-        <div className="relative">
-          <div className="hidden md:flex items-center gap-2 absolute -top-16 right-0">
-            <Button 
-              size="icon" 
-              variant="outline" 
-              onClick={prev}
-              disabled={currentIndex === 0}
-              className="rounded-full border-charcoal/20"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            <Button 
-              size="icon" 
-              variant="outline" 
-              onClick={next}
-              disabled={currentIndex >= maxIndex}
-              className="rounded-full border-charcoal/20"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
-
-          <div className="overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {challenges.map((item, index) => (
             <div 
-              className="flex gap-4 transition-transform duration-500 ease-out"
-              style={{ transform: `translateX(-${currentIndex * (100 / visibleCards + 1.5)}%)` }}
+              key={index}
+              className="p-5 rounded-2xl bg-cream border border-charcoal/5 shadow-sm hover:shadow-md hover:border-teal/20 transition-all duration-300"
             >
-              {challenges.map((item, index) => (
-                <div 
-                  key={index}
-                  className="flex-shrink-0 w-full md:w-[calc(33.333%-12px)] p-6 rounded-2xl bg-cream border border-border/50 shadow-sm hover:shadow-md transition-all duration-300"
-                >
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className={`w-10 h-10 rounded-xl ${item.color} flex items-center justify-center`}>
-                      <item.icon className="h-5 w-5" />
-                    </div>
-                    <span className="text-sm font-semibold text-charcoal-muted uppercase tracking-wide">
-                      {item.category}
-                    </span>
-                  </div>
-                  <p className="text-charcoal leading-relaxed">
-                    {item.story}
-                  </p>
+              <div className="flex items-center gap-3 mb-3">
+                <div className={`w-9 h-9 rounded-xl ${item.color} flex items-center justify-center`}>
+                  <item.icon className="h-4 w-4" />
                 </div>
-              ))}
+                <span className="text-xs font-semibold text-charcoal-muted uppercase tracking-wide">
+                  {item.category}
+                </span>
+              </div>
+              <p className="text-charcoal text-sm leading-relaxed">
+                {item.story}
+              </p>
             </div>
-          </div>
-
-          <div className="flex justify-center gap-2 mt-8 md:hidden">
-            {challenges.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`w-2 h-2 rounded-full transition-colors ${
-                  currentIndex === index ? "bg-teal" : "bg-charcoal/20"
-                }`}
-              />
-            ))}
-          </div>
+          ))}
         </div>
 
         <blockquote className="mt-16 max-w-2xl mx-auto text-center">

@@ -1,96 +1,116 @@
-# The Klara Project - Design Guidelines
+# Klara Project - Design Guidelines
 
 ## Design Philosophy
-**"Grounded Clarity"** - Warm, human, trustworthy. Visual language of an established institution that takes its mission seriously. Not cold, clinical, trendy, or flashy. Think: well-designed university press publication meets thoughtful nonprofit annual report.
+**"Modern Credibility"** - Clean, contemporary, and trustworthy. The visual language of a forward-thinking organization that takes its mission seriously. Not cold or clinical, but warm and approachable. Think: modern tech nonprofit meets thoughtful startup annual report.
 
 **Critical Constraint**: Must NOT look AI-generated. The mission addresses AI and human dignity concerns - generic AI aesthetics undermine credibility. Every design choice emphasizes human, relational nature of the mission.
 
 ## Color System
 
 **Backgrounds**
-- Primary: `#FAF8F5` (warm cream - main background)
-- Secondary: `#F0EDEA` (soft warm gray - section alternates)
-- Accent: `#E8E4E0` (slightly darker warm gray - cards)
+- Primary: `#FAFAFA` (clean off-white - main background)
+- Secondary: `#F5F5F5` (soft gray - section alternates)
+- Accent: `#EBEBEB` (light gray - cards, subtle)
 
 **Text**
-- Primary: `#2D2A27` (deep warm charcoal - body)
-- Secondary: `#5C5652` (muted charcoal - secondary)
-- Muted: `#8A847E` (light charcoal - captions, metadata)
+- Primary: `#1E293B` (deep slate - body)
+- Secondary: `#475569` (muted slate - secondary)
+- Muted: `#64748B` (light slate - captions, metadata)
 
-**Accent Colors**
-- Primary: `#1E4D4A` (deep teal-green - buttons, links)
-- Primary Hover: `#163B39` (darker teal)
-- Secondary: `#C9A962` (warm gold - highlights, special elements)
-- Secondary Muted: `#D4BC82` (lighter gold backgrounds)
+**Brand Colors**
+- Teal Primary: `#0F766E` (vibrant teal - buttons, links)
+- Teal Light: `#14B8A6` (bright teal - accents, gradients)
+- Teal Dark: `#0A5752` (deep teal - hover states, gradients)
+- Gold: `#E8A850` (warm amber-gold - highlights, statistics)
+- Coral: `#F97316` (vibrant orange - badges, alerts)
 
 **Functional**
-- Success: `#2E7D4A`, Error: `#A63D3D`
-- Border: `#DDD8D3`, Border Light: `#EBE7E3`
+- Success: `#16A34A`, Error: `#DC2626`
+- Border: `#E2E8F0`
 
 **Usage Rules**:
-- Alternate cream background with warm gray for visual rhythm between sections
-- Deep teal for all interactive elements
-- Gold used sparingly for key statistics, pull quotes, founder section accents
-- Never use pure white or pure black
+- Use gradient treatments on buttons and icons for depth
+- Teal for all interactive elements
+- Gold/coral used sparingly for key statistics, badges, status indicators
+- Alternating background sections for visual rhythm
+- Never use pure white (#FFFFFF) or pure black (#000000)
 
 ## Typography
 
-**Fonts**: Source Serif 4 (headings), IBM Plex Sans (body/UI)
+**Fonts**: IBM Plex Sans (all text, including headings for modern feel)
 
 **Type Scale**:
-- H1: 3rem (2.25rem mobile), line-height 1.1, weight 700, letter-spacing -0.02em
-- H2: 2.25rem (1.75rem mobile), line-height 1.2, weight 600, letter-spacing -0.01em
+- Hero: 4.5rem (3rem mobile), font-weight 800, letter-spacing -0.02em
+- H1: 3rem (2.25rem mobile), line-height 1.1, weight 700
+- H2: 2.25rem (1.75rem mobile), line-height 1.2, weight 700
 - H3: 1.5rem (1.25rem mobile), line-height 1.3, weight 600
 - H4: 1.25rem, line-height 1.4, weight 600
 - Body Large: 1.25rem, line-height 1.6
-- Body: 1.0625rem (17px), line-height 1.7
-- Body Small: 0.9375rem, line-height 1.6
-- Caption: 0.8125rem, line-height 1.5
+- Body: 1rem, line-height 1.7
+- Body Small: 0.875rem, line-height 1.6
+- Caption: 0.75rem, line-height 1.5
+
+**Special Treatments**:
+- Hero headlines use gradient text effects where impactful
+- Serif (Source Serif 4) reserved for quotes and scripture only
 
 ## Spacing System
-8px base grid: 4px, 8px, 12px, 16px, 24px, 32px, 48px, 64px, 96px, 128px
+4px base grid: 4px, 8px, 12px, 16px, 20px, 24px, 32px, 48px, 64px, 80px, 96px
 
 **Section Spacing**:
-- Between major sections: 96px desktop, 64px mobile
+- Between major sections: 112px desktop, 80px mobile
 - Within sections: 48px
-- Between related elements: 24px
+- Between related elements: 20px
 
 ## Components
 
-**Primary Button**: Deep teal background, white text, IBM Plex Sans 600 weight, 1rem, padding 0.875rem × 1.75rem, 6px border-radius, subtle shadow, hover lifts 1px with deeper shadow
+**Primary Button**: Gradient background (teal to teal-dark), cream text, IBM Plex Sans 600 weight, rounded-full, subtle shadow, hover deepens gradient
 
-**Secondary Button**: Transparent with 2px teal border, teal text, same typography, fills teal on hover with white text
+**Secondary Button**: Transparent with teal border, teal text, rounded-full, fills teal on hover
 
-**Cards**: White background, 8px border-radius, subtle shadow, 1px light border, 32px padding
+**Cards**: 
+- Clean white background
+- Rounded-2xl (16px radius)
+- Subtle shadow on hover
+- Light border (charcoal/5)
+- 24px padding
 
-**Input Fields**: 1rem IBM Plex Sans, 0.875rem × 1rem padding, 1px border, 6px radius, white background, teal focus ring
+**Badges/Pills**: Rounded-full, small text, background with 10% opacity of accent color
+
+**Icon Containers**: Gradient backgrounds (from-teal to-teal-light), rounded-xl or rounded-2xl, shadow-sm
 
 ## Layout
-- Max width: 1200px content
-- Gutters: 24px (48px total mobile padding, 80px desktop)
+- Max width: 1280px content
+- Gutters: 16px mobile, 32px desktop
 - 12-column grid desktop, single/2-column mobile
 - Breakpoints: 640px, 768px, 1024px, 1280px
 
 ## Logo
-Typographic treatment until professional logo: "THE KLARA PROJECT" in Source Serif 4 600 weight, "THE" smaller above "KLARA PROJECT", deep teal color
+Modern treatment: "K" icon badge with gradient background + "Klara Project" text + "Clarity for the AI Age" tagline
 
 ## Images
-**Hero Sections**: Use warm, human imagery - people in thoughtful discussion, parents with children, church settings, students engaged in learning. Avoid stock photo clichés and tech imagery. Images should convey warmth, community, and intellectual engagement.
+**Hero Sections**: Use warm, human imagery - people in thoughtful discussion, parents with children, church settings. Images should convey warmth, community, and intellectual engagement.
 
-**Throughout Site**: Authentic photography showing real people, church environments, family settings. Every image should reinforce human dignity and relational mission.
+**Image Treatment**: Strong gradient overlays for text legibility, gradient goes from dark (content side) to transparent
 
-**Hero Image Treatment**: Large, impactful hero images with overlaid text. Buttons on images use blurred backgrounds, no hover/active modifications (buttons handle their own states).
+## Visual Effects
+- Gradient text for hero headlines
+- Gradient backgrounds on icons and CTAs
+- Subtle shadows that deepen on hover
+- Smooth transitions (300ms ease)
+- Backdrop blur on overlays
+- Animated elements (pulse on status indicators, bounce on scroll hints)
 
 ## Page-Specific Notes
 
-**Homepage**: Hero with compelling imagery, mission overview, key statistics in gold accents, founder introduction with photo, multiple donation CTAs throughout
+**Homepage**: Bold hero with gradient text, scrolling challenge cards, dark statistics section with colorful gradient icons, founder section with image treatment
 
-**Why Klara**: Mission-focused with faith statement, differentiators presented clearly, theory of change visualization
+**Why Klara**: Mission-focused with faith statement, two-column Equip/Engage approach
 
-**Resources**: Clean library layout with downloadable white paper, curriculum previews
+**Resources**: Grid layout with status badges
 
-**Donate**: Prominent, trust-building with clear giving levels ($10-$25,000+), monthly recurring emphasis, Stripe integration
+**Donate**: Trust-building with clear giving levels, Stripe integration
 
-**Get Involved**: Essay competition, student grants, volunteer opportunities prominently featured
+**Get Involved**: Essay competition, student grants prominently featured
 
-All pages maintain warm, scholarly aesthetic with generous whitespace and clear hierarchy.
+All pages maintain modern, approachable aesthetic with generous whitespace and clear hierarchy.
