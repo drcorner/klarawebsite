@@ -1,5 +1,5 @@
 import { Quote } from "lucide-react";
-import founderImage from "@assets/generated_images/professional_male_founder_headshot.png";
+import founderImage from "@assets/Pisani-SpeakingPhoto1_1765542350944.jpeg";
 
 export default function FounderSection() {
   return (
@@ -15,9 +15,6 @@ export default function FounderSection() {
                 className="relative w-full max-w-md mx-auto lg:mx-0 rounded-2xl shadow-xl"
               />
             </div>
-            <p className="mt-3 text-charcoal-light text-xs text-center lg:text-left">
-              Image generated with AI - placeholder for founder photo
-            </p>
           </div>
           
           <div className="order-1 lg:order-2">

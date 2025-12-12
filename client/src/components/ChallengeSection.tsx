@@ -1,8 +1,14 @@
-import { User, Briefcase, Heart, MessageCircle, GraduationCap, Users, Code, Church } from "lucide-react";
+import { Church, Briefcase, Heart, Bot, Baby, User, Code } from "lucide-react";
 
 const challenges = [
   {
-    icon: GraduationCap,
+    icon: Church,
+    category: "Ministry",
+    story: "A pastor uses AI to draft his sermons, saying it frees him for counseling and hospital visits. But part of him misses the wrestling he used to do alone with the text.",
+    color: "bg-teal/10 text-teal",
+  },
+  {
+    icon: Baby,
     category: "Parenting",
     story: "A father learns his teenage son has been using AI to complete school assignments. Is this cheating—or just using a new tool? He wants his son to develop his own thinking, but he also uses AI at work. Where's the line?",
     color: "bg-teal-light/10 text-teal",
@@ -26,28 +32,16 @@ const challenges = [
     color: "bg-red-100 text-red-600",
   },
   {
-    icon: MessageCircle,
-    category: "Dating",
-    story: "A college student admits he finds it easier to talk to AI than to date. He's not sure he sees the point of the awkwardness when a chatbot is always available and never disappoints.",
+    icon: Bot,
+    category: "AI Relationships",
+    story: "A college student admits he finds it easier to talk to an AI girlfriend than to date. He wants a real girlfriend, but it's awkward and the Christian women he meets aren't interested in him.",
     color: "bg-purple-100 text-purple-600",
-  },
-  {
-    icon: Users,
-    category: "Belonging",
-    story: "A retired elder who once led the finance committee now can't follow conversations about AI. He feels invisible in a church that used to need him.",
-    color: "bg-blue-100 text-blue-600",
   },
   {
     icon: Code,
     category: "Ethics",
     story: "A software engineer is building AI systems at work. She's proud of what she's creating—but lately wonders if she should be. She doesn't know how to think Christianly about it, and no one at church has asked.",
     color: "bg-green-100 text-green-600",
-  },
-  {
-    icon: Church,
-    category: "Ministry",
-    story: "A pastor uses AI to draft his sermons, saying it frees him for counseling and hospital visits. But part of him misses the wrestling he used to do alone with the text.",
-    color: "bg-teal/10 text-teal",
   },
 ];
 
@@ -59,19 +53,16 @@ export default function ChallengeSection() {
           <span className="inline-block px-4 py-1.5 rounded-full bg-coral/10 text-coral text-sm font-semibold mb-4">
             The Challenge
           </span>
-          <h2 className="font-sans text-3xl md:text-4xl font-bold text-charcoal mb-4">
-            These are real situations
+          <h2 className="font-sans text-3xl md:text-4xl font-bold text-charcoal">
+            New challenges in the Age of AI
           </h2>
-          <p className="text-charcoal-muted max-w-2xl mx-auto">
-            Faithful Christians are already facing questions no one taught them to answer.
-          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {challenges.map((item, index) => (
             <div 
               key={index}
-              className="p-5 rounded-2xl bg-cream border border-charcoal/5 shadow-sm hover:shadow-md hover:border-teal/20 transition-all duration-300"
+              className={`p-5 rounded-2xl bg-cream border border-charcoal/5 shadow-sm hover:shadow-md hover:border-teal/20 transition-all duration-300 ${index === 6 ? 'lg:col-start-2' : ''}`}
             >
               <div className="flex items-center gap-3 mb-3">
                 <div className={`w-9 h-9 rounded-xl ${item.color} flex items-center justify-center`}>

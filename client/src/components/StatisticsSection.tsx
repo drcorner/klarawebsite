@@ -1,9 +1,9 @@
-import { TrendingUp, Users, Briefcase } from "lucide-react";
+import { TrendingUp, Users, Shuffle } from "lucide-react";
 
 const stats = [
   {
     icon: TrendingUp,
-    value: "2026–2027",
+    value: "2026–2030",
     label: "Leading AI companies predict human-level capabilities within this timeframe",
     gradient: "from-teal-light to-teal",
   },
@@ -15,7 +15,7 @@ const stats = [
     gradient: "from-coral to-gold",
   },
   {
-    icon: Briefcase,
+    icon: Shuffle,
     value: "12–14%",
     label: "Share of workers who may need to transition to entirely new occupations by 2030",
     gradient: "from-gold to-coral",
