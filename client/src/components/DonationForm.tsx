@@ -185,7 +185,7 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
             infrastructure that enables sustainable growth.
           </p>
           
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 mb-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
             {foundingAmounts.map((amount) => (
               <Button
                 key={amount}
@@ -202,8 +202,12 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
               </Button>
             ))}
           </div>
+        </Card>
+      )}
 
-          <p className="text-charcoal-muted text-sm mb-4">
+      {showFoundingGifts && (
+        <div className="text-center p-6 rounded-lg border border-charcoal/10 bg-cream">
+          <p className="text-charcoal mb-4">
             Want to learn more before giving? We'd welcome the chance to share our plans 
             and answer your questions.
           </p>
@@ -215,7 +219,7 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
           >
             Schedule a Conversation with Our Founder
           </Button>
-        </Card>
+        </div>
       )}
     </div>
   );

@@ -59,45 +59,51 @@ export default function Header() {
       </div>
 
       {isMenuOpen && (
-        <div className="md:hidden fixed inset-0 top-16 bg-cream z-40">
-          <nav className="flex flex-col p-6 gap-1">
-            <Link href="/">
-              <Button
-                variant={location === "/" ? "secondary" : "ghost"}
-                className={`w-full justify-start text-lg rounded-xl ${
-                  location === "/" ? "bg-teal text-cream" : ""
-                }`}
-                onClick={() => setIsMenuOpen(false)}
-                data-testid="mobile-nav-home"
-              >
-                Home
-              </Button>
-            </Link>
-            {navItems.map((item) => (
-              <Link key={item.href} href={item.href}>
+        <>
+          <div 
+            className="md:hidden fixed inset-0 top-16 bg-charcoal/50 z-40"
+            onClick={() => setIsMenuOpen(false)}
+          />
+          <div className="md:hidden fixed left-0 right-0 top-16 bg-cream z-50 border-b border-charcoal/10 shadow-lg">
+            <nav className="flex flex-col p-4 gap-1 max-h-[calc(100vh-4rem)] overflow-y-auto">
+              <Link href="/">
                 <Button
-                  variant={location === item.href ? "secondary" : "ghost"}
+                  variant={location === "/" ? "secondary" : "ghost"}
                   className={`w-full justify-start text-lg rounded-xl ${
-                    location === item.href ? "bg-teal text-cream" : ""
+                    location === "/" ? "bg-teal text-cream" : ""
                   }`}
                   onClick={() => setIsMenuOpen(false)}
-                  data-testid={`mobile-nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
+                  data-testid="mobile-nav-home"
                 >
-                  {item.label}
+                  Home
                 </Button>
               </Link>
-            ))}
-            <Link href="/donate">
-              <Button 
-                className="w-full mt-4 bg-gradient-to-r from-teal to-teal-dark text-cream font-semibold text-lg rounded-full"
-                onClick={() => setIsMenuOpen(false)}
-                data-testid="mobile-nav-donate"
-              >
-                Donate
-              </Button>
-            </Link>
-          </nav>
-        </div>
+              {navItems.map((item) => (
+                <Link key={item.href} href={item.href}>
+                  <Button
+                    variant={location === item.href ? "secondary" : "ghost"}
+                    className={`w-full justify-start text-lg rounded-xl ${
+                      location === item.href ? "bg-teal text-cream" : ""
+                    }`}
+                    onClick={() => setIsMenuOpen(false)}
+                    data-testid={`mobile-nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
+                  >
+                    {item.label}
+                  </Button>
+                </Link>
+              ))}
+              <Link href="/donate">
+                <Button 
+                  className="w-full mt-4 bg-gradient-to-r from-teal to-teal-dark text-cream font-semibold text-lg rounded-full"
+                  onClick={() => setIsMenuOpen(false)}
+                  data-testid="mobile-nav-donate"
+                >
+                  Donate
+                </Button>
+              </Link>
+            </nav>
+          </div>
+        </>
       )}
     </header>
   );
