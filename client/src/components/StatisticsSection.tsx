@@ -9,8 +9,7 @@ const stats = [
   },
   {
     icon: Users,
-    value: "14M",
-    suffix: " jobs",
+    value: "14 Million",
     label: "Net job loss forecast by the World Economic Forum by 2027",
     gradient: "from-coral to-gold",
   },
@@ -46,7 +45,6 @@ export default function StatisticsSection() {
               </div>
               <p className={`text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent`}>
                 {stat.value}
-                {stat.suffix && <span className="text-2xl opacity-70">{stat.suffix}</span>}
               </p>
               <p className="mt-4 text-cream/70 leading-relaxed text-sm">
                 {stat.label}

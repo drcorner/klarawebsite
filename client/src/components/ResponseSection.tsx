@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { ArrowRight, Compass, Globe } from "lucide-react";
+import { ArrowRight, BookOpen, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function ResponseSection() {
@@ -18,7 +18,7 @@ export default function ResponseSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-12">
           <div className="p-8 rounded-2xl bg-cream border border-charcoal/5 shadow-sm hover:shadow-md transition-shadow">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal to-teal-light flex items-center justify-center mb-6 shadow-sm">
-              <Compass className="h-7 w-7 text-cream" />
+              <BookOpen className="h-7 w-7 text-cream" />
             </div>
             <h3 className="font-bold text-xl text-charcoal mb-3">Equip</h3>
             <p className="text-charcoal-muted leading-relaxed">

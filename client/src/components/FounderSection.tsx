@@ -37,7 +37,7 @@ export default function FounderSection() {
             <p className="text-charcoal leading-relaxed mb-4">
               <strong className="text-charcoal">Anthony R. Pisani, Ph.D.</strong>, is a clinical psychologist, internationally 
               recognized leader in suicide prevention, and entrepreneur. A committed Christian, he 
-              came to faith as an adult while in graduate school. He has been married 25 years and 
+              came to faith as an adult while in graduate school. He has been married for 25 years and 
               is the father of three.
             </p>
             

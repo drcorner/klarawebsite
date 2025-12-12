@@ -62,7 +62,7 @@ export default function ChallengeSection() {
           {challenges.map((item, index) => (
             <div 
               key={index}
-              className={`p-5 rounded-2xl bg-cream border border-charcoal/5 shadow-sm hover:shadow-md hover:border-teal/20 transition-all duration-300 ${index === 6 ? 'lg:col-start-2' : ''}`}
+              className="p-5 rounded-2xl bg-cream border border-charcoal/5 shadow-sm hover:shadow-md hover:border-teal/20 transition-all duration-300"
             >
               <div className="flex items-center gap-3 mb-3">
                 <div className={`w-9 h-9 rounded-xl ${item.color} flex items-center justify-center`}>
