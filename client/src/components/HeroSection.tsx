@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import heroImage from "@assets/generated_images/intergenerational_thoughtful_conversation_photo.png";
+import heroImage from "@assets/istockphoto-2216206432-1024x1024_1765540381629.jpg";
 
 export default function HeroSection() {
   const scrollToChallenge = () => {
@@ -13,11 +13,11 @@ export default function HeroSection() {
       <div className="absolute inset-0 z-0">
         <img 
           src={heroImage} 
-          alt="Intergenerational conversation about faith and technology" 
-          className="w-full h-full object-cover scale-105"
+          alt="Diverse group in collaborative discussion" 
+          className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-charcoal/95 via-charcoal/80 to-teal-dark/60" />
-        <div className="absolute inset-0 bg-gradient-to-t from-charcoal/50 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-charcoal/95 via-charcoal/75 to-charcoal/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-charcoal/60 via-transparent to-transparent" />
       </div>
       
       <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 py-24">
@@ -72,9 +72,6 @@ export default function HeroSection() {
         <ChevronDown className="h-8 w-8 animate-bounce" />
       </button>
 
-      <p className="absolute bottom-3 right-4 text-cream/25 text-xs z-10">
-        Image generated with AI
-      </p>
     </section>
   );
 }
