@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Lock, Calendar } from "lucide-react";
+import { Lock, Calendar, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
 
 const monthlyAmounts = [25, 50, 100, 250];
 const oneTimeAmounts = [50, 100, 250, 500, 1000];
@@ -27,21 +28,56 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const { toast } = useToast();
 
   const amounts = frequency === "monthly" ? monthlyAmounts : oneTimeAmounts;
   const currentAmount = customAmount ? parseInt(customAmount) : selectedAmount;
 
   const handleDonate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!currentAmount || !email || !name) return;
+    if (!currentAmount || !email || !name) {
+      toast({
+        title: "Missing information",
+        description: "Please fill in all required fields.",
+        variant: "destructive",
+      });
+      return;
+    }
     
     setIsProcessing(true);
-    console.log("Processing donation:", { amount: currentAmount, frequency, email, name });
     
-    setTimeout(() => {
+    try {
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount: currentAmount,
+          frequency,
+          email,
+          name,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create checkout session');
+      }
+
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (error: any) {
+      console.error('Donation error:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
       setIsProcessing(false);
-      alert(`Thank you for your ${frequency} donation of $${currentAmount}!`);
-    }, 1500);
+    }
   };
 
   return (
@@ -156,7 +192,14 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
             disabled={!currentAmount || isProcessing}
             data-testid="button-complete-donation"
           >
-            {isProcessing ? "Processing..." : `Complete ${frequency === "monthly" ? "Monthly " : ""}Donation`}
+            {isProcessing ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Processing...
+              </>
+            ) : (
+              `Complete ${frequency === "monthly" ? "Monthly " : ""}Donation`
+            )}
           </Button>
 
           <div className="flex items-center justify-center gap-2 text-charcoal-muted text-sm">
