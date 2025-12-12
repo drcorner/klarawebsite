@@ -15,8 +15,8 @@ const challenges = [
   },
   {
     icon: Heart,
-    category: "Relationships",
-    story: "A wife shares that she's been processing her marriage problems with an AI chatbot rather than the church counselor. Her pastor wonders what she'll find in a chatbot that only knows what you tell it.",
+    category: "Life Advice",
+    story: "A wife shares that she's been processing her marriage problems with an AI chatbot rather than the church counselor. Her pastor wonders what marital counsel she'll get from a chatbot that only knows what you tell it.",
     color: "bg-coral/10 text-coral",
   },
   {
@@ -28,7 +28,7 @@ const challenges = [
   {
     icon: User,
     category: "Youth",
-    story: "A 13-year-old girl, already anxious about the future, hears a woman she admires at church say, \"I'm glad I won't be around to see it.\" She wonders if it would be better not to be around.",
+    story: "A 13-year-old girl, already anxious about the future, hears a woman she admires at church say about AI superintelligence, \"I'm glad I won't be around to see it.\" The girl wonders if she'd be better off dead too.",
     color: "bg-red-100 text-red-600",
   },
   {
@@ -79,12 +79,12 @@ export default function ChallengeSection() {
           ))}
         </div>
 
-        <blockquote className="mt-16 max-w-2xl mx-auto text-center">
-          <p className="font-serif text-2xl md:text-3xl text-charcoal italic leading-relaxed">
-            "My people are destroyed for lack of knowledge."
+        <blockquote className="mt-16 max-w-3xl mx-auto text-center">
+          <p className="font-serif text-xl md:text-2xl text-charcoal italic leading-relaxed">
+            "See to it that no one takes you captive by philosophy and empty deceit, according to human tradition, according to the elemental spirits of the world, and not according to Christ."
           </p>
           <cite className="mt-4 block text-charcoal-muted not-italic font-medium">
-            —Hosea 4:6
+            —Colossians 2:8
           </cite>
         </blockquote>
       </div>

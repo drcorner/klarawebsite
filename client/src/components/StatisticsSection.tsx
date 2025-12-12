@@ -16,7 +16,7 @@ const stats = [
   },
   {
     icon: Shuffle,
-    value: "12–14%",
+    value: "14%",
     label: "Share of workers who may need to transition to entirely new occupations by 2030",
     gradient: "from-gold to-coral",
   },

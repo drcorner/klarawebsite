@@ -20,7 +20,7 @@ export default function Logo({ variant = "default", className = "" }: LogoProps)
             Klara Project
           </span>
           <span className={`text-[10px] tracking-[0.15em] uppercase font-medium ${accentColor}`}>
-            Clarity for the AI Age
+            Christian Clarity for the AI Age
           </span>
         </div>
       </div>
