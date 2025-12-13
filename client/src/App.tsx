@@ -1,4 +1,5 @@
-import { Switch, Route } from "wouter";
+import { useEffect } from "react";
+import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -13,6 +14,17 @@ import ManageDonation from "@/pages/ManageDonation";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsOfService from "@/pages/TermsOfService";
 import NotFound from "@/pages/not-found";
+import CookieConsent, { trackPageVisit, hasConsent } from "@/components/CookieConsent";
+
+function usePageTracking() {
+  const [location] = useLocation();
+  
+  useEffect(() => {
+    if (hasConsent()) {
+      trackPageVisit(location);
+    }
+  }, [location]);
+}
 
 function Router() {
   return (
@@ -31,12 +43,23 @@ function Router() {
   );
 }
 
+function AppContent() {
+  usePageTracking();
+  
+  return (
+    <>
+      <Router />
+      <CookieConsent />
+    </>
+  );
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
-        <Router />
+        <AppContent />
       </TooltipProvider>
     </QueryClientProvider>
   );

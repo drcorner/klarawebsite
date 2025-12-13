@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { sendVerificationEmail, sendDonationThankYouEmail } from "./sendgridClient";
-import { trackNewsletterSignup, trackDonation, trackWhitePaperDownload } from "./hubspotClient";
+import { trackNewsletterSignup, trackDonation, trackWhitePaperDownload, trackPageVisit, updateCommunicationConsent } from "./hubspotClient";
 import { db } from "./db";
 import { verificationCodes, donorSessions } from "@shared/schema";
 import { eq, and, gt } from "drizzle-orm";
@@ -229,7 +229,7 @@ export async function registerRoutes(
 
   app.post('/api/create-checkout-session', async (req, res) => {
     try {
-      const { amount, frequency, email, name, duration, successUrl, cancelUrl } = req.body;
+      const { amount, frequency, email, name, duration, successUrl, cancelUrl, communicationConsent } = req.body;
 
       if (!amount || !email || !name) {
         return res.status(400).json({ error: 'Missing required fields' });
@@ -285,6 +285,7 @@ export async function registerRoutes(
             donation_type: 'monthly',
             amount: amount.toString(),
             duration: duration || 'ongoing',
+            communication_consent: communicationConsent ? 'true' : 'false',
           },
           success_url: successUrl || `${req.protocol}://${req.get('host')}/donate/thank-you?session_id={CHECKOUT_SESSION_ID}`,
           cancel_url: cancelUrl || `${req.protocol}://${req.get('host')}/donate`,
@@ -314,6 +315,7 @@ export async function registerRoutes(
             donor_email: email,
             donation_type: 'one-time',
             amount: amount.toString(),
+            communication_consent: communicationConsent ? 'true' : 'false',
           },
           success_url: successUrl || `${req.protocol}://${req.get('host')}/donate/thank-you?session_id={CHECKOUT_SESSION_ID}`,
           cancel_url: cancelUrl || `${req.protocol}://${req.get('host')}/donate`,
@@ -467,6 +469,7 @@ export async function registerRoutes(
       const donorEmail = metadata.donor_email || session.customer_email;
       const donationType = metadata.donation_type || 'one-time';
       const duration = metadata.duration;
+      const communicationConsent = metadata.communication_consent === 'true';
       
       if (!donorEmail) {
         return res.status(400).json({ error: 'No email found for session' });
@@ -493,6 +496,11 @@ export async function registerRoutes(
           donationType: donationType === 'monthly' ? 'monthly' : 'one-time',
           duration,
         });
+        
+        // Update communication consent in HubSpot only if explicitly set in metadata
+        if (metadata.communication_consent !== undefined) {
+          await updateCommunicationConsent(donorEmail, communicationConsent);
+        }
       } catch (hubspotError: any) {
         console.error('HubSpot tracking error:', hubspotError);
       }
@@ -550,6 +558,28 @@ export async function registerRoutes(
     } catch (error: any) {
       console.error('Error tracking white paper download:', error);
       res.status(500).json({ error: 'Failed to process request' });
+    }
+  });
+
+  // Track page visits for returning visitors
+  app.post('/api/track-visit', async (req, res) => {
+    try {
+      const { visitorId, page, email } = req.body;
+      
+      if (!visitorId || !page) {
+        return res.status(400).json({ error: 'Visitor ID and page are required' });
+      }
+
+      try {
+        await trackPageVisit({ visitorId, page, email });
+      } catch (hubspotError: any) {
+        console.error('HubSpot page visit tracking error:', hubspotError);
+      }
+
+      res.json({ success: true });
+    } catch (error: any) {
+      console.error('Error tracking page visit:', error);
+      res.status(500).json({ error: 'Failed to track visit' });
     }
   });
 

@@ -210,3 +210,61 @@ export async function trackWhitePaperDownload(email: string): Promise<void> {
     console.error('HubSpot trackWhitePaperDownload error:', error.message);
   }
 }
+
+interface PageVisitData {
+  visitorId: string;
+  page: string;
+  email?: string;
+}
+
+// Track page visit for returning visitors
+export async function trackPageVisit(data: PageVisitData): Promise<void> {
+  try {
+    if (!data.email) {
+      console.log(`Page visit tracked locally: ${data.visitorId} visited ${data.page}`);
+      return;
+    }
+
+    const contactId = await upsertContact({
+      email: data.email,
+      source: 'Website Visitor',
+    });
+
+    if (contactId) {
+      const client = await getUncachableHubSpotClient();
+      
+      await client.crm.contacts.basicApi.update(contactId, {
+        properties: {
+          notes_last_updated: new Date().toISOString(),
+        },
+      });
+      
+      console.log(`HubSpot: Tracked page visit for ${data.email} on ${data.page}`);
+    }
+  } catch (error: any) {
+    console.error('HubSpot trackPageVisit error:', error.message);
+  }
+}
+
+// Update contact communication consent
+export async function updateCommunicationConsent(email: string, hasConsent: boolean): Promise<void> {
+  try {
+    const contactId = await upsertContact({
+      email,
+    });
+
+    if (contactId) {
+      const client = await getUncachableHubSpotClient();
+      
+      await client.crm.contacts.basicApi.update(contactId, {
+        properties: {
+          hs_email_optout: hasConsent ? 'false' : 'true',
+        },
+      });
+      
+      console.log(`HubSpot: Updated communication consent for ${email}: ${hasConsent}`);
+    }
+  } catch (error: any) {
+    console.error('HubSpot updateCommunicationConsent error:', error.message);
+  }
+}

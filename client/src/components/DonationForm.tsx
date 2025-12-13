@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 
 const monthlyAmounts = [25, 50, 100, 250];
@@ -37,6 +38,7 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
   const [customAmount, setCustomAmount] = useState("");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [communicationConsent, setCommunicationConsent] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const { toast } = useToast();
 
@@ -68,6 +70,7 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
           email,
           name,
           duration: frequency === "monthly" ? duration : undefined,
+          communicationConsent,
         }),
       });
 
@@ -222,6 +225,23 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
                 data-testid="input-donor-email"
               />
             </div>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <Checkbox
+              id="communication-consent"
+              checked={communicationConsent}
+              onCheckedChange={(checked) => setCommunicationConsent(checked === true)}
+              className="mt-0.5"
+              data-testid="checkbox-communication-consent"
+            />
+            <Label 
+              htmlFor="communication-consent" 
+              className="text-sm text-charcoal-muted leading-relaxed cursor-pointer"
+            >
+              I agree to receive occasional updates about Klara Project's work and impact. 
+              You can unsubscribe at any time.
+            </Label>
           </div>
 
           <Button 
