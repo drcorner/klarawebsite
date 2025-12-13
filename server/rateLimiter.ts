@@ -64,6 +64,12 @@ export const strictRateLimiter = createRateLimiter({
   message: 'Too many verification attempts. Please wait 10 minutes.',
 });
 
+export const eventFriendlyRateLimiter = createRateLimiter({
+  windowMs: 60 * 1000,
+  maxRequests: 300,
+  message: 'Too many requests. Please try again shortly.',
+});
+
 export const moderateRateLimiter = createRateLimiter({
   windowMs: 60 * 1000,
   maxRequests: 20,

@@ -7,7 +7,7 @@ import { db } from "./db";
 import { verificationCodes, donorSessions } from "@shared/schema";
 import { eq, and, gt } from "drizzle-orm";
 import { z } from "zod";
-import { strictRateLimiter, moderateRateLimiter, lightRateLimiter } from "./rateLimiter";
+import { moderateRateLimiter, lightRateLimiter, eventFriendlyRateLimiter } from "./rateLimiter";
 
 function generateCode(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
@@ -31,7 +31,7 @@ export async function registerRoutes(
   app: Express
 ): Promise<Server> {
 
-  app.post('/api/donor/send-code', strictRateLimiter, async (req, res) => {
+  app.post('/api/donor/send-code', eventFriendlyRateLimiter, async (req, res) => {
     try {
       const result = emailSchema.safeParse(req.body);
       if (!result.success) {
@@ -61,7 +61,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post('/api/donor/verify-code', strictRateLimiter, async (req, res) => {
+  app.post('/api/donor/verify-code', eventFriendlyRateLimiter, async (req, res) => {
     try {
       const result = verifyCodeSchema.safeParse(req.body);
       if (!result.success) {
@@ -228,7 +228,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post('/api/create-checkout-session', moderateRateLimiter, async (req, res) => {
+  app.post('/api/create-checkout-session', eventFriendlyRateLimiter, async (req, res) => {
     try {
       const { amount, frequency, email, name, phone, duration, successUrl, cancelUrl, communicationConsent } = req.body;
 
