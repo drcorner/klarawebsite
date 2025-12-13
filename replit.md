@@ -61,6 +61,7 @@ A sophisticated nonprofit website for The Klara Project, a Christian nonprofit w
 - Cookie consent banner with visitor tracking integration
 - Page visit tracking to HubSpot (gated behind cookie consent)
 - Communication consent checkbox on donation form (synced to HubSpot)
+- Rate limiting on API endpoints to prevent abuse (strict limits on verification codes, moderate on forms)
 
 ## Development Notes
 - Run with `npm run dev`

@@ -7,6 +7,7 @@ import { db } from "./db";
 import { verificationCodes, donorSessions } from "@shared/schema";
 import { eq, and, gt } from "drizzle-orm";
 import { z } from "zod";
+import { strictRateLimiter, moderateRateLimiter, lightRateLimiter } from "./rateLimiter";
 
 function generateCode(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
@@ -30,7 +31,7 @@ export async function registerRoutes(
   app: Express
 ): Promise<Server> {
 
-  app.post('/api/donor/send-code', async (req, res) => {
+  app.post('/api/donor/send-code', strictRateLimiter, async (req, res) => {
     try {
       const result = emailSchema.safeParse(req.body);
       if (!result.success) {
@@ -60,7 +61,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post('/api/donor/verify-code', async (req, res) => {
+  app.post('/api/donor/verify-code', strictRateLimiter, async (req, res) => {
     try {
       const result = verifyCodeSchema.safeParse(req.body);
       if (!result.success) {
@@ -227,7 +228,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post('/api/create-checkout-session', async (req, res) => {
+  app.post('/api/create-checkout-session', moderateRateLimiter, async (req, res) => {
     try {
       const { amount, frequency, email, name, phone, duration, successUrl, cancelUrl, communicationConsent } = req.body;
 
@@ -516,7 +517,7 @@ export async function registerRoutes(
   });
 
   // Newsletter signup endpoint with HubSpot tracking
-  app.post('/api/newsletter/subscribe', async (req, res) => {
+  app.post('/api/newsletter/subscribe', moderateRateLimiter, async (req, res) => {
     try {
       const result = emailSchema.safeParse(req.body);
       if (!result.success) {
@@ -540,7 +541,7 @@ export async function registerRoutes(
   });
 
   // White paper download tracking endpoint
-  app.post('/api/whitepaper/download', async (req, res) => {
+  app.post('/api/whitepaper/download', moderateRateLimiter, async (req, res) => {
     try {
       const result = emailSchema.safeParse(req.body);
       if (!result.success) {
@@ -564,7 +565,7 @@ export async function registerRoutes(
   });
 
   // Track page visits for returning visitors
-  app.post('/api/track-visit', async (req, res) => {
+  app.post('/api/track-visit', lightRateLimiter, async (req, res) => {
     try {
       const { visitorId, page, email } = req.body;
       
