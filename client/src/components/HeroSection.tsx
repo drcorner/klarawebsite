@@ -22,15 +22,15 @@ export default function HeroSection() {
       
       <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 py-24">
         <div className="max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-light/20 backdrop-blur-sm border border-teal-light/30 mb-8">
-            <span className="w-2 h-2 rounded-full bg-teal-light animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 backdrop-blur-sm border border-primary/30 mb-8">
+            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
             <span className="text-cream text-sm font-medium">Now accepting founding partners</span>
           </div>
           
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight">
             <span className="text-cream font-sans font-black">AI Is Here.</span>
             <br />
-            <span className="bg-gradient-to-r from-teal-light to-gold bg-clip-text text-transparent font-sans font-bold">
+            <span className="bg-gradient-to-r from-primary to-gold bg-clip-text text-transparent font-sans font-bold">
               Help the Church Respond.
             </span>
           </h1>
@@ -44,7 +44,7 @@ export default function HeroSection() {
             <Link href="/get-involved">
               <Button 
                 size="lg" 
-                className="bg-teal hover:bg-teal-hover text-cream font-semibold text-base px-8 rounded-full group shadow-lg shadow-teal/25"
+                className="bg-primary hover:bg-primary/90 text-cream font-semibold text-base px-8 rounded-full group shadow-lg shadow-primary/25"
                 data-testid="button-hero-get-involved"
               >
                 Get Involved

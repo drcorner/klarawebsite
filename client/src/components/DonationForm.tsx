@@ -105,7 +105,7 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
               type="button"
               className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
                 frequency === "monthly" 
-                  ? "bg-teal text-cream" 
+                  ? "bg-primary text-cream" 
                   : "text-charcoal"
               }`}
               onClick={() => setFrequency("monthly")}
@@ -118,7 +118,7 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
               type="button"
               className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
                 frequency === "one-time" 
-                  ? "bg-teal text-cream" 
+                  ? "bg-primary text-cream" 
                   : "text-charcoal"
               }`}
               onClick={() => setFrequency("one-time")}
@@ -137,7 +137,7 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
                   type="button"
                   className={`py-3 px-4 rounded-md font-semibold border-2 transition-colors ${
                     selectedAmount === amount && !customAmount
-                      ? "bg-teal text-cream border-teal" 
+                      ? "bg-primary text-cream border-primary" 
                       : "bg-cream border-border text-charcoal"
                   }`}
                   onClick={() => {
@@ -176,7 +176,7 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
                     type="button"
                     className={`py-2 px-4 rounded-md font-medium border-2 transition-colors ${
                       duration === option.value
-                        ? "bg-teal text-cream border-teal"
+                        ? "bg-primary text-cream border-primary"
                         : "bg-cream border-border text-charcoal"
                     }`}
                     onClick={() => setDuration(option.value)}
@@ -261,7 +261,7 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
           <Button 
             type="submit" 
             size="lg"
-            className="w-full bg-teal text-cream font-semibold text-lg"
+            className="w-full bg-primary text-cream font-semibold text-lg"
             disabled={!currentAmount || isProcessing}
             data-testid="button-complete-donation"
           >
@@ -330,7 +330,7 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
           
           <Button 
             variant="outline" 
-            className="border-teal text-teal"
+            className="border-primary text-primary"
             data-testid="button-schedule-conversation"
           >
             Schedule a Conversation with Our Founder
