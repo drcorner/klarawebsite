@@ -71,7 +71,7 @@ export async function sendVerificationEmail(toEmail: string, code: string): Prom
           </p>
         </div>
         <p style="color: #999; font-size: 12px; text-align: center; margin-top: 20px;">
-          The Klara Project - Clarity for Christians in the Age of AI
+          The Klara Project - Christian Clarity for the AI Age
         </p>
       </div>
     `,
@@ -136,7 +136,7 @@ ${details.manageUrl}
 With gratitude,
 The Klara Project Team
 
-"Clarity for Christians in the Age of AI"
+"Christian Clarity for the AI Age"
 `,
     html: `
       <div style="font-family: 'IBM Plex Sans', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -209,7 +209,7 @@ The Klara Project Team
         </div>
         
         <p style="color: #999; font-size: 12px; text-align: center; margin-top: 20px;">
-          The Klara Project - "Clarity for Christians in the Age of AI"
+          The Klara Project - "Christian Clarity for the AI Age"
         </p>
       </div>
     `,

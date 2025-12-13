@@ -226,7 +226,7 @@ export default function ManageDonation() {
         <body>
           <div class="header">
             <h1>The Klara Project</h1>
-            <p>Clarity for Christians in the Age of AI</p>
+            <p>Christian Clarity for the AI Age</p>
           </div>
           <h2 class="receipt-title">Donation Receipt</h2>
           <div class="detail-row">
@@ -318,7 +318,7 @@ export default function ManageDonation() {
         <body>
           <div class="header">
             <h1>The Klara Project</h1>
-            <p>Clarity for Christians in the Age of AI</p>
+            <p>Christian Clarity for the AI Age</p>
           </div>
           <h2 class="statement-title">${data.year} Year-to-Date Giving Statement</h2>
           <div class="donor-info">

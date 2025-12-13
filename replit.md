@@ -1,7 +1,7 @@
 # The Klara Project Website
 
 ## Overview
-A sophisticated nonprofit website for The Klara Project, a Christian nonprofit with the mission "Clarity for Christians in the Age of AI." The site equips churches with practical resources and engages culture to ensure Christian perspectives shape technology development.
+A sophisticated nonprofit website for The Klara Project, a Christian nonprofit with the mission "Christian Clarity for the AI Age." The site equips churches with practical resources and engages culture to ensure Christian perspectives shape technology development.
 
 ## Project Architecture
 
