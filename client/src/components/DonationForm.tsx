@@ -21,8 +21,18 @@ interface DonationFormProps {
   showFoundingGifts?: boolean;
 }
 
+type Duration = "ongoing" | "3" | "6" | "12";
+
+const durationOptions: { value: Duration; label: string }[] = [
+  { value: "ongoing", label: "Ongoing" },
+  { value: "3", label: "3 months" },
+  { value: "6", label: "6 months" },
+  { value: "12", label: "12 months" },
+];
+
 export default function DonationForm({ showFoundingGifts = true }: DonationFormProps) {
   const [frequency, setFrequency] = useState<"monthly" | "one-time">("monthly");
+  const [duration, setDuration] = useState<Duration>("ongoing");
   const [selectedAmount, setSelectedAmount] = useState<number | null>(50);
   const [customAmount, setCustomAmount] = useState("");
   const [email, setEmail] = useState("");
@@ -57,6 +67,7 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
           frequency,
           email,
           name,
+          duration: frequency === "monthly" ? duration : undefined,
         }),
       });
 
@@ -149,6 +160,34 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
               </div>
             </div>
           </div>
+
+          {frequency === "monthly" && (
+            <div>
+              <Label className="text-charcoal-muted mb-3 block">Donation Duration</Label>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                {durationOptions.map((option) => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    className={`py-2 px-4 rounded-md font-medium border-2 transition-colors ${
+                      duration === option.value
+                        ? "bg-teal text-cream border-teal"
+                        : "bg-cream border-border text-charcoal"
+                    }`}
+                    onClick={() => setDuration(option.value)}
+                    data-testid={`button-duration-${option.value}`}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+              {duration !== "ongoing" && (
+                <p className="text-charcoal-muted text-sm mt-2">
+                  Your donation will automatically end after {duration} months.
+                </p>
+              )}
+            </div>
+          )}
 
           {frequency === "monthly" && currentAmount && impactStatements[currentAmount] && (
             <div className="bg-gold/10 border border-gold/30 rounded-lg p-4">

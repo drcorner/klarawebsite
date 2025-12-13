@@ -4,10 +4,24 @@ import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClie
 import { db } from "./db";
 import { verificationCodes, donorSessions } from "@shared/schema";
 import { eq, and, gt } from "drizzle-orm";
+import { z } from "zod";
 
 function generateCode(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
+
+const emailSchema = z.object({
+  email: z.string().email("Invalid email address"),
+});
+
+const verifyCodeSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  code: z.string().length(6, "Code must be 6 digits"),
+});
+
+const sessionIdSchema = z.object({
+  sessionId: z.string().uuid("Invalid session ID"),
+});
 
 export async function registerRoutes(
   httpServer: Server,
@@ -16,10 +30,11 @@ export async function registerRoutes(
 
   app.post('/api/donor/send-code', async (req, res) => {
     try {
-      const { email } = req.body;
-      if (!email) {
-        return res.status(400).json({ error: 'Email is required' });
+      const result = emailSchema.safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).json({ error: 'Valid email is required' });
       }
+      const { email } = result.data;
 
       const code = generateCode();
       const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
@@ -38,10 +53,11 @@ export async function registerRoutes(
 
   app.post('/api/donor/verify-code', async (req, res) => {
     try {
-      const { email, code } = req.body;
-      if (!email || !code) {
-        return res.status(400).json({ error: 'Email and code are required' });
+      const result = verifyCodeSchema.safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).json({ error: 'Valid email and 6-digit code are required' });
       }
+      const { email, code } = result.data;
 
       const [verification] = await db.select()
         .from(verificationCodes)
@@ -190,7 +206,7 @@ export async function registerRoutes(
 
   app.post('/api/create-checkout-session', async (req, res) => {
     try {
-      const { amount, frequency, email, name, successUrl, cancelUrl } = req.body;
+      const { amount, frequency, email, name, duration, successUrl, cancelUrl } = req.body;
 
       if (!amount || !email || !name) {
         return res.status(400).json({ error: 'Missing required fields' });
@@ -200,17 +216,37 @@ export async function registerRoutes(
       const amountInCents = Math.round(amount * 100);
 
       if (frequency === 'monthly') {
+        const subscriptionData: any = {};
+        
+        if (duration && duration !== 'ongoing') {
+          const months = parseInt(duration);
+          if ([3, 6, 12].includes(months)) {
+            const now = new Date();
+            const originalDay = now.getDate();
+            const cancelDate = new Date(now);
+            cancelDate.setMonth(cancelDate.getMonth() + months);
+            
+            if (cancelDate.getDate() !== originalDay) {
+              cancelDate.setDate(0);
+            }
+            subscriptionData.cancel_at = Math.floor(cancelDate.getTime() / 1000);
+          }
+        }
+
+        const durationLabel = duration && duration !== 'ongoing' ? ` (${duration} months)` : '';
+        
         const session = await stripe.checkout.sessions.create({
           payment_method_types: ['card'],
           mode: 'subscription',
           customer_email: email,
+          subscription_data: Object.keys(subscriptionData).length > 0 ? subscriptionData : undefined,
           line_items: [
             {
               price_data: {
                 currency: 'usd',
                 product_data: {
                   name: 'Monthly Donation to Klara Project',
-                  description: `$${amount}/month recurring donation`,
+                  description: `$${amount}/month recurring donation${durationLabel}`,
                 },
                 unit_amount: amountInCents,
                 recurring: {
@@ -225,6 +261,7 @@ export async function registerRoutes(
             donor_email: email,
             donation_type: 'monthly',
             amount: amount.toString(),
+            duration: duration || 'ongoing',
           },
           success_url: successUrl || `${req.protocol}://${req.get('host')}/donate/thank-you?session_id={CHECKOUT_SESSION_ID}`,
           cancel_url: cancelUrl || `${req.protocol}://${req.get('host')}/donate`,

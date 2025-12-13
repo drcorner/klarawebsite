@@ -28,6 +28,7 @@ A sophisticated nonprofit website for The Klara Project, a Christian nonprofit w
 - `/get-involved` - Donation, newsletter, volunteer, sharing options
 - `/donate` - Donation form with monthly/one-time options
 - `/donate/thank-you` - Thank you confirmation page
+- `/manage-donation` - Donor portal with email verification, view history, manage payment
 - `/privacy-policy` - Privacy policy
 - `/terms-of-service` - Terms of service
 
