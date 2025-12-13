@@ -12,9 +12,20 @@ export default function PartnerSection() {
   const [firstName, setFirstName] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("White paper download requested:", { email, firstName });
+    
+    // Track white paper download in HubSpot
+    try {
+      await fetch("/api/whitepaper/download", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+    } catch (error) {
+      console.error("White paper tracking error:", error);
+    }
+    
     setSubmitted(true);
   };
 

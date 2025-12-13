@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { sendVerificationEmail, sendDonationThankYouEmail } from "./sendgridClient";
+import { trackNewsletterSignup, trackDonation, trackWhitePaperDownload } from "./hubspotClient";
 import { db } from "./db";
 import { verificationCodes, donorSessions } from "@shared/schema";
 import { eq, and, gt } from "drizzle-orm";
@@ -483,11 +484,72 @@ export async function registerRoutes(
         manageUrl: `${baseUrl}/manage-donation`,
       });
 
+      // Track donation in HubSpot
+      try {
+        await trackDonation({
+          email: donorEmail,
+          donorName,
+          amount: session.amount_total || 0,
+          donationType: donationType === 'monthly' ? 'monthly' : 'one-time',
+          duration,
+        });
+      } catch (hubspotError: any) {
+        console.error('HubSpot tracking error:', hubspotError);
+      }
+
       console.log(`Thank you email sent to ${donorEmail}`);
       res.json({ success: true });
     } catch (error: any) {
       console.error('Error sending thank you email:', error);
       res.status(500).json({ error: 'Failed to send thank you email' });
+    }
+  });
+
+  // Newsletter signup endpoint with HubSpot tracking
+  app.post('/api/newsletter/subscribe', async (req, res) => {
+    try {
+      const result = emailSchema.safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).json({ error: 'Valid email is required' });
+      }
+      const { email } = result.data;
+
+      // Track in HubSpot
+      try {
+        await trackNewsletterSignup(email);
+      } catch (hubspotError: any) {
+        console.error('HubSpot newsletter tracking error:', hubspotError);
+      }
+
+      console.log(`Newsletter subscription: ${email}`);
+      res.json({ success: true, message: 'Successfully subscribed to newsletter' });
+    } catch (error: any) {
+      console.error('Error subscribing to newsletter:', error);
+      res.status(500).json({ error: 'Failed to subscribe to newsletter' });
+    }
+  });
+
+  // White paper download tracking endpoint
+  app.post('/api/whitepaper/download', async (req, res) => {
+    try {
+      const result = emailSchema.safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).json({ error: 'Valid email is required' });
+      }
+      const { email } = result.data;
+
+      // Track in HubSpot
+      try {
+        await trackWhitePaperDownload(email);
+      } catch (hubspotError: any) {
+        console.error('HubSpot white paper tracking error:', hubspotError);
+      }
+
+      console.log(`White paper download: ${email}`);
+      res.json({ success: true });
+    } catch (error: any) {
+      console.error('Error tracking white paper download:', error);
+      res.status(500).json({ error: 'Failed to process request' });
     }
   });
 

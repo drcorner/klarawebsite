@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { Link } from "wouter";
-import { Mail, ArrowRight } from "lucide-react";
+import { Mail, ArrowRight, Loader2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Logo from "./Logo";
@@ -19,6 +20,32 @@ const legalLinks = [
 ];
 
 export default function Footer() {
+  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
+  const handleSubscribe = async () => {
+    if (!email || isLoading) return;
+    
+    setIsLoading(true);
+    try {
+      const response = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      
+      if (response.ok) {
+        setIsSubscribed(true);
+        setEmail("");
+      }
+    } catch (error) {
+      console.error("Newsletter subscription error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <footer className="bg-charcoal text-cream">
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-20">
@@ -52,17 +79,33 @@ export default function Footer() {
             <p className="text-cream/60 text-sm mb-4">
               Get updates on resources and opportunities.
             </p>
-            <div className="flex gap-2">
-              <Input 
-                type="email" 
-                placeholder="Your email" 
-                className="bg-cream/10 border-cream/20 text-cream placeholder:text-cream/40 rounded-full text-sm"
-                data-testid="input-footer-email"
-              />
-              <Button size="icon" className="bg-teal-light text-cream shrink-0 rounded-full" data-testid="button-footer-subscribe">
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </div>
+            {isSubscribed ? (
+              <div className="flex items-center gap-2 text-teal-light text-sm">
+                <Check className="h-4 w-4" />
+                Thanks for subscribing!
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <Input 
+                  type="email" 
+                  placeholder="Your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSubscribe()}
+                  className="bg-cream/10 border-cream/20 text-cream placeholder:text-cream/40 rounded-full text-sm"
+                  data-testid="input-footer-email"
+                />
+                <Button 
+                  size="icon" 
+                  className="bg-teal-light text-cream shrink-0 rounded-full" 
+                  onClick={handleSubscribe}
+                  disabled={isLoading || !email}
+                  data-testid="button-footer-subscribe"
+                >
+                  {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
+                </Button>
+              </div>
+            )}
             <div className="mt-6">
               <h4 className="font-semibold text-cream mb-2 text-sm uppercase tracking-wide">Contact</h4>
               <a 
