@@ -8,21 +8,21 @@
 ## Color System
 
 **Backgrounds**
-- Primary: `#FAFAFA` (clean off-white - main background)
-- Secondary: `#F5F5F5` (soft gray - section alternates)
-- Accent: `#EBEBEB` (light gray - cards, subtle)
+- Primary: `#F7F4F0` (warm cream - main background)
+- Secondary: `#F2EDE8` (soft warm gray - section alternates)
+- Accent: `#EBE6E0` (warm beige - cards, subtle)
 
 **Text**
-- Primary: `#1E293B` (deep slate - body)
-- Secondary: `#475569` (muted slate - secondary)
-- Muted: `#64748B` (light slate - captions, metadata)
+- Primary: `#3D3530` (warm charcoal - body)
+- Secondary: `#5C544D` (muted brown - secondary)
+- Muted: `#736B63` (warm taupe - captions, metadata)
 
 **Brand Colors**
-- Teal Primary: `#0F766E` (vibrant teal - buttons, links)
-- Teal Light: `#14B8A6` (bright teal - accents, gradients)
-- Teal Dark: `#0A5752` (deep teal - hover states, gradients)
-- Gold: `#E8A850` (warm amber-gold - highlights, statistics)
-- Coral: `#F97316` (vibrant orange - badges, alerts)
+- Terracotta Primary: `#B85C38` (warm terracotta - buttons, links)
+- Terracotta Light: `#D97B5C` (soft coral - accents, gradients)
+- Terracotta Dark: `#A64B2A` (deep rust - hover states, gradients)
+- Gold: `#D4A574` (warm sand-gold - highlights, statistics)
+- Coral: `#E07A5F` (earthy coral - badges, alerts)
 
 **Functional**
 - Success: `#16A34A`, Error: `#DC2626`
@@ -30,7 +30,7 @@
 
 **Usage Rules**:
 - Use gradient treatments on buttons and icons for depth
-- Teal for all interactive elements
+- Terracotta for all interactive elements
 - Gold/coral used sparingly for key statistics, badges, status indicators
 - Alternating background sections for visual rhythm
 - Never use pure white (#FFFFFF) or pure black (#000000)
@@ -64,9 +64,9 @@
 
 ## Components
 
-**Primary Button**: Gradient background (teal to teal-dark), cream text, IBM Plex Sans 600 weight, rounded-full, subtle shadow, hover deepens gradient
+**Primary Button**: Gradient background (terracotta to terracotta-dark), cream text, IBM Plex Sans 600 weight, rounded-full, subtle shadow, hover deepens gradient
 
-**Secondary Button**: Transparent with teal border, teal text, rounded-full, fills teal on hover
+**Secondary Button**: Transparent with terracotta border, terracotta text, rounded-full, fills terracotta on hover
 
 **Cards**: 
 - Clean white background
@@ -77,7 +77,7 @@
 
 **Badges/Pills**: Rounded-full, small text, background with 10% opacity of accent color
 
-**Icon Containers**: Gradient backgrounds (from-teal to-teal-light), rounded-xl or rounded-2xl, shadow-sm
+**Icon Containers**: Gradient backgrounds (from-terracotta to-terracotta-light), rounded-xl or rounded-2xl, shadow-sm
 
 ## Layout
 - Max width: 1280px content
