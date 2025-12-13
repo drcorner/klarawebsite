@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
+import { sendVerificationEmail } from "./sendgridClient";
 import { db } from "./db";
 import { verificationCodes, donorSessions } from "@shared/schema";
 import { eq, and, gt } from "drizzle-orm";
@@ -43,6 +44,13 @@ export async function registerRoutes(
       await db.insert(verificationCodes).values({ email, code, expiresAt });
 
       console.log(`Verification code for ${email}: ${code}`);
+
+      try {
+        await sendVerificationEmail(email, code);
+        console.log(`Verification email sent to ${email}`);
+      } catch (emailError: any) {
+        console.error('Failed to send verification email:', emailError);
+      }
 
       res.json({ success: true, message: 'Verification code sent' });
     } catch (error: any) {
