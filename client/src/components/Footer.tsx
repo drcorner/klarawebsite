@@ -10,6 +10,7 @@ const navLinks = [
   { label: "Resources", href: "/resources" },
   { label: "Get Involved", href: "/get-involved" },
   { label: "Donate", href: "/donate" },
+  { label: "Manage Donation", href: "/manage-donation" },
 ];
 
 const legalLinks = [
