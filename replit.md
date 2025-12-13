@@ -36,7 +36,7 @@ A sophisticated nonprofit website for The Klara Project, a Christian nonprofit w
 - `Header.tsx` - Navigation with mobile hamburger menu
 - `Footer.tsx` - Site footer with newsletter signup
 - `HeroSection.tsx` - Main hero with background image
-- `DonationForm.tsx` - Interactive donation form with amount selection
+- `DonationForm.tsx` - Interactive donation form with amount selection and fixed-term duration options
 - `PartnerSection.tsx` - White paper download with email capture modal
 
 ### Backend (Express)
@@ -54,6 +54,10 @@ A sophisticated nonprofit website for The Klara Project, a Christian nonprofit w
 - AI-generated images for hero and sections
 - Mobile-responsive design
 - Interactive forms with state management
+- Stripe integration with working checkout sessions
+- Donor portal with email verification (code-based authentication)
+- Donor dashboard showing subscription and payment history with Stripe portal integration
+- Fixed-term donation option for monthly subscriptions (3, 6, 12 months with auto-cancel)
 
 ## Development Notes
 - Run with `npm run dev`
