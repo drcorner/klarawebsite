@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Mail, Loader2, CreditCard, Calendar, ExternalLink, LogOut, DollarSign } from "lucide-react";
+import { Mail, Loader2, CreditCard, Calendar, ExternalLink, LogOut, DollarSign, Download, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -192,6 +192,180 @@ export default function ManageDonation() {
 
   const formatAmount = (cents: number) => {
     return `$${(cents / 100).toFixed(2)}`;
+  };
+
+  const handleDownloadReceipt = async (chargeId: string) => {
+    if (!sessionId) return;
+
+    try {
+      const response = await fetch(`/api/donor/receipt/${sessionId}/${chargeId}`);
+      if (!response.ok) throw new Error('Failed to fetch receipt');
+      
+      const data = await response.json();
+      
+      const receiptHtml = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Donation Receipt - The Klara Project</title>
+          <style>
+            body { font-family: 'IBM Plex Sans', Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; }
+            .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #1E4D4A; padding-bottom: 20px; }
+            .header h1 { color: #1E4D4A; margin: 0 0 5px 0; font-family: Georgia, serif; }
+            .header p { color: #666; margin: 0; font-size: 14px; }
+            .receipt-title { color: #1E4D4A; margin: 30px 0 20px 0; font-size: 18px; }
+            .detail-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
+            .detail-label { color: #666; }
+            .detail-value { color: #2D2A27; font-weight: 500; }
+            .amount { color: #1E4D4A; font-size: 24px; font-weight: bold; }
+            .tax-notice { background: rgba(201, 169, 98, 0.15); border-left: 4px solid #C9A962; padding: 15px; margin: 30px 0; font-size: 13px; color: #666; }
+            .footer { margin-top: 40px; text-align: center; color: #999; font-size: 12px; }
+            @media print { body { margin: 0; } }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <h1>The Klara Project</h1>
+            <p>Clarity for Christians in the Age of AI</p>
+          </div>
+          <h2 class="receipt-title">Donation Receipt</h2>
+          <div class="detail-row">
+            <span class="detail-label">Date:</span>
+            <span class="detail-value">${data.date}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Transaction ID:</span>
+            <span class="detail-value">${data.chargeId}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Email:</span>
+            <span class="detail-value">${data.email}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Payment Method:</span>
+            <span class="detail-value">${data.paymentMethod}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Amount:</span>
+            <span class="detail-value amount">${formatAmount(data.amount)}</span>
+          </div>
+          <div class="tax-notice">
+            <strong>Tax Information:</strong> The Klara Project has applied for 501(c)(3) tax-exempt status. Upon approval, donations will be tax-deductible retroactive to our date of incorporation. Please retain this receipt for your records.
+          </div>
+          <div class="footer">
+            <p>Thank you for your generous support!</p>
+            <p>The Klara Project</p>
+          </div>
+        </body>
+        </html>
+      `;
+
+      const printWindow = window.open('', '_blank');
+      if (printWindow) {
+        printWindow.document.write(receiptHtml);
+        printWindow.document.close();
+        printWindow.print();
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to download receipt",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDownloadYTDStatement = async () => {
+    if (!sessionId) return;
+
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/donor/ytd-statement/${sessionId}`);
+      if (!response.ok) throw new Error('Failed to fetch statement');
+      
+      const data = await response.json();
+      
+      const donationsHtml = data.donations.map((d: { date: string; amount: number; id: string }) => `
+        <tr>
+          <td style="padding: 8px 0; border-bottom: 1px solid #eee;">${d.date}</td>
+          <td style="padding: 8px 0; border-bottom: 1px solid #eee; text-align: right;">${formatAmount(d.amount)}</td>
+        </tr>
+      `).join('');
+
+      const statementHtml = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>${data.year} Giving Statement - The Klara Project</title>
+          <style>
+            body { font-family: 'IBM Plex Sans', Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; }
+            .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #1E4D4A; padding-bottom: 20px; }
+            .header h1 { color: #1E4D4A; margin: 0 0 5px 0; font-family: Georgia, serif; }
+            .header p { color: #666; margin: 0; font-size: 14px; }
+            .statement-title { color: #1E4D4A; margin: 30px 0 10px 0; font-size: 18px; }
+            .donor-info { background: #f5f5f5; padding: 15px; margin-bottom: 20px; }
+            table { width: 100%; border-collapse: collapse; }
+            th { text-align: left; padding: 10px 0; border-bottom: 2px solid #1E4D4A; color: #1E4D4A; }
+            th:last-child { text-align: right; }
+            .total-row { font-weight: bold; border-top: 2px solid #1E4D4A; }
+            .total-row td { padding-top: 15px; }
+            .total-amount { color: #1E4D4A; font-size: 20px; }
+            .tax-notice { background: rgba(201, 169, 98, 0.15); border-left: 4px solid #C9A962; padding: 15px; margin: 30px 0; font-size: 13px; color: #666; }
+            .footer { margin-top: 40px; text-align: center; color: #999; font-size: 12px; }
+            @media print { body { margin: 0; } }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <h1>The Klara Project</h1>
+            <p>Clarity for Christians in the Age of AI</p>
+          </div>
+          <h2 class="statement-title">${data.year} Year-to-Date Giving Statement</h2>
+          <div class="donor-info">
+            <strong>Donor:</strong> ${data.email}<br>
+            <strong>Statement Generated:</strong> ${data.generatedAt}
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${donationsHtml}
+              <tr class="total-row">
+                <td><strong>Total Giving (${data.year})</strong></td>
+                <td style="text-align: right;" class="total-amount">${formatAmount(data.totalAmount)}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="tax-notice">
+            <strong>Tax Information:</strong> The Klara Project has applied for 501(c)(3) tax-exempt status. Upon approval, donations will be tax-deductible retroactive to our date of incorporation. Please retain this statement for your records.
+          </div>
+          <div class="footer">
+            <p>Thank you for your generous support!</p>
+            <p>The Klara Project</p>
+          </div>
+        </body>
+        </html>
+      `;
+
+      const printWindow = window.open('', '_blank');
+      if (printWindow) {
+        printWindow.document.write(statementHtml);
+        printWindow.document.close();
+        printWindow.print();
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to generate statement",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -389,11 +563,23 @@ export default function ManageDonation() {
                   </Card>
 
                   <Card className="bg-card border-card-border">
-                    <CardHeader>
+                    <CardHeader className="flex flex-row items-center justify-between gap-4">
                       <CardTitle className="flex items-center gap-2">
                         <DollarSign className="w-5 h-5 text-teal" />
                         Payment History
                       </CardTitle>
+                      {donationData.charges.length > 0 && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleDownloadYTDStatement}
+                          disabled={isLoading}
+                          data-testid="button-download-ytd"
+                        >
+                          <FileText className="w-4 h-4 mr-2" />
+                          {new Date().getFullYear()} Statement
+                        </Button>
+                      )}
                     </CardHeader>
                     <CardContent>
                       {donationData.charges.length === 0 ? (
@@ -405,10 +591,10 @@ export default function ManageDonation() {
                           {donationData.charges.map((charge) => (
                             <div
                               key={charge.id}
-                              className="flex items-center justify-between py-3 border-b border-border last:border-b-0"
+                              className="flex items-center justify-between gap-3 py-3 border-b border-border last:border-b-0"
                               data-testid={`charge-${charge.id}`}
                             >
-                              <div>
+                              <div className="flex-1">
                                 <p className="font-medium text-charcoal">
                                   {formatAmount(charge.amount)}
                                 </p>
@@ -416,12 +602,25 @@ export default function ManageDonation() {
                                   {formatDate(charge.created)}
                                 </p>
                               </div>
-                              <Badge
-                                variant={charge.status === "succeeded" ? "default" : "secondary"}
-                                className={charge.status === "succeeded" ? "bg-teal" : ""}
-                              >
-                                {charge.status}
-                              </Badge>
+                              <div className="flex items-center gap-2">
+                                {charge.status === "succeeded" && (
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => handleDownloadReceipt(charge.id)}
+                                    title="Download Receipt"
+                                    data-testid={`button-receipt-${charge.id}`}
+                                  >
+                                    <Download className="w-4 h-4" />
+                                  </Button>
+                                )}
+                                <Badge
+                                  variant={charge.status === "succeeded" ? "default" : "secondary"}
+                                  className={charge.status === "succeeded" ? "bg-teal" : ""}
+                                >
+                                  {charge.status}
+                                </Badge>
+                              </div>
                             </div>
                           ))}
                         </div>

@@ -48,7 +48,7 @@ export async function sendVerificationEmail(toEmail: string, code: string): Prom
   
   const msg = {
     to: toEmail,
-    from: fromEmail,
+    from: { email: fromEmail, name: 'The Klara Project' },
     subject: 'Your Klara Project Verification Code',
     text: `Your verification code is: ${code}\n\nThis code will expire in 10 minutes.\n\nIf you did not request this code, please ignore this email.`,
     html: `
@@ -108,7 +108,7 @@ export async function sendDonationThankYouEmail(details: DonationDetails): Promi
 
   const msg = {
     to: details.donorEmail,
-    from: fromEmail,
+    from: { email: fromEmail, name: 'The Klara Project' },
     subject: 'Thank You for Your Donation to The Klara Project',
     text: `Dear ${details.donorName},
 

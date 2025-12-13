@@ -345,6 +345,107 @@ export async function registerRoutes(
     }
   });
 
+  app.get('/api/donor/receipt/:sessionId/:chargeId', async (req, res) => {
+    try {
+      const { sessionId, chargeId } = req.params;
+      
+      const [session] = await db.select()
+        .from(donorSessions)
+        .where(and(
+          eq(donorSessions.id, sessionId),
+          gt(donorSessions.expiresAt, new Date())
+        ));
+
+      if (!session || !session.stripeCustomerId) {
+        return res.status(401).json({ error: 'Invalid session' });
+      }
+
+      const stripe = await getUncachableStripeClient();
+      const charge = await stripe.charges.retrieve(chargeId);
+
+      if (charge.customer !== session.stripeCustomerId) {
+        return res.status(403).json({ error: 'Unauthorized' });
+      }
+
+      const receiptData = {
+        chargeId: charge.id,
+        amount: charge.amount,
+        date: new Date(charge.created * 1000).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }),
+        email: session.email,
+        status: charge.status,
+        paymentMethod: charge.payment_method_details?.card?.brand 
+          ? `${charge.payment_method_details.card.brand} ending in ${charge.payment_method_details.card.last4}`
+          : 'Card',
+      };
+
+      res.json(receiptData);
+    } catch (error: any) {
+      console.error('Error fetching receipt:', error);
+      res.status(500).json({ error: 'Failed to fetch receipt' });
+    }
+  });
+
+  app.get('/api/donor/ytd-statement/:sessionId', async (req, res) => {
+    try {
+      const { sessionId } = req.params;
+      
+      const [session] = await db.select()
+        .from(donorSessions)
+        .where(and(
+          eq(donorSessions.id, sessionId),
+          gt(donorSessions.expiresAt, new Date())
+        ));
+
+      if (!session || !session.stripeCustomerId) {
+        return res.status(401).json({ error: 'Invalid session' });
+      }
+
+      const stripe = await getUncachableStripeClient();
+      
+      const currentYear = new Date().getFullYear();
+      const startOfYear = new Date(currentYear, 0, 1);
+      const startTimestamp = Math.floor(startOfYear.getTime() / 1000);
+
+      const charges = await stripe.charges.list({
+        customer: session.stripeCustomerId,
+        limit: 100,
+        created: { gte: startTimestamp },
+      });
+
+      const successfulCharges = charges.data.filter(c => c.status === 'succeeded');
+      const totalAmount = successfulCharges.reduce((sum, c) => sum + c.amount, 0);
+
+      const statementData = {
+        year: currentYear,
+        email: session.email,
+        totalAmount,
+        donations: successfulCharges.map(c => ({
+          id: c.id,
+          date: new Date(c.created * 1000).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          }),
+          amount: c.amount,
+        })),
+        generatedAt: new Date().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }),
+      };
+
+      res.json(statementData);
+    } catch (error: any) {
+      console.error('Error generating YTD statement:', error);
+      res.status(500).json({ error: 'Failed to generate statement' });
+    }
+  });
+
   app.post('/api/send-donation-thank-you', async (req, res) => {
     try {
       const { sessionId } = req.body;
