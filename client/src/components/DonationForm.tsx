@@ -38,6 +38,7 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
   const [customAmount, setCustomAmount] = useState("");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [communicationConsent, setCommunicationConsent] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const { toast } = useToast();
@@ -69,6 +70,7 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
           frequency,
           email,
           name,
+          phone: phone || undefined,
           duration: frequency === "monthly" ? duration : undefined,
           communicationConsent,
         }),
@@ -225,6 +227,18 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
                 data-testid="input-donor-email"
               />
             </div>
+          </div>
+
+          <div>
+            <Label htmlFor="phone">Phone (optional)</Label>
+            <Input
+              id="phone"
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="(555) 123-4567"
+              data-testid="input-donor-phone"
+            />
           </div>
 
           <div className="flex items-start gap-3">

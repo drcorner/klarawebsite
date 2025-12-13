@@ -229,7 +229,7 @@ export async function registerRoutes(
 
   app.post('/api/create-checkout-session', async (req, res) => {
     try {
-      const { amount, frequency, email, name, duration, successUrl, cancelUrl, communicationConsent } = req.body;
+      const { amount, frequency, email, name, phone, duration, successUrl, cancelUrl, communicationConsent } = req.body;
 
       if (!amount || !email || !name) {
         return res.status(400).json({ error: 'Missing required fields' });
@@ -282,6 +282,7 @@ export async function registerRoutes(
           metadata: {
             donor_name: name,
             donor_email: email,
+            donor_phone: phone || '',
             donation_type: 'monthly',
             amount: amount.toString(),
             duration: duration || 'ongoing',
@@ -313,6 +314,7 @@ export async function registerRoutes(
           metadata: {
             donor_name: name,
             donor_email: email,
+            donor_phone: phone || '',
             donation_type: 'one-time',
             amount: amount.toString(),
             communication_consent: communicationConsent ? 'true' : 'false',
