@@ -1,11 +1,182 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
+import { db } from "./db";
+import { verificationCodes, donorSessions } from "@shared/schema";
+import { eq, and, gt } from "drizzle-orm";
+
+function generateCode(): string {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
 
 export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+
+  app.post('/api/donor/send-code', async (req, res) => {
+    try {
+      const { email } = req.body;
+      if (!email) {
+        return res.status(400).json({ error: 'Email is required' });
+      }
+
+      const code = generateCode();
+      const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
+
+      await db.delete(verificationCodes).where(eq(verificationCodes.email, email));
+      await db.insert(verificationCodes).values({ email, code, expiresAt });
+
+      console.log(`Verification code for ${email}: ${code}`);
+
+      res.json({ success: true, message: 'Verification code sent' });
+    } catch (error: any) {
+      console.error('Error sending verification code:', error);
+      res.status(500).json({ error: 'Failed to send verification code' });
+    }
+  });
+
+  app.post('/api/donor/verify-code', async (req, res) => {
+    try {
+      const { email, code } = req.body;
+      if (!email || !code) {
+        return res.status(400).json({ error: 'Email and code are required' });
+      }
+
+      const [verification] = await db.select()
+        .from(verificationCodes)
+        .where(and(
+          eq(verificationCodes.email, email),
+          eq(verificationCodes.code, code),
+          gt(verificationCodes.expiresAt, new Date())
+        ));
+
+      if (!verification) {
+        return res.status(400).json({ error: 'Invalid or expired code' });
+      }
+
+      await db.delete(verificationCodes).where(eq(verificationCodes.email, email));
+
+      const stripe = await getUncachableStripeClient();
+      const customers = await stripe.customers.list({ email, limit: 1 });
+      const stripeCustomerId = customers.data[0]?.id || null;
+
+      const sessionExpiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+      const [session] = await db.insert(donorSessions)
+        .values({ email, stripeCustomerId, expiresAt: sessionExpiresAt })
+        .returning();
+
+      res.json({ success: true, sessionId: session.id, hasStripeAccount: !!stripeCustomerId });
+    } catch (error: any) {
+      console.error('Error verifying code:', error);
+      res.status(500).json({ error: 'Failed to verify code' });
+    }
+  });
+
+  app.get('/api/donor/session/:sessionId', async (req, res) => {
+    try {
+      const { sessionId } = req.params;
+      
+      const [session] = await db.select()
+        .from(donorSessions)
+        .where(and(
+          eq(donorSessions.id, sessionId),
+          gt(donorSessions.expiresAt, new Date())
+        ));
+
+      if (!session) {
+        return res.status(401).json({ error: 'Invalid or expired session' });
+      }
+
+      res.json({ email: session.email, stripeCustomerId: session.stripeCustomerId });
+    } catch (error: any) {
+      console.error('Error fetching session:', error);
+      res.status(500).json({ error: 'Failed to fetch session' });
+    }
+  });
+
+  app.get('/api/donor/donations/:sessionId', async (req, res) => {
+    try {
+      const { sessionId } = req.params;
+      
+      const [session] = await db.select()
+        .from(donorSessions)
+        .where(and(
+          eq(donorSessions.id, sessionId),
+          gt(donorSessions.expiresAt, new Date())
+        ));
+
+      if (!session) {
+        return res.status(401).json({ error: 'Invalid or expired session' });
+      }
+
+      if (!session.stripeCustomerId) {
+        return res.json({ subscriptions: [], charges: [], hasStripeAccount: false });
+      }
+
+      const stripe = await getUncachableStripeClient();
+      
+      const subscriptions = await stripe.subscriptions.list({
+        customer: session.stripeCustomerId,
+        status: 'all',
+      });
+
+      const charges = await stripe.charges.list({
+        customer: session.stripeCustomerId,
+        limit: 20,
+      });
+
+      res.json({
+        hasStripeAccount: true,
+        subscriptions: subscriptions.data.map(sub => ({
+          id: sub.id,
+          status: sub.status,
+          amount: sub.items.data[0]?.price?.unit_amount || 0,
+          interval: sub.items.data[0]?.price?.recurring?.interval,
+          currentPeriodEnd: sub.current_period_end,
+          cancelAtPeriodEnd: sub.cancel_at_period_end,
+        })),
+        charges: charges.data.map(charge => ({
+          id: charge.id,
+          amount: charge.amount,
+          status: charge.status,
+          created: charge.created,
+          description: charge.description,
+        })),
+      });
+    } catch (error: any) {
+      console.error('Error fetching donations:', error);
+      res.status(500).json({ error: 'Failed to fetch donation history' });
+    }
+  });
+
+  app.post('/api/donor/create-portal-session', async (req, res) => {
+    try {
+      const { sessionId } = req.body;
+      
+      const [session] = await db.select()
+        .from(donorSessions)
+        .where(and(
+          eq(donorSessions.id, sessionId),
+          gt(donorSessions.expiresAt, new Date())
+        ));
+
+      if (!session || !session.stripeCustomerId) {
+        return res.status(401).json({ error: 'Invalid session or no Stripe account' });
+      }
+
+      const stripe = await getUncachableStripeClient();
+      const portalSession = await stripe.billingPortal.sessions.create({
+        customer: session.stripeCustomerId,
+        return_url: `${req.protocol}://${req.get('host')}/manage-donation`,
+      });
+
+      res.json({ url: portalSession.url });
+    } catch (error: any) {
+      console.error('Error creating portal session:', error);
+      res.status(500).json({ error: 'Failed to create portal session' });
+    }
+  });
 
   app.get('/api/stripe/config', async (req, res) => {
     try {

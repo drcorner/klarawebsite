@@ -9,6 +9,7 @@ import Resources from "@/pages/Resources";
 import GetInvolved from "@/pages/GetInvolved";
 import Donate from "@/pages/Donate";
 import DonateThankYou from "@/pages/DonateThankYou";
+import ManageDonation from "@/pages/ManageDonation";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsOfService from "@/pages/TermsOfService";
 import NotFound from "@/pages/not-found";
@@ -22,6 +23,7 @@ function Router() {
       <Route path="/get-involved" component={GetInvolved} />
       <Route path="/donate" component={Donate} />
       <Route path="/donate/thank-you" component={DonateThankYou} />
+      <Route path="/manage-donation" component={ManageDonation} />
       <Route path="/privacy-policy" component={PrivacyPolicy} />
       <Route path="/terms-of-service" component={TermsOfService} />
       <Route component={NotFound} />
