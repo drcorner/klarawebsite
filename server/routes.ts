@@ -67,6 +67,19 @@ export async function registerRoutes(
       }
       const { email, code } = result.data;
 
+      console.log(`Verifying code for ${email}: ${code}`);
+
+      const allCodes = await db.select()
+        .from(verificationCodes)
+        .where(eq(verificationCodes.email, email));
+      
+      console.log(`Found ${allCodes.length} codes for email:`, allCodes.map(c => ({
+        code: c.code,
+        expiresAt: c.expiresAt,
+        now: new Date(),
+        isExpired: c.expiresAt <= new Date()
+      })));
+
       const [verification] = await db.select()
         .from(verificationCodes)
         .where(and(
@@ -76,6 +89,7 @@ export async function registerRoutes(
         ));
 
       if (!verification) {
+        console.log('No valid verification found');
         return res.status(400).json({ error: 'Invalid or expired code' });
       }
 
