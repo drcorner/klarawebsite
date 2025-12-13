@@ -1,4 +1,5 @@
-import { Link } from "wouter";
+import { useEffect, useRef } from "react";
+import { Link, useSearch } from "wouter";
 import { Heart, ArrowLeft, Share2, Facebook, Twitter, Linkedin } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -6,6 +7,26 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 export default function DonateThankYou() {
+  const searchString = useSearch();
+  const params = new URLSearchParams(searchString);
+  const sessionId = params.get('session_id');
+  const emailSentRef = useRef(false);
+
+  useEffect(() => {
+    if (sessionId && !emailSentRef.current) {
+      emailSentRef.current = true;
+      fetch('/api/send-donation-thank-you', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId }),
+      }).then(res => {
+        if (res.ok) {
+          console.log('Thank you email sent successfully');
+        }
+      }).catch(err => console.error('Failed to send thank-you email:', err));
+    }
+  }, [sessionId]);
+
   const shareUrl = encodeURIComponent("https://klaraproject.org");
   const shareText = encodeURIComponent("I just supported Klara Project - equipping churches for the AI age. Join me!");
 

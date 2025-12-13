@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
-import { sendVerificationEmail } from "./sendgridClient";
+import { sendVerificationEmail, sendDonationThankYouEmail } from "./sendgridClient";
 import { db } from "./db";
 import { verificationCodes, donorSessions } from "@shared/schema";
 import { eq, and, gt } from "drizzle-orm";
@@ -342,6 +342,51 @@ export async function registerRoutes(
     } catch (error: any) {
       console.error('Error retrieving checkout session:', error);
       res.status(500).json({ error: 'Failed to retrieve session' });
+    }
+  });
+
+  app.post('/api/send-donation-thank-you', async (req, res) => {
+    try {
+      const { sessionId } = req.body;
+      
+      if (!sessionId) {
+        return res.status(400).json({ error: 'Session ID required' });
+      }
+
+      const stripe = await getUncachableStripeClient();
+      const session = await stripe.checkout.sessions.retrieve(sessionId);
+      
+      if (session.status !== 'complete') {
+        return res.status(400).json({ error: 'Session not complete' });
+      }
+
+      const metadata = session.metadata || {};
+      const donorName = metadata.donor_name || 'Valued Donor';
+      const donorEmail = metadata.donor_email || session.customer_email;
+      const donationType = metadata.donation_type || 'one-time';
+      const duration = metadata.duration;
+      
+      if (!donorEmail) {
+        return res.status(400).json({ error: 'No email found for session' });
+      }
+
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+      
+      await sendDonationThankYouEmail({
+        donorName,
+        donorEmail,
+        amount: session.amount_total || 0,
+        isRecurring: donationType === 'monthly',
+        duration,
+        date: new Date(),
+        manageUrl: `${baseUrl}/manage-donation`,
+      });
+
+      console.log(`Thank you email sent to ${donorEmail}`);
+      res.json({ success: true });
+    } catch (error: any) {
+      console.error('Error sending thank you email:', error);
+      res.status(500).json({ error: 'Failed to send thank you email' });
     }
   });
 
