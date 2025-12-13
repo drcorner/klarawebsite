@@ -58,6 +58,9 @@ A sophisticated nonprofit website for The Klara Project, a Christian nonprofit w
 - Donor portal with email verification (code-based authentication)
 - Donor dashboard showing subscription and payment history with Stripe portal integration
 - Fixed-term donation option for monthly subscriptions (3, 6, 12 months with auto-cancel)
+- Cookie consent banner with visitor tracking integration
+- Page visit tracking to HubSpot (gated behind cookie consent)
+- Communication consent checkbox on donation form (synced to HubSpot)
 
 ## Development Notes
 - Run with `npm run dev`
