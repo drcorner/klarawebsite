@@ -5,7 +5,7 @@ const stats = [
     icon: TrendingUp,
     value: "2026–2030",
     label: "Leading AI companies predict human-level capabilities within this timeframe",
-    gradient: "from-primary to-primary/80",
+    gradient: "from-[hsl(220,70%,70%)] to-[hsl(220,60%,80%)]",
   },
   {
     icon: Users,
@@ -17,7 +17,7 @@ const stats = [
     icon: Shuffle,
     value: "14%",
     label: "Share of workers who may need to transition to entirely new occupations by 2030",
-    gradient: "from-gold to-coral",
+    gradient: "from-teal-light to-[hsl(160,50%,60%)]",
   },
 ];
 
