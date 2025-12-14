@@ -30,7 +30,7 @@ export default function HeroSection() {
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight">
             <span className="text-cream font-sans font-black">AI Is Here.</span>
             <br />
-            <span className="bg-gradient-to-r from-[hsl(220,60%,55%)] to-gold bg-clip-text text-transparent font-sans font-bold">
+            <span className="bg-gradient-to-r from-[hsl(220,70%,70%)] to-gold bg-clip-text text-transparent font-sans font-bold">
               Help the Church Respond.
             </span>
           </h1>
