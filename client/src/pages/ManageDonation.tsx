@@ -387,7 +387,7 @@ export default function ManageDonation() {
             <Card className="bg-card border-card-border">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Mail className="w-5 h-5 text-teal" />
+                  <Mail className="w-5 h-5 text-primary" />
                   Enter Your Email
                 </CardTitle>
                 <CardDescription>
@@ -410,7 +410,7 @@ export default function ManageDonation() {
                   </div>
                   <Button
                     type="submit"
-                    className="w-full bg-teal text-cream"
+                    className="w-full bg-primary text-cream"
                     disabled={isLoading}
                     data-testid="button-send-code"
                   >
@@ -453,7 +453,7 @@ export default function ManageDonation() {
                   </div>
                   <Button
                     type="submit"
-                    className="w-full bg-teal text-cream"
+                    className="w-full bg-primary text-cream"
                     disabled={isLoading}
                     data-testid="button-verify-code"
                   >
@@ -497,7 +497,7 @@ export default function ManageDonation() {
               {donationData === null ? (
                 <Card className="bg-card border-card-border">
                   <CardContent className="py-8 text-center">
-                    <Loader2 className="h-8 w-8 animate-spin mx-auto text-teal mb-4" />
+                    <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary mb-4" />
                     <p className="text-charcoal-muted">Loading your donation history...</p>
                   </CardContent>
                 </Card>
@@ -507,7 +507,7 @@ export default function ManageDonation() {
                     <CardHeader className="flex flex-row items-center justify-between gap-4">
                       <div>
                         <CardTitle className="flex items-center gap-2">
-                          <Calendar className="w-5 h-5 text-teal" />
+                          <Calendar className="w-5 h-5 text-primary" />
                           Active Subscriptions
                         </CardTitle>
                       </div>
@@ -551,7 +551,7 @@ export default function ManageDonation() {
                               </div>
                               <Badge
                                 variant={sub.status === "active" ? "default" : "secondary"}
-                                className={sub.status === "active" ? "bg-teal" : ""}
+                                className={sub.status === "active" ? "bg-primary" : ""}
                               >
                                 {sub.cancelAtPeriodEnd ? "Canceling" : sub.status}
                               </Badge>
@@ -565,7 +565,7 @@ export default function ManageDonation() {
                   <Card className="bg-card border-card-border">
                     <CardHeader className="flex flex-row items-center justify-between gap-4">
                       <CardTitle className="flex items-center gap-2">
-                        <DollarSign className="w-5 h-5 text-teal" />
+                        <DollarSign className="w-5 h-5 text-primary" />
                         Payment History
                       </CardTitle>
                       {donationData.charges.length > 0 && (

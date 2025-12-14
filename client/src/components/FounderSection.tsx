@@ -8,7 +8,7 @@ export default function FounderSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div className="relative order-2 lg:order-1">
             <div className="relative">
-              <div className="absolute -inset-4 bg-gradient-to-br from-teal/20 via-teal-light/10 to-gold/10 rounded-3xl blur-xl" />
+              <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 via-primary/10 to-gold/10 rounded-3xl blur-xl" />
               <img 
                 src={founderImage} 
                 alt="Dr. Anthony R. Pisani, Founder of Klara Project" 
@@ -18,15 +18,15 @@ export default function FounderSection() {
           </div>
           
           <div className="order-1 lg:order-2">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-teal/10 text-teal text-sm font-semibold mb-4">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4">
               Leadership
             </span>
             <h2 className="font-sans text-3xl md:text-4xl font-bold text-charcoal mb-6">
               About the Founder
             </h2>
             
-            <div className="relative mb-6 p-6 rounded-2xl bg-gradient-to-br from-teal/5 to-transparent border border-teal/10">
-              <Quote className="absolute top-4 left-4 h-8 w-8 text-teal/20" />
+            <div className="relative mb-6 p-6 rounded-2xl bg-gradient-to-br from-primary/5 to-transparent border border-primary/10">
+              <Quote className="absolute top-4 left-4 h-8 w-8 text-primary/20" />
               <p className="text-charcoal leading-relaxed pl-8 italic">
                 The idea for Klara Project was born when Dr. Pisani taught a Sunday school class 
                 on faith and AI and watched people young and old leave encouraged—strengthened in their 

@@ -67,7 +67,7 @@ export default function WhyKlaraProject() {
         <section className="bg-cream-dark py-16 md:py-24">
           <div className="max-w-7xl mx-auto px-6 md:px-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <Card className="p-8 bg-card border-l-4 border-l-teal">
+              <Card className="p-8 bg-card border-l-4 border-l-primary">
                 <h3 className="font-serif text-2xl font-semibold text-charcoal mb-4">Our Mission</h3>
                 <ul className="space-y-3 text-charcoal">
                   <li><strong>Equip</strong> churches and Christians with practical resources for the AI age.</li>
@@ -124,8 +124,8 @@ export default function WhyKlaraProject() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {approachItems.map((item, index) => (
                 <Card key={index} className="p-6 bg-card border-card-border">
-                  <div className="w-12 h-12 rounded-lg bg-teal/10 flex items-center justify-center mb-4">
-                    <item.icon className="h-6 w-6 text-teal" />
+                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                    <item.icon className="h-6 w-6 text-primary" />
                   </div>
                   <h3 className="font-semibold text-charcoal mb-2">{item.title}</h3>
                   <p className="text-charcoal-muted text-sm">{item.description}</p>
@@ -202,7 +202,7 @@ export default function WhyKlaraProject() {
           </div>
         </section>
 
-        <section className="bg-teal py-16 md:py-20">
+        <section className="bg-primary py-16 md:py-20">
           <div className="max-w-7xl mx-auto px-6 md:px-10">
             <Card className="max-w-2xl mx-auto p-8 bg-cream text-center">
               <h3 className="font-serif text-2xl font-semibold text-charcoal mb-4">
@@ -214,7 +214,7 @@ export default function WhyKlaraProject() {
               </p>
               <Button 
                 onClick={() => setIsModalOpen(true)}
-                className="bg-teal text-cream"
+                className="bg-primary text-cream"
                 data-testid="button-download-whitepaper"
               >
                 <Download className="w-4 h-4 mr-2" />
@@ -248,13 +248,13 @@ export default function WhyKlaraProject() {
                   data-testid="input-modal-email"
                 />
               </div>
-              <Button type="submit" className="w-full bg-teal text-cream" data-testid="button-modal-download">
+              <Button type="submit" className="w-full bg-primary text-cream" data-testid="button-modal-download">
                 Download White Paper
               </Button>
             </form>
           ) : (
             <div className="text-center py-6">
-              <Download className="h-8 w-8 text-teal mx-auto mb-4" />
+              <Download className="h-8 w-8 text-primary mx-auto mb-4" />
               <p className="text-charcoal">Thank you! Your download will begin shortly.</p>
             </div>
           )}

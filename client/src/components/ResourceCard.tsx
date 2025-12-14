@@ -25,7 +25,7 @@ export default function ResourceCard({
   };
 
   const statusColors = {
-    "available": "bg-teal/10 text-teal border-teal/30",
+    "available": "bg-primary/10 text-primary border-primary/30",
     "in-progress": "bg-gold/10 text-gold-dark border-gold/30",
     "coming-soon": "bg-charcoal-light/10 text-charcoal-muted border-charcoal-light/30",
   };
@@ -46,14 +46,14 @@ export default function ResourceCard({
       </p>
       
       {status === "available" && onDownload && (
-        <Button onClick={onDownload} className="bg-teal text-cream" data-testid={`button-download-${title.toLowerCase().replace(/\s+/g, '-')}`}>
+        <Button onClick={onDownload} className="bg-primary text-cream" data-testid={`button-download-${title.toLowerCase().replace(/\s+/g, '-')}`}>
           <Download className="w-4 h-4 mr-2" />
           Download
         </Button>
       )}
       
       {status === "in-progress" && onLearnMore && (
-        <Button variant="outline" onClick={onLearnMore} className="border-teal text-teal" data-testid={`button-learn-${title.toLowerCase().replace(/\s+/g, '-')}`}>
+        <Button variant="outline" onClick={onLearnMore} className="border-primary text-primary" data-testid={`button-learn-${title.toLowerCase().replace(/\s+/g, '-')}`}>
           Learn More
           <ArrowRight className="w-4 h-4 ml-2" />
         </Button>

@@ -35,8 +35,8 @@ export default function DonateThankYou() {
       <Header />
       <main className="py-20 md:py-28">
         <div className="max-w-2xl mx-auto px-6 md:px-10 text-center">
-          <div className="w-20 h-20 rounded-full bg-teal/10 flex items-center justify-center mx-auto mb-8">
-            <Heart className="h-10 w-10 text-teal" />
+          <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-8">
+            <Heart className="h-10 w-10 text-primary" />
           </div>
           
           <h1 className="font-serif text-4xl md:text-5xl font-bold text-charcoal mb-6">
@@ -53,7 +53,7 @@ export default function DonateThankYou() {
             <p className="text-charcoal-muted text-sm">
               A confirmation email has been sent to your address. If you have any questions 
               about your donation, please contact us at{" "}
-              <a href="mailto:info@klaraproject.org" className="text-teal underline">
+              <a href="mailto:info@klaraproject.org" className="text-primary underline">
                 info@klaraproject.org
               </a>
             </p>
@@ -70,7 +70,7 @@ export default function DonateThankYou() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button variant="outline" size="icon" className="border-teal text-teal">
+                <Button variant="outline" size="icon" className="border-primary text-primary">
                   <Facebook className="w-4 h-4" />
                 </Button>
               </a>
@@ -79,7 +79,7 @@ export default function DonateThankYou() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button variant="outline" size="icon" className="border-teal text-teal">
+                <Button variant="outline" size="icon" className="border-primary text-primary">
                   <Twitter className="w-4 h-4" />
                 </Button>
               </a>
@@ -88,7 +88,7 @@ export default function DonateThankYou() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button variant="outline" size="icon" className="border-teal text-teal">
+                <Button variant="outline" size="icon" className="border-primary text-primary">
                   <Linkedin className="w-4 h-4" />
                 </Button>
               </a>
@@ -96,7 +96,7 @@ export default function DonateThankYou() {
           </div>
 
           <Link href="/">
-            <Button variant="outline" className="border-teal text-teal" data-testid="button-back-home">
+            <Button variant="outline" className="border-primary text-primary" data-testid="button-back-home">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Return to Homepage
             </Button>

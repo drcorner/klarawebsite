@@ -34,8 +34,8 @@ export default function WhatYourGiftSupports() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {items.map((item, index) => (
           <Card key={index} className="p-6 bg-card border-card-border text-center">
-            <div className="w-12 h-12 rounded-full bg-teal/10 flex items-center justify-center mx-auto mb-4">
-              <item.icon className="h-6 w-6 text-teal" />
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+              <item.icon className="h-6 w-6 text-primary" />
             </div>
             <h3 className="font-semibold text-charcoal mb-2">{item.title}</h3>
             <p className="text-charcoal-muted text-sm">{item.description}</p>

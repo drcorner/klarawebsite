@@ -167,14 +167,14 @@ export default function Resources() {
                   data-testid="input-download-email"
                 />
               </div>
-              <Button type="submit" className="w-full bg-teal text-cream" data-testid="button-confirm-download">
+              <Button type="submit" className="w-full bg-primary text-cream" data-testid="button-confirm-download">
                 <Download className="w-4 h-4 mr-2" />
                 Download White Paper
               </Button>
             </form>
           ) : (
             <div className="text-center py-6">
-              <Download className="h-8 w-8 text-teal mx-auto mb-4" />
+              <Download className="h-8 w-8 text-primary mx-auto mb-4" />
               <p className="text-charcoal">Thank you! Your download will begin shortly.</p>
             </div>
           )}

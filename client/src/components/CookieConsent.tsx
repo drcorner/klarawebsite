@@ -84,7 +84,7 @@ export default function CookieConsent() {
               By continuing, you agree to our{" "}
               <Link 
                 href="/privacy-policy" 
-                className="text-teal-600 hover:text-teal-700 underline underline-offset-2"
+                className="text-primary hover:text-primary/80 underline underline-offset-2"
                 data-testid="link-privacy-policy"
               >
                 Privacy Policy
@@ -104,7 +104,7 @@ export default function CookieConsent() {
             <Button
               size="sm"
               onClick={handleAccept}
-              className="bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white"
+              className="bg-gradient-to-r from-primary to-primary/80 text-white"
               data-testid="button-accept-cookies"
             >
               Accept

@@ -20,7 +20,7 @@ export default function NewsletterSignup({ variant = "inline", className = "" }:
 
   if (submitted) {
     return (
-      <div className={`flex items-center gap-2 text-teal ${className}`}>
+      <div className={`flex items-center gap-2 text-primary ${className}`}>
         <Check className="w-5 h-5" />
         <span>Thank you for subscribing!</span>
       </div>
@@ -46,7 +46,7 @@ export default function NewsletterSignup({ variant = "inline", className = "" }:
             className="flex-1"
             data-testid="input-newsletter-email"
           />
-          <Button type="submit" className="bg-teal text-cream" data-testid="button-newsletter-subscribe">
+          <Button type="submit" className="bg-primary text-cream" data-testid="button-newsletter-subscribe">
             Subscribe
           </Button>
         </form>
@@ -65,7 +65,7 @@ export default function NewsletterSignup({ variant = "inline", className = "" }:
         className="flex-1"
         data-testid="input-newsletter-email-inline"
       />
-      <Button type="submit" className="bg-teal text-cream shrink-0" data-testid="button-newsletter-subscribe-inline">
+      <Button type="submit" className="bg-primary text-cream shrink-0" data-testid="button-newsletter-subscribe-inline">
         <Mail className="w-4 h-4 md:mr-2" />
         <span className="hidden md:inline">Subscribe</span>
       </Button>

@@ -53,8 +53,8 @@ export default function GetInvolved() {
           <div className="max-w-7xl mx-auto px-6 md:px-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <div className="w-16 h-16 rounded-full bg-teal/10 flex items-center justify-center mb-6">
-                  <Heart className="h-8 w-8 text-teal" />
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
+                  <Heart className="h-8 w-8 text-primary" />
                 </div>
                 <h2 className="font-serif text-3xl font-semibold text-charcoal mb-6">
                   Give
@@ -66,14 +66,14 @@ export default function GetInvolved() {
                   us serve churches and represent Christian perspectives where decisions are being made.
                 </p>
                 <Link href="/donate">
-                  <Button className="bg-teal text-cream font-semibold" data-testid="button-support-mission">
+                  <Button className="bg-primary text-cream font-semibold" data-testid="button-support-mission">
                     Support Our Mission
                   </Button>
                 </Link>
               </div>
               <Card className="p-8 bg-cream-dark border-card-border">
                 <div className="flex items-center gap-4 mb-6">
-                  <Mail className="h-6 w-6 text-teal" />
+                  <Mail className="h-6 w-6 text-primary" />
                   <h3 className="font-serif text-2xl font-semibold text-charcoal">
                     Stay Informed
                   </h3>
@@ -91,8 +91,8 @@ export default function GetInvolved() {
           <div className="max-w-7xl mx-auto px-6 md:px-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               <div>
-                <div className="w-16 h-16 rounded-full bg-teal/10 flex items-center justify-center mb-6">
-                  <Briefcase className="h-8 w-8 text-teal" />
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
+                  <Briefcase className="h-8 w-8 text-primary" />
                 </div>
                 <h2 className="font-serif text-3xl font-semibold text-charcoal mb-6">
                   Volunteer Your Expertise
@@ -162,7 +162,7 @@ export default function GetInvolved() {
                         data-testid="textarea-volunteer-message"
                       />
                     </div>
-                    <Button type="submit" className="w-full bg-teal text-cream font-semibold" data-testid="button-volunteer-submit">
+                    <Button type="submit" className="w-full bg-primary text-cream font-semibold" data-testid="button-volunteer-submit">
                       Express Interest
                     </Button>
                   </form>
@@ -170,8 +170,8 @@ export default function GetInvolved() {
               ) : (
                 <Card className="p-8 bg-card border-card-border flex items-center justify-center">
                   <div className="text-center">
-                    <div className="w-16 h-16 rounded-full bg-teal/10 flex items-center justify-center mx-auto mb-4">
-                      <Check className="h-8 w-8 text-teal" />
+                    <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                      <Check className="h-8 w-8 text-primary" />
                     </div>
                     <h3 className="font-serif text-xl font-semibold text-charcoal mb-2">
                       Thank You!
@@ -190,8 +190,8 @@ export default function GetInvolved() {
           <div className="max-w-7xl mx-auto px-6 md:px-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               <div>
-                <div className="w-16 h-16 rounded-full bg-teal/10 flex items-center justify-center mb-6">
-                  <Share2 className="h-8 w-8 text-teal" />
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
+                  <Share2 className="h-8 w-8 text-primary" />
                 </div>
                 <h2 className="font-serif text-3xl font-semibold text-charcoal mb-6">
                   Share Our Mission
@@ -207,7 +207,7 @@ export default function GetInvolved() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Button variant="outline" className="border-teal text-teal" data-testid="button-share-facebook">
+                    <Button variant="outline" className="border-primary text-primary" data-testid="button-share-facebook">
                       <Facebook className="w-4 h-4 mr-2" />
                       Facebook
                     </Button>
@@ -217,7 +217,7 @@ export default function GetInvolved() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Button variant="outline" className="border-teal text-teal" data-testid="button-share-twitter">
+                    <Button variant="outline" className="border-primary text-primary" data-testid="button-share-twitter">
                       <Twitter className="w-4 h-4 mr-2" />
                       Twitter
                     </Button>
@@ -227,14 +227,14 @@ export default function GetInvolved() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Button variant="outline" className="border-teal text-teal" data-testid="button-share-linkedin">
+                    <Button variant="outline" className="border-primary text-primary" data-testid="button-share-linkedin">
                       <Linkedin className="w-4 h-4 mr-2" />
                       LinkedIn
                     </Button>
                   </a>
                   <Button 
                     variant="outline" 
-                    className="border-teal text-teal"
+                    className="border-primary text-primary"
                     onClick={handleCopyLink}
                     data-testid="button-copy-link"
                   >
@@ -246,7 +246,7 @@ export default function GetInvolved() {
 
               <Card className="p-8 bg-cream-dark border-card-border">
                 <div className="flex items-center gap-4 mb-6">
-                  <Church className="h-6 w-6 text-teal" />
+                  <Church className="h-6 w-6 text-primary" />
                   <h3 className="font-serif text-2xl font-semibold text-charcoal">
                     Bring Us to Your Church
                   </h3>
@@ -257,7 +257,7 @@ export default function GetInvolved() {
                   settings.
                 </p>
                 <a href="mailto:info@klaraproject.org">
-                  <Button className="bg-teal text-cream font-semibold" data-testid="button-contact-church">
+                  <Button className="bg-primary text-cream font-semibold" data-testid="button-contact-church">
                     Contact Us
                   </Button>
                 </a>

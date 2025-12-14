@@ -7,7 +7,7 @@ export default function ResponseSection() {
     <section className="bg-cream-dark py-20 md:py-28">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="text-center mb-14">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-teal/10 text-teal text-sm font-semibold mb-4">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4">
             Our Approach
           </span>
           <h2 className="font-sans text-3xl md:text-4xl font-bold text-charcoal">
@@ -17,7 +17,7 @@ export default function ResponseSection() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-12">
           <div className="p-8 rounded-2xl bg-cream border border-charcoal/5 shadow-sm hover:shadow-md transition-shadow">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal to-teal-light flex items-center justify-center mb-6 shadow-sm">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center mb-6 shadow-sm">
               <BookOpen className="h-7 w-7 text-cream" />
             </div>
             <h3 className="font-bold text-xl text-charcoal mb-3">Equip</h3>
@@ -41,7 +41,7 @@ export default function ResponseSection() {
 
         <div className="text-center">
           <Link href="/why-klara-project">
-            <Button className="bg-gradient-to-r from-teal to-teal-dark text-cream rounded-full group font-semibold shadow-sm" data-testid="button-see-building">
+            <Button className="bg-gradient-to-r from-primary to-primary/80 text-cream rounded-full group font-semibold shadow-sm" data-testid="button-see-building">
               Learn More About Our Mission
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>

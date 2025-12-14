@@ -30,13 +30,13 @@ export default function PartnerSection() {
   };
 
   return (
-    <section className="relative bg-gradient-to-br from-charcoal via-charcoal to-teal-dark py-24 md:py-32 overflow-hidden">
+    <section className="relative bg-gradient-to-br from-charcoal via-charcoal to-primary/80 py-24 md:py-32 overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(20,184,166,0.15),transparent_50%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(249,115,22,0.1),transparent_50%)]" />
       
       <div className="relative max-w-7xl mx-auto px-4 md:px-8">
         <div className="max-w-3xl mx-auto text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-light to-teal mb-8 shadow-lg shadow-teal/25">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary/80 mb-8 shadow-lg shadow-primary/25">
             <Rocket className="h-8 w-8 text-cream" />
           </div>
           
@@ -127,7 +127,7 @@ export default function PartnerSection() {
               </p>
               <Button 
                 type="submit" 
-                className="w-full bg-gradient-to-r from-teal to-teal-dark text-cream font-semibold rounded-full"
+                className="w-full bg-gradient-to-r from-primary to-primary/80 text-cream font-semibold rounded-full"
                 data-testid="button-whitepaper-submit"
               >
                 Download White Paper
@@ -135,7 +135,7 @@ export default function PartnerSection() {
             </form>
           ) : (
             <div className="text-center py-6">
-              <div className="w-16 h-16 bg-gradient-to-br from-teal to-teal-light rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary/80 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Download className="h-8 w-8 text-cream" />
               </div>
               <p className="text-charcoal font-semibold mb-2">Thank you!</p>

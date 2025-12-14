@@ -58,7 +58,7 @@ export default function TermsOfService() {
                 Donations to Klara Project are generally non-refundable. However, we understand 
                 that circumstances may change. If you have concerns about a donation, please 
                 contact us at{" "}
-                <a href="mailto:info@klaraproject.org" className="text-teal underline">
+                <a href="mailto:info@klaraproject.org" className="text-primary underline">
                   info@klaraproject.org
                 </a>
                 , and we will work with you to address your situation.
@@ -109,7 +109,7 @@ export default function TermsOfService() {
               </h2>
               <p className="text-charcoal leading-relaxed">
                 If you have questions about these Terms of Service, please contact us at{" "}
-                <a href="mailto:info@klaraproject.org" className="text-teal underline">
+                <a href="mailto:info@klaraproject.org" className="text-primary underline">
                   info@klaraproject.org
                 </a>
               </p>

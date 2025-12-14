@@ -90,7 +90,7 @@ export default function PrivacyPolicy() {
               <p className="text-charcoal leading-relaxed mb-6">
                 If you have questions about this Privacy Policy or wish to exercise your rights, 
                 please contact us at{" "}
-                <a href="mailto:info@klaraproject.org" className="text-teal underline">
+                <a href="mailto:info@klaraproject.org" className="text-primary underline">
                   info@klaraproject.org
                 </a>
               </p>

@@ -5,13 +5,13 @@ const challenges = [
     icon: Church,
     category: "Ministry",
     story: "A pastor uses AI to draft his sermons, saying it frees him for counseling and hospital visits. But part of him misses the wrestling he used to do alone with the text.",
-    color: "bg-teal/10 text-teal",
+    color: "bg-primary/10 text-primary",
   },
   {
     icon: Baby,
     category: "Parenting",
     story: "A father learns his teenage son has been using AI to complete school assignments. Is this cheating—or just using a new tool? He wants his son to develop his own thinking, but he also uses AI at work. Where's the line?",
-    color: "bg-teal-light/10 text-teal",
+    color: "bg-primary/10 text-primary",
   },
   {
     icon: Heart,
@@ -62,7 +62,7 @@ export default function ChallengeSection() {
           {challenges.map((item, index) => (
             <div 
               key={index}
-              className="p-5 rounded-2xl bg-cream border border-charcoal/5 shadow-sm hover:shadow-md hover:border-teal/20 transition-all duration-300"
+              className="p-5 rounded-2xl bg-cream border border-charcoal/5 shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-300"
             >
               <div className="flex items-center gap-3 mb-3">
                 <div className={`w-9 h-9 rounded-xl ${item.color} flex items-center justify-center`}>

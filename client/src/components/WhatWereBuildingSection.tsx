@@ -8,7 +8,7 @@ const items = [
     title: "Video-Based Curriculum",
     description: "A 13-week series for small groups, Sunday school, or workshops—helping Christians apply biblical principles to AI challenges.",
     status: "In Progress",
-    gradient: "from-teal to-teal-light",
+    gradient: "from-primary to-primary/80",
   },
   {
     icon: MessageSquare,
@@ -29,7 +29,7 @@ const items = [
     title: "Educational Grants",
     description: "Research funding for students exploring AI, faith, and ethics.",
     status: "Coming Soon",
-    gradient: "from-purple-500 to-teal",
+    gradient: "from-purple-500 to-primary",
   },
   {
     icon: Heart,
@@ -46,7 +46,7 @@ export default function WhatWereBuildingSection() {
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
           <div>
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-teal/10 to-teal-light/10 text-teal text-sm font-semibold mb-4">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/10 to-primary/5 text-primary text-sm font-semibold mb-4">
               <Sparkles className="h-4 w-4" />
               Our Programs
             </span>
@@ -55,7 +55,7 @@ export default function WhatWereBuildingSection() {
             </h2>
           </div>
           <Link href="/resources">
-            <Button variant="outline" className="border-teal text-teal rounded-full group font-semibold">
+            <Button variant="outline" className="border-primary text-primary rounded-full group font-semibold">
               View All Resources
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
@@ -66,7 +66,7 @@ export default function WhatWereBuildingSection() {
           {items.map((item, index) => (
             <div 
               key={index} 
-              className="group relative p-6 rounded-2xl bg-cream border border-charcoal/10 hover:border-teal/30 hover:shadow-lg hover:shadow-teal/5 transition-all duration-300"
+              className="group relative p-6 rounded-2xl bg-cream border border-charcoal/10 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300"
               data-testid={`card-building-${index}`}
             >
               <div className="flex items-start justify-between mb-5">
@@ -75,13 +75,13 @@ export default function WhatWereBuildingSection() {
                 </div>
                 <span className={`text-xs font-semibold px-3 py-1 rounded-full ${
                   item.status === "In Progress" 
-                    ? "bg-teal/10 text-teal" 
+                    ? "bg-primary/10 text-primary" 
                     : "bg-charcoal/5 text-charcoal-muted"
                 }`}>
                   {item.status}
                 </span>
               </div>
-              <h3 className="font-semibold text-lg text-charcoal mb-2 group-hover:text-teal transition-colors">
+              <h3 className="font-semibold text-lg text-charcoal mb-2 group-hover:text-primary transition-colors">
                 {item.title}
               </h3>
               <p className="text-charcoal-muted text-sm leading-relaxed">

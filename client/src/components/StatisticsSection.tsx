@@ -5,7 +5,7 @@ const stats = [
     icon: TrendingUp,
     value: "2026–2030",
     label: "Leading AI companies predict human-level capabilities within this timeframe",
-    gradient: "from-teal-light to-teal",
+    gradient: "from-primary to-primary/80",
   },
   {
     icon: Users,
@@ -26,7 +26,7 @@ export default function StatisticsSection() {
     <section className="bg-charcoal py-20 md:py-28">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="text-center mb-16">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-teal-light/20 text-teal-light text-sm font-semibold mb-4">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-primary/20 text-primary text-sm font-semibold mb-4">
             The Urgency
           </span>
           <h2 className="font-sans text-3xl md:text-4xl font-bold text-cream">
