@@ -5,12 +5,12 @@ const stats = [
     accent: "text-[hsl(220,70%,75%)]",
   },
   {
-    value: "92M",
+    value: "92 Million",
     label: "Jobs eliminated by AI by 2030—even as new ones emerge",
     accent: "text-coral",
   },
   {
-    value: "122–190M",
+    value: "190 Million",
     label: "People using just one AI chatbot daily",
     accent: "text-gold",
   },
