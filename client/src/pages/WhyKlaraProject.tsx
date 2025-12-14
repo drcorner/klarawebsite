@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Building2, Users, BookOpen, TrendingUp, Download, ArrowRight } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -19,6 +19,7 @@ const approachItems = [
 ];
 
 export default function WhyKlaraProject() {
+  const [, setLocation] = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -148,14 +149,15 @@ export default function WhyKlaraProject() {
                 Generation Z and Generation Alpha. We create resources to serve them and their parents, 
                 and we build our organization by developing young leaders from within.
               </p>
-              <Link href="/next-generation">
-                <Button asChild variant="outline" className="rounded-full group font-semibold" data-testid="button-learn-next-gen">
-                  <span>
-                    Learn More About Our Commitment
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </span>
-                </Button>
-              </Link>
+              <Button 
+                variant="outline" 
+                className="rounded-full group font-semibold"
+                onClick={() => setLocation("/next-generation")}
+                data-testid="button-learn-next-gen"
+              >
+                Learn More About Our Commitment
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Button>
             </div>
           </div>
         </section>
