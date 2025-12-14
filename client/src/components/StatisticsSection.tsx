@@ -5,13 +5,13 @@ const stats = [
     accent: "text-[hsl(220,70%,75%)]",
   },
   {
-    value: "14M",
-    label: "Net job loss forecast by the World Economic Forum by 2027",
+    value: "92M",
+    label: "Jobs eliminated by AI by 2030—even as new ones emerge",
     accent: "text-coral",
   },
   {
-    value: "14%",
-    label: "Share of workers who may need to transition to entirely new occupations by 2030",
+    value: "122–190M",
+    label: "People using just one AI chatbot daily",
     accent: "text-gold",
   },
 ];
