@@ -24,6 +24,7 @@ A sophisticated nonprofit website for The Klara Project, a Christian nonprofit w
 ### Pages
 - `/` - Homepage with hero, mission overview, statistics, founder bio
 - `/why-klara-project` - Mission, vision, faith statement, approach
+- `/next-generation` - Gen Z and Gen Alpha focus, leadership development
 - `/resources` - Resource library with downloadable white paper
 - `/get-involved` - Donation, newsletter, volunteer, sharing options
 - `/donate` - Donation form with monthly/one-time options
@@ -31,6 +32,10 @@ A sophisticated nonprofit website for The Klara Project, a Christian nonprofit w
 - `/manage-donation` - Donor portal with email verification, view history, manage payment
 - `/privacy-policy` - Privacy policy
 - `/terms-of-service` - Terms of service
+
+### Navigation
+- Global scroll-to-top on all route changes (useScrollToTop hook in App.tsx)
+- All navigation automatically scrolls to top of destination page
 
 ### Key Components
 - `Header.tsx` - Navigation with mobile hamburger menu

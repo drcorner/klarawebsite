@@ -17,6 +17,14 @@ import NextGeneration from "@/pages/NextGeneration";
 import NotFound from "@/pages/not-found";
 import CookieConsent, { trackPageVisit, hasConsent } from "@/components/CookieConsent";
 
+function useScrollToTop() {
+  const [location] = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [location]);
+}
+
 function usePageTracking() {
   const [location] = useLocation();
   
@@ -46,6 +54,7 @@ function Router() {
 }
 
 function AppContent() {
+  useScrollToTop();
   usePageTracking();
   
   return (
