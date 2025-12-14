@@ -64,7 +64,7 @@ export default function Footer() {
               {navLinks.map((link) => (
                 <Link key={link.href} href={link.href}>
                   <span 
-                    className="text-cream/60 hover:text-teal-light transition-colors text-sm"
+                    className="text-cream/60 hover:text-primary transition-colors text-sm"
                     data-testid={`footer-nav-${link.label.toLowerCase().replace(/\s+/g, '-')}`}
                   >
                     {link.label}
@@ -80,7 +80,7 @@ export default function Footer() {
               Get updates on resources and opportunities.
             </p>
             {isSubscribed ? (
-              <div className="flex items-center gap-2 text-teal-light text-sm">
+              <div className="flex items-center gap-2 text-primary text-sm">
                 <Check className="h-4 w-4" />
                 Thanks for subscribing!
               </div>
@@ -97,7 +97,7 @@ export default function Footer() {
                 />
                 <Button 
                   size="icon" 
-                  className="bg-teal-light text-cream shrink-0 rounded-full" 
+                  className="bg-primary text-cream shrink-0 rounded-full" 
                   onClick={handleSubscribe}
                   disabled={isLoading || !email}
                   data-testid="button-footer-subscribe"
@@ -110,7 +110,7 @@ export default function Footer() {
               <h4 className="font-semibold text-cream mb-2 text-sm uppercase tracking-wide">Contact</h4>
               <a 
                 href="mailto:info@klaraproject.org" 
-                className="text-teal-light hover:text-teal-light/80 transition-colors text-sm inline-flex items-center gap-1"
+                className="text-primary hover:text-primary/80 transition-colors text-sm inline-flex items-center gap-1"
                 data-testid="link-contact-email"
               >
                 <Mail className="h-4 w-4" />

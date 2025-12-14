@@ -27,7 +27,7 @@ export default function Header() {
                   variant={location === item.href ? "secondary" : "ghost"}
                   size="sm"
                   className={`rounded-full ${
-                    location === item.href ? "bg-teal text-cream" : ""
+                    location === item.href ? "bg-primary text-cream" : ""
                   }`}
                   data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
                 >
@@ -38,7 +38,7 @@ export default function Header() {
             <Link href="/donate">
               <Button 
                 size="sm"
-                className="ml-3 bg-gradient-to-r from-teal to-teal-dark text-cream font-semibold rounded-full px-6 shadow-sm shadow-teal/20" 
+                className="ml-3 bg-gradient-to-r from-primary to-primary/80 text-cream font-semibold rounded-full px-6 shadow-sm shadow-primary/20" 
                 data-testid="nav-donate"
               >
                 Donate
@@ -70,7 +70,7 @@ export default function Header() {
                 <Button
                   variant={location === "/" ? "secondary" : "ghost"}
                   className={`w-full justify-start text-lg rounded-xl ${
-                    location === "/" ? "bg-teal text-cream" : ""
+                    location === "/" ? "bg-primary text-cream" : ""
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                   data-testid="mobile-nav-home"
@@ -83,7 +83,7 @@ export default function Header() {
                   <Button
                     variant={location === item.href ? "secondary" : "ghost"}
                     className={`w-full justify-start text-lg rounded-xl ${
-                      location === item.href ? "bg-teal text-cream" : ""
+                      location === item.href ? "bg-primary text-cream" : ""
                     }`}
                     onClick={() => setIsMenuOpen(false)}
                     data-testid={`mobile-nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
@@ -94,7 +94,7 @@ export default function Header() {
               ))}
               <Link href="/donate">
                 <Button 
-                  className="w-full mt-4 bg-gradient-to-r from-teal to-teal-dark text-cream font-semibold text-lg rounded-full"
+                  className="w-full mt-4 bg-gradient-to-r from-primary to-primary/80 text-cream font-semibold text-lg rounded-full"
                   onClick={() => setIsMenuOpen(false)}
                   data-testid="mobile-nav-donate"
                 >
