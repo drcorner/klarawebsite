@@ -210,14 +210,14 @@ export default function ManageDonation() {
           <title>Donation Receipt - The Klara Project</title>
           <style>
             body { font-family: 'IBM Plex Sans', Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; }
-            .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #1E4D4A; padding-bottom: 20px; }
-            .header h1 { color: #1E4D4A; margin: 0 0 5px 0; font-family: Georgia, serif; }
+            .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #C4704B; padding-bottom: 20px; }
+            .header h1 { color: #C4704B; margin: 0 0 5px 0; font-family: Georgia, serif; }
             .header p { color: #666; margin: 0; font-size: 14px; }
-            .receipt-title { color: #1E4D4A; margin: 30px 0 20px 0; font-size: 18px; }
+            .receipt-title { color: #C4704B; margin: 30px 0 20px 0; font-size: 18px; }
             .detail-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
             .detail-label { color: #666; }
             .detail-value { color: #2D2A27; font-weight: 500; }
-            .amount { color: #1E4D4A; font-size: 24px; font-weight: bold; }
+            .amount { color: #C4704B; font-size: 24px; font-weight: bold; }
             .tax-notice { background: rgba(201, 169, 98, 0.15); border-left: 4px solid #C9A962; padding: 15px; margin: 30px 0; font-size: 13px; color: #666; }
             .footer { margin-top: 40px; text-align: center; color: #999; font-size: 12px; }
             @media print { body { margin: 0; } }
@@ -299,17 +299,17 @@ export default function ManageDonation() {
           <title>${data.year} Giving Statement - The Klara Project</title>
           <style>
             body { font-family: 'IBM Plex Sans', Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; }
-            .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #1E4D4A; padding-bottom: 20px; }
-            .header h1 { color: #1E4D4A; margin: 0 0 5px 0; font-family: Georgia, serif; }
+            .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #C4704B; padding-bottom: 20px; }
+            .header h1 { color: #C4704B; margin: 0 0 5px 0; font-family: Georgia, serif; }
             .header p { color: #666; margin: 0; font-size: 14px; }
-            .statement-title { color: #1E4D4A; margin: 30px 0 10px 0; font-size: 18px; }
+            .statement-title { color: #C4704B; margin: 30px 0 10px 0; font-size: 18px; }
             .donor-info { background: #f5f5f5; padding: 15px; margin-bottom: 20px; }
             table { width: 100%; border-collapse: collapse; }
-            th { text-align: left; padding: 10px 0; border-bottom: 2px solid #1E4D4A; color: #1E4D4A; }
+            th { text-align: left; padding: 10px 0; border-bottom: 2px solid #C4704B; color: #C4704B; }
             th:last-child { text-align: right; }
-            .total-row { font-weight: bold; border-top: 2px solid #1E4D4A; }
+            .total-row { font-weight: bold; border-top: 2px solid #C4704B; }
             .total-row td { padding-top: 15px; }
-            .total-amount { color: #1E4D4A; font-size: 20px; }
+            .total-amount { color: #C4704B; font-size: 20px; }
             .tax-notice { background: rgba(201, 169, 98, 0.15); border-left: 4px solid #C9A962; padding: 15px; margin: 30px 0; font-size: 13px; color: #666; }
             .footer { margin-top: 40px; text-align: center; color: #999; font-size: 12px; }
             @media print { body { margin: 0; } }
