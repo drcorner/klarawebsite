@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Building2, Users, BookOpen, TrendingUp, Download } from "lucide-react";
+import { Link } from "wouter";
+import { Building2, Users, BookOpen, TrendingUp, Download, ArrowRight } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
@@ -142,21 +143,17 @@ export default function WhyKlaraProject() {
                 Investing in the Next Generation
               </h2>
               <p className="text-charcoal leading-relaxed mb-4">
-                From Gen X to Gen Alpha, every generation will be shaped by AI transformation. Gen X 
-                leads organizations making critical decisions today. Gen Z enters a workforce being 
-                reshaped in real time. Gen Alpha will grow up never knowing a world without AI.
+                Investing in the next generation is not just part of The Klara Project's mission—it is 
+                central to how we operate. Two generations will be most shaped by AI and robotics: 
+                Generation Z and Generation Alpha. We create resources to serve them and their parents, 
+                and we build our organization by developing young leaders from within.
               </p>
-              <p className="text-charcoal leading-relaxed mb-4">
-                The Klara Project is committed to developing leaders across generations within our organization: 
-                board representation, hiring leaders when consistent with excellence, and building 
-                succession planning from the start. We don't just serve these generations; we platform 
-                and develop them.
-              </p>
-              <p className="text-charcoal-muted leading-relaxed italic">
-                We are positioned at a strategic moment: the largest wealth transfer in history is 
-                underway. Our commitment to young leaders positions us to build relationships with 
-                emerging philanthropists who will shape Christian giving for decades.
-              </p>
+              <Link href="/next-generation">
+                <Button variant="outline" className="rounded-full group font-semibold" data-testid="button-learn-next-gen">
+                  Learn More About Our Commitment
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </Link>
             </div>
           </div>
         </section>

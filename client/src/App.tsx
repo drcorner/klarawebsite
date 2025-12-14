@@ -13,6 +13,7 @@ import DonateThankYou from "@/pages/DonateThankYou";
 import ManageDonation from "@/pages/ManageDonation";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsOfService from "@/pages/TermsOfService";
+import NextGeneration from "@/pages/NextGeneration";
 import NotFound from "@/pages/not-found";
 import CookieConsent, { trackPageVisit, hasConsent } from "@/components/CookieConsent";
 
@@ -38,6 +39,7 @@ function Router() {
       <Route path="/manage-donation" component={ManageDonation} />
       <Route path="/privacy-policy" component={PrivacyPolicy} />
       <Route path="/terms-of-service" component={TermsOfService} />
+      <Route path="/next-generation" component={NextGeneration} />
       <Route component={NotFound} />
     </Switch>
   );
