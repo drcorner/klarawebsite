@@ -152,7 +152,7 @@ export default function WhyKlaraProject() {
               <Button 
                 variant="outline" 
                 className="rounded-full group font-semibold"
-                onClick={() => setLocation("/next-generation")}
+                onClick={() => { window.scrollTo(0, 0); setLocation("/next-generation"); }}
                 data-testid="button-learn-next-gen"
               >
                 Learn More About Our Commitment
