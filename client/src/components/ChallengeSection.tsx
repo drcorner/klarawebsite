@@ -1,47 +1,52 @@
-import { Church, Briefcase, Heart, Bot, Baby, User, Code } from "lucide-react";
-
 const challenges = [
   {
-    icon: Church,
+    letter: "M",
     category: "Ministry",
     story: "A pastor uses AI to draft his sermons, saying it frees him for counseling and hospital visits. But part of him misses the wrestling he used to do alone with the text.",
-    color: "bg-primary/10 text-primary",
+    accentColor: "text-primary",
+    bgColor: "bg-primary/5",
   },
   {
-    icon: Baby,
+    letter: "P",
     category: "Parenting",
     story: "A father learns his teenage son has been using AI to complete school assignments. Is this cheating—or just using a new tool? He wants his son to develop his own thinking, but he also uses AI at work. Where's the line?",
-    color: "bg-primary/10 text-primary",
+    accentColor: "text-primary",
+    bgColor: "bg-primary/5",
   },
   {
-    icon: Heart,
+    letter: "L",
     category: "Life Advice",
     story: "A wife shares that she's been processing her marriage problems with an AI chatbot rather than the church counselor. Her pastor wonders what marital counsel she'll get from a chatbot that only knows what you tell it.",
-    color: "bg-coral/10 text-coral",
+    accentColor: "text-coral",
+    bgColor: "bg-coral/5",
   },
   {
-    icon: Briefcase,
+    letter: "E",
     category: "Employment",
     story: "A skilled bookkeeper was let go when her firm adopted AI software and isn't sure her skills will ever be marketable again.",
-    color: "bg-gold/10 text-gold-dark",
+    accentColor: "text-gold-dark",
+    bgColor: "bg-gold/5",
   },
   {
-    icon: User,
+    letter: "Y",
     category: "Youth",
     story: "A 13-year-old girl, already anxious about the future, hears a woman she admires at church say about AI superintelligence, \"I'm glad I won't be around to see it.\" The girl wonders if she'd be better off dead too.",
-    color: "bg-red-100 text-red-600",
+    accentColor: "text-coral",
+    bgColor: "bg-coral/5",
   },
   {
-    icon: Bot,
+    letter: "A",
     category: "AI Relationships",
     story: "A college student admits he finds it easier to talk to an AI girlfriend than to date. He wants a real girlfriend, but it's awkward and the Christian women he meets aren't interested in him.",
-    color: "bg-purple-100 text-purple-600",
+    accentColor: "text-primary",
+    bgColor: "bg-primary/5",
   },
   {
-    icon: Code,
+    letter: "E",
     category: "Ethics",
     story: "A software engineer is building AI systems at work. She's proud of what she's creating—but lately wonders if she should be. She doesn't know how to think Christianly about it, and no one at church has asked.",
-    color: "bg-green-100 text-green-600",
+    accentColor: "text-gold-dark",
+    bgColor: "bg-gold/5",
   },
 ];
 
@@ -62,12 +67,12 @@ export default function ChallengeSection() {
           {challenges.map((item, index) => (
             <div 
               key={index}
-              className="p-5 rounded-2xl bg-cream border border-charcoal/5 shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-300"
+              className={`p-5 rounded-2xl ${item.bgColor} border border-charcoal/5 shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-300`}
             >
               <div className="flex items-center gap-3 mb-3">
-                <div className={`w-9 h-9 rounded-xl ${item.color} flex items-center justify-center`}>
-                  <item.icon className="h-4 w-4" />
-                </div>
+                <span className={`font-sans text-3xl font-bold ${item.accentColor} leading-none tracking-tight`}>
+                  {item.letter}
+                </span>
                 <span className="text-xs font-semibold text-charcoal-muted uppercase tracking-wide">
                   {item.category}
                 </span>
