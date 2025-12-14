@@ -149,9 +149,11 @@ export default function WhyKlaraProject() {
                 and we build our organization by developing young leaders from within.
               </p>
               <Link href="/next-generation">
-                <Button variant="outline" className="rounded-full group font-semibold" data-testid="button-learn-next-gen">
-                  Learn More About Our Commitment
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                <Button asChild variant="outline" className="rounded-full group font-semibold" data-testid="button-learn-next-gen">
+                  <span>
+                    Learn More About Our Commitment
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </span>
                 </Button>
               </Link>
             </div>
