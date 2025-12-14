@@ -17,7 +17,7 @@ export default function ResponseSection() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
           <div className="p-8 rounded-2xl bg-cream border border-charcoal/5 shadow-sm hover:shadow-md transition-shadow">
-            <span className="font-serif text-6xl font-bold text-primary/15 leading-none block mb-4">E</span>
+            <div className="w-12 h-1 bg-primary rounded-full mb-6"></div>
             <h3 className="font-bold text-xl text-charcoal mb-3">Equip</h3>
             <p className="text-charcoal-muted leading-relaxed">
               We provide churches with practical resources—curricula, conversation guides, and 
@@ -26,7 +26,7 @@ export default function ResponseSection() {
           </div>
           
           <div className="p-8 rounded-2xl bg-cream border border-charcoal/5 shadow-sm hover:shadow-md transition-shadow">
-            <span className="font-serif text-6xl font-bold text-gold/30 leading-none block mb-4">E</span>
+            <div className="w-12 h-1 bg-gold rounded-full mb-6"></div>
             <h3 className="font-bold text-xl text-charcoal mb-3">Engage</h3>
             <p className="text-charcoal-muted leading-relaxed">
               Building on that foundation, we engage the broader culture to ensure Christian 
