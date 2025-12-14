@@ -1,48 +1,41 @@
 const challenges = [
   {
-    letter: "M",
     category: "Ministry",
     story: "A pastor uses AI to draft his sermons, saying it frees him for counseling and hospital visits. But part of him misses the wrestling he used to do alone with the text.",
     accentColor: "text-primary",
     bgColor: "bg-primary/5",
   },
   {
-    letter: "P",
     category: "Parenting",
     story: "A father learns his teenage son has been using AI to complete school assignments. Is this cheating—or just using a new tool? He wants his son to develop his own thinking, but he also uses AI at work. Where's the line?",
     accentColor: "text-primary",
     bgColor: "bg-primary/5",
   },
   {
-    letter: "L",
     category: "Life Advice",
     story: "A wife shares that she's been processing her marriage problems with an AI chatbot rather than the church counselor. Her pastor wonders what marital counsel she'll get from a chatbot that only knows what you tell it.",
     accentColor: "text-coral",
     bgColor: "bg-coral/5",
   },
   {
-    letter: "E",
     category: "Employment",
     story: "A skilled bookkeeper was let go when her firm adopted AI software and isn't sure her skills will ever be marketable again.",
     accentColor: "text-gold-dark",
     bgColor: "bg-gold/5",
   },
   {
-    letter: "Y",
     category: "Youth",
     story: "A 13-year-old girl, already anxious about the future, hears a woman she admires at church say about AI superintelligence, \"I'm glad I won't be around to see it.\" The girl wonders if she'd be better off dead too.",
     accentColor: "text-coral",
     bgColor: "bg-coral/5",
   },
   {
-    letter: "A",
     category: "AI Relationships",
     story: "A college student admits he finds it easier to talk to an AI girlfriend than to date. He wants a real girlfriend, but it's awkward and the Christian women he meets aren't interested in him.",
     accentColor: "text-primary",
     bgColor: "bg-primary/5",
   },
   {
-    letter: "E",
     category: "Ethics",
     story: "A software engineer is building AI systems at work. She's proud of what she's creating—but lately wonders if she should be. She doesn't know how to think Christianly about it, and no one at church has asked.",
     accentColor: "text-gold-dark",
@@ -69,14 +62,9 @@ export default function ChallengeSection() {
               key={index}
               className={`p-5 rounded-2xl ${item.bgColor} border border-charcoal/5 shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-300`}
             >
-              <div className="flex items-center gap-3 mb-3">
-                <span className={`font-sans text-3xl font-bold ${item.accentColor} leading-none tracking-tight`}>
-                  {item.letter}
-                </span>
-                <span className="text-xs font-semibold text-charcoal-muted uppercase tracking-wide">
-                  {item.category}
-                </span>
-              </div>
+              <span className={`text-xs font-semibold ${item.accentColor} uppercase tracking-wide mb-3 block`}>
+                {item.category}
+              </span>
               <p className="text-charcoal text-sm leading-relaxed">
                 {item.story}
               </p>
