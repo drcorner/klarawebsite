@@ -12,8 +12,8 @@ const challenges = [
     bgColor: "bg-primary/5",
   },
   {
-    category: "Life Advice",
-    story: "A wife shares that she's been processing her marriage problems with an AI chatbot rather than the church counselor. Her pastor wonders what marital counsel she'll get from a chatbot that only knows what you tell it.",
+    category: "AI Advice",
+    story: "A husband shares that he's been processing his marriage problems with an AI chatbot rather than the church counselor. His pastor wonders what marital counsel he'll get from a chatbot that only knows what you tell it.",
     accentColor: "text-coral",
     bgColor: "bg-coral/5",
   },
@@ -52,7 +52,7 @@ export default function ChallengeSection() {
             The Challenge
           </span>
           <h2 className="font-sans text-3xl md:text-4xl font-bold text-charcoal">
-            New challenges in the Age of AI
+            Faithful Christians face challenges in the age of AI
           </h2>
         </div>
 

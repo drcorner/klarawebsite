@@ -12,8 +12,8 @@ import churchImage from "@assets/generated_images/church_small_group_bible_study
 
 const approachItems = [
   { icon: Building2, title: "Infrastructure first", description: "Legal formation, website, donor systems before programming." },
-  { icon: Users, title: "Early operational support", description: "Executive coordinator hired in the foundation phase." },
-  { icon: BookOpen, title: "Content through contractors", description: "Video curricula developed by professionals." },
+  { icon: Users, title: "Intergenerational Leadership", description: "Build a team that can unite churches and donors across generational divides." },
+  { icon: BookOpen, title: "Exceptional content", description: "Video curricula developed by professionals." },
   { icon: TrendingUp, title: "Phased complexity", description: "Advanced initiatives only after establishing credibility and expertise." },
 ];
 
@@ -142,13 +142,14 @@ export default function WhyKlaraProject() {
                 Investing in the Next Generation
               </h2>
               <p className="text-charcoal leading-relaxed mb-4">
-                Generation Z will be most affected by AI transformation. They enter a workforce being 
-                reshaped in real time and will live with the consequences of decisions being made today.
+                From Gen X to Gen Alpha, every generation will be shaped by AI transformation. Gen X 
+                leads organizations making critical decisions today. Gen Z enters a workforce being 
+                reshaped in real time. Gen Alpha will grow up never knowing a world without AI.
               </p>
               <p className="text-charcoal leading-relaxed mb-4">
-                The Klara Project is committed to developing Gen Z leaders within our organization: 
-                board representation, hiring young leaders when consistent with excellence, and building 
-                succession planning from the start. We don't just serve this generation; we platform 
+                The Klara Project is committed to developing leaders across generations within our organization: 
+                board representation, hiring leaders when consistent with excellence, and building 
+                succession planning from the start. We don't just serve these generations; we platform 
                 and develop them.
               </p>
               <p className="text-charcoal-muted leading-relaxed italic">
