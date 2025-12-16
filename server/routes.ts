@@ -168,7 +168,7 @@ export async function registerRoutes(
 
       res.json({
         hasStripeAccount: true,
-        subscriptions: subscriptions.data.map(sub => ({
+        subscriptions: subscriptions.data.map((sub: any) => ({
           id: sub.id,
           status: sub.status,
           amount: sub.items.data[0]?.price?.unit_amount || 0,
@@ -449,6 +449,114 @@ export async function registerRoutes(
     } catch (error: any) {
       console.error('Error generating YTD statement:', error);
       res.status(500).json({ error: 'Failed to generate statement' });
+    }
+  });
+
+  // Update recurring donation amount
+  app.patch('/api/donor/subscription/:subscriptionId', eventFriendlyRateLimiter, async (req, res) => {
+    try {
+      const { subscriptionId } = req.params;
+      const { sessionId, newAmount } = req.body;
+      
+      if (!sessionId || !newAmount || typeof newAmount !== 'number' || newAmount < 1) {
+        return res.status(400).json({ error: 'Valid session ID and amount (minimum $1) required' });
+      }
+
+      const [session] = await db.select()
+        .from(donorSessions)
+        .where(and(
+          eq(donorSessions.id, sessionId),
+          gt(donorSessions.expiresAt, new Date())
+        ));
+
+      if (!session || !session.stripeCustomerId) {
+        return res.status(401).json({ error: 'Invalid session' });
+      }
+
+      const stripe = await getUncachableStripeClient();
+      
+      // Verify this subscription belongs to the customer
+      const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+      if (subscription.customer !== session.stripeCustomerId) {
+        return res.status(403).json({ error: 'Unauthorized' });
+      }
+
+      const subscriptionItem = subscription.items.data[0];
+      if (!subscriptionItem) {
+        return res.status(400).json({ error: 'No subscription item found' });
+      }
+
+      const amountInCents = Math.round(newAmount * 100);
+
+      // Update the subscription with a new price
+      await stripe.subscriptions.update(subscriptionId, {
+        items: [{
+          id: subscriptionItem.id,
+          price_data: {
+            currency: 'usd',
+            product: typeof subscriptionItem.price.product === 'string' 
+              ? subscriptionItem.price.product 
+              : subscriptionItem.price.product.id,
+            unit_amount: amountInCents,
+            recurring: {
+              interval: subscriptionItem.price.recurring?.interval || 'month',
+            },
+          },
+        }],
+        proration_behavior: 'create_prorations',
+      });
+
+      console.log(`Subscription ${subscriptionId} updated to $${newAmount}/month`);
+      res.json({ success: true, newAmount });
+    } catch (error: any) {
+      console.error('Error updating subscription:', error);
+      res.status(500).json({ error: error.message || 'Failed to update donation amount' });
+    }
+  });
+
+  // Cancel recurring donation
+  app.post('/api/donor/subscription/:subscriptionId/cancel', eventFriendlyRateLimiter, async (req, res) => {
+    try {
+      const { subscriptionId } = req.params;
+      const { sessionId, confirmed } = req.body;
+      
+      if (!sessionId) {
+        return res.status(400).json({ error: 'Session ID required' });
+      }
+
+      if (!confirmed) {
+        return res.status(400).json({ error: 'Cancellation must be confirmed' });
+      }
+
+      const [session] = await db.select()
+        .from(donorSessions)
+        .where(and(
+          eq(donorSessions.id, sessionId),
+          gt(donorSessions.expiresAt, new Date())
+        ));
+
+      if (!session || !session.stripeCustomerId) {
+        return res.status(401).json({ error: 'Invalid session' });
+      }
+
+      const stripe = await getUncachableStripeClient();
+      
+      // Verify this subscription belongs to the customer
+      const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+      if (subscription.customer !== session.stripeCustomerId) {
+        return res.status(403).json({ error: 'Unauthorized' });
+      }
+
+      // Cancel at period end (graceful cancellation)
+      await stripe.subscriptions.update(subscriptionId, {
+        cancel_at_period_end: true,
+      });
+
+      console.log(`Subscription ${subscriptionId} set to cancel at period end`);
+      res.json({ success: true, cancelAtPeriodEnd: true });
+    } catch (error: any) {
+      console.error('Error canceling subscription:', error);
+      res.status(500).json({ error: error.message || 'Failed to cancel donation' });
     }
   });
 

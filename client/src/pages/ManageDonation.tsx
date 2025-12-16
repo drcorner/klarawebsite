@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { Mail, Loader2, CreditCard, Calendar, ExternalLink, LogOut, DollarSign, Download, FileText } from "lucide-react";
+import { Mail, Loader2, CreditCard, Calendar, ExternalLink, LogOut, DollarSign, Download, FileText, Pencil, XCircle, Heart, Users, ArrowDown, ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -40,6 +41,17 @@ export default function ManageDonation() {
   const [isLoading, setIsLoading] = useState(false);
   const [donationData, setDonationData] = useState<DonationData | null>(null);
   const { toast } = useToast();
+
+  // Amount adjustment modal
+  const [adjustModalOpen, setAdjustModalOpen] = useState(false);
+  const [selectedSubscription, setSelectedSubscription] = useState<Subscription | null>(null);
+  const [newAmount, setNewAmount] = useState("");
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  // Cancellation modal
+  const [cancelModalOpen, setCancelModalOpen] = useState(false);
+  const [cancelStep, setCancelStep] = useState<"intervention" | "confirm">("intervention");
+  const [isCanceling, setIsCanceling] = useState(false);
 
   useEffect(() => {
     const savedSession = localStorage.getItem("donorSessionId");
@@ -194,6 +206,105 @@ export default function ManageDonation() {
     return `$${(cents / 100).toFixed(2)}`;
   };
 
+  // Amount adjustment handlers
+  const openAdjustModal = (sub: Subscription) => {
+    setSelectedSubscription(sub);
+    setNewAmount((sub.amount / 100).toString());
+    setAdjustModalOpen(true);
+  };
+
+  const handleUpdateAmount = async () => {
+    if (!selectedSubscription || !sessionId || !newAmount) return;
+
+    const amount = parseFloat(newAmount);
+    if (isNaN(amount) || amount < 1) {
+      toast({
+        title: "Invalid amount",
+        description: "Please enter an amount of at least $1",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsUpdating(true);
+    try {
+      const response = await fetch(`/api/donor/subscription/${selectedSubscription.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId, newAmount: amount }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast({
+          title: "Donation updated",
+          description: `Your recurring donation has been updated to $${amount}/month.`,
+        });
+        setAdjustModalOpen(false);
+        fetchDonations(sessionId);
+      } else {
+        throw new Error(data.error);
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to update donation amount",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  // Cancellation handlers
+  const openCancelModal = (sub: Subscription) => {
+    setSelectedSubscription(sub);
+    setCancelStep("intervention");
+    setCancelModalOpen(true);
+  };
+
+  const handleReduceInstead = () => {
+    setCancelModalOpen(false);
+    if (selectedSubscription) {
+      openAdjustModal(selectedSubscription);
+    }
+  };
+
+  const handleConfirmCancel = async () => {
+    if (!selectedSubscription || !sessionId) return;
+
+    setIsCanceling(true);
+    try {
+      const response = await fetch(`/api/donor/subscription/${selectedSubscription.id}/cancel`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId, confirmed: true }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast({
+          title: "Donation canceled",
+          description: "Your recurring donation will end at the current billing period.",
+        });
+        setCancelModalOpen(false);
+        fetchDonations(sessionId);
+      } else {
+        throw new Error(data.error);
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to cancel donation",
+        variant: "destructive",
+      });
+    } finally {
+      setIsCanceling(false);
+    }
+  };
+
   const handleDownloadReceipt = async (chargeId: string) => {
     if (!sessionId) return;
 
@@ -210,14 +321,14 @@ export default function ManageDonation() {
           <title>Donation Receipt - The Klara Project</title>
           <style>
             body { font-family: 'IBM Plex Sans', Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; }
-            .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #C4704B; padding-bottom: 20px; }
-            .header h1 { color: #C4704B; margin: 0 0 5px 0; font-family: Georgia, serif; }
+            .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #1E4D4A; padding-bottom: 20px; }
+            .header h1 { color: #1E4D4A; margin: 0 0 5px 0; font-family: Georgia, serif; }
             .header p { color: #666; margin: 0; font-size: 14px; }
-            .receipt-title { color: #C4704B; margin: 30px 0 20px 0; font-size: 18px; }
+            .receipt-title { color: #1E4D4A; margin: 30px 0 20px 0; font-size: 18px; }
             .detail-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
             .detail-label { color: #666; }
             .detail-value { color: #2D2A27; font-weight: 500; }
-            .amount { color: #C4704B; font-size: 24px; font-weight: bold; }
+            .amount { color: #1E4D4A; font-size: 24px; font-weight: bold; }
             .tax-notice { background: rgba(201, 169, 98, 0.15); border-left: 4px solid #C9A962; padding: 15px; margin: 30px 0; font-size: 13px; color: #666; }
             .footer { margin-top: 40px; text-align: center; color: #999; font-size: 12px; }
             @media print { body { margin: 0; } }
@@ -299,17 +410,17 @@ export default function ManageDonation() {
           <title>${data.year} Giving Statement - The Klara Project</title>
           <style>
             body { font-family: 'IBM Plex Sans', Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; }
-            .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #C4704B; padding-bottom: 20px; }
-            .header h1 { color: #C4704B; margin: 0 0 5px 0; font-family: Georgia, serif; }
+            .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #1E4D4A; padding-bottom: 20px; }
+            .header h1 { color: #1E4D4A; margin: 0 0 5px 0; font-family: Georgia, serif; }
             .header p { color: #666; margin: 0; font-size: 14px; }
-            .statement-title { color: #C4704B; margin: 30px 0 10px 0; font-size: 18px; }
+            .statement-title { color: #1E4D4A; margin: 30px 0 10px 0; font-size: 18px; }
             .donor-info { background: #f5f5f5; padding: 15px; margin-bottom: 20px; }
             table { width: 100%; border-collapse: collapse; }
-            th { text-align: left; padding: 10px 0; border-bottom: 2px solid #C4704B; color: #C4704B; }
+            th { text-align: left; padding: 10px 0; border-bottom: 2px solid #1E4D4A; color: #1E4D4A; }
             th:last-child { text-align: right; }
-            .total-row { font-weight: bold; border-top: 2px solid #C4704B; }
+            .total-row { font-weight: bold; border-top: 2px solid #1E4D4A; }
             .total-row td { padding-top: 15px; }
-            .total-amount { color: #C4704B; font-size: 20px; }
+            .total-amount { color: #1E4D4A; font-size: 20px; }
             .tax-notice { background: rgba(201, 169, 98, 0.15); border-left: 4px solid #C9A962; padding: 15px; margin: 30px 0; font-size: 13px; color: #666; }
             .footer { margin-top: 40px; text-align: center; color: #999; font-size: 12px; }
             @media print { body { margin: 0; } }
@@ -368,6 +479,8 @@ export default function ManageDonation() {
     }
   };
 
+  const presetAmounts = [10, 25, 50, 100, 250];
+
   return (
     <div className="min-h-screen bg-cream">
       <Header />
@@ -376,10 +489,10 @@ export default function ManageDonation() {
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-12">
             <h1 className="font-serif text-4xl font-bold text-charcoal mb-4">
-              Manage Your Donation
+              Manage Your Giving
             </h1>
             <p className="text-charcoal-muted text-lg">
-              View your giving history and update your payment preferences
+              View your giving history and update your recurring donations
             </p>
           </div>
 
@@ -498,7 +611,7 @@ export default function ManageDonation() {
                 <Card className="bg-card border-card-border">
                   <CardContent className="py-8 text-center">
                     <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary mb-4" />
-                    <p className="text-charcoal-muted">Loading your donation history...</p>
+                    <p className="text-charcoal-muted">Loading your giving history...</p>
                   </CardContent>
                 </Card>
               ) : donationData.hasStripeAccount ? (
@@ -508,7 +621,7 @@ export default function ManageDonation() {
                       <div>
                         <CardTitle className="flex items-center gap-2">
                           <Calendar className="w-5 h-5 text-primary" />
-                          Active Subscriptions
+                          Recurring Donations
                         </CardTitle>
                       </div>
                       <Button
@@ -522,7 +635,7 @@ export default function ManageDonation() {
                         ) : (
                           <>
                             <CreditCard className="w-4 h-4 mr-2" />
-                            Manage Payment
+                            Update Payment Method
                             <ExternalLink className="w-3 h-3 ml-2" />
                           </>
                         )}
@@ -531,30 +644,55 @@ export default function ManageDonation() {
                     <CardContent>
                       {donationData.subscriptions.length === 0 ? (
                         <p className="text-charcoal-muted text-center py-4">
-                          No active subscriptions
+                          No active recurring donations
                         </p>
                       ) : (
                         <div className="space-y-4">
                           {donationData.subscriptions.map((sub) => (
                             <div
                               key={sub.id}
-                              className="flex items-center justify-between p-4 bg-cream-dark rounded-lg"
+                              className="p-4 bg-cream-dark rounded-lg"
                               data-testid={`subscription-${sub.id}`}
                             >
-                              <div>
-                                <p className="font-semibold text-charcoal">
-                                  {formatAmount(sub.amount)}/{sub.interval}
-                                </p>
-                                <p className="text-sm text-charcoal-muted">
-                                  Next billing: {formatDate(sub.currentPeriodEnd)}
-                                </p>
+                              <div className="flex items-center justify-between mb-3">
+                                <div>
+                                  <p className="font-semibold text-charcoal text-lg">
+                                    {formatAmount(sub.amount)}/{sub.interval}
+                                  </p>
+                                  <p className="text-sm text-charcoal-muted">
+                                    Next gift: {formatDate(sub.currentPeriodEnd)}
+                                  </p>
+                                </div>
+                                <Badge
+                                  variant={sub.status === "active" ? "default" : "secondary"}
+                                  className={sub.status === "active" && !sub.cancelAtPeriodEnd ? "bg-primary" : ""}
+                                >
+                                  {sub.cancelAtPeriodEnd ? "Ending soon" : sub.status === "active" ? "Active" : sub.status}
+                                </Badge>
                               </div>
-                              <Badge
-                                variant={sub.status === "active" ? "default" : "secondary"}
-                                className={sub.status === "active" ? "bg-primary" : ""}
-                              >
-                                {sub.cancelAtPeriodEnd ? "Canceling" : sub.status}
-                              </Badge>
+                              {!sub.cancelAtPeriodEnd && sub.status === "active" && (
+                                <div className="flex gap-2 mt-3 pt-3 border-t border-border">
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => openAdjustModal(sub)}
+                                    data-testid={`button-adjust-${sub.id}`}
+                                  >
+                                    <Pencil className="w-3 h-3 mr-1" />
+                                    Adjust Amount
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="text-charcoal-muted"
+                                    onClick={() => openCancelModal(sub)}
+                                    data-testid={`button-cancel-${sub.id}`}
+                                  >
+                                    <XCircle className="w-3 h-3 mr-1" />
+                                    Cancel
+                                  </Button>
+                                </div>
+                              )}
                             </div>
                           ))}
                         </div>
@@ -566,7 +704,7 @@ export default function ManageDonation() {
                     <CardHeader className="flex flex-row items-center justify-between gap-4">
                       <CardTitle className="flex items-center gap-2">
                         <DollarSign className="w-5 h-5 text-primary" />
-                        Payment History
+                        Giving History
                       </CardTitle>
                       {donationData.charges.length > 0 && (
                         <Button
@@ -584,7 +722,7 @@ export default function ManageDonation() {
                     <CardContent>
                       {donationData.charges.length === 0 ? (
                         <p className="text-charcoal-muted text-center py-4">
-                          No payment history
+                          No giving history
                         </p>
                       ) : (
                         <div className="space-y-3">
@@ -603,23 +741,22 @@ export default function ManageDonation() {
                                 </p>
                               </div>
                               <div className="flex items-center gap-2">
+                                <Badge
+                                  variant={charge.status === "succeeded" ? "default" : "secondary"}
+                                  className={charge.status === "succeeded" ? "bg-primary" : ""}
+                                >
+                                  {charge.status === "succeeded" ? "Complete" : charge.status}
+                                </Badge>
                                 {charge.status === "succeeded" && (
                                   <Button
                                     variant="ghost"
                                     size="icon"
                                     onClick={() => handleDownloadReceipt(charge.id)}
-                                    title="Download Receipt"
                                     data-testid={`button-receipt-${charge.id}`}
                                   >
                                     <Download className="w-4 h-4" />
                                   </Button>
                                 )}
-                                <Badge
-                                  variant={charge.status === "succeeded" ? "default" : "secondary"}
-                                  className={charge.status === "succeeded" ? "bg-teal" : ""}
-                                >
-                                  {charge.status}
-                                </Badge>
                               </div>
                             </div>
                           ))}
@@ -632,10 +769,10 @@ export default function ManageDonation() {
                 <Card className="bg-card border-card-border">
                   <CardContent className="py-8 text-center">
                     <p className="text-charcoal-muted mb-4">
-                      No donation history found for this email address.
+                      No giving history found for this email address.
                     </p>
-                    <Button asChild className="bg-teal text-cream">
-                      <a href="/donate" data-testid="link-make-donation">Make Your First Donation</a>
+                    <Button asChild className="bg-primary text-cream">
+                      <a href="/donate">Make Your First Gift</a>
                     </Button>
                   </CardContent>
                 </Card>
@@ -644,6 +781,189 @@ export default function ManageDonation() {
           )}
         </div>
       </main>
+
+      {/* Adjust Amount Modal */}
+      <Dialog open={adjustModalOpen} onOpenChange={setAdjustModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Pencil className="w-5 h-5 text-primary" />
+              Adjust Recurring Donation
+            </DialogTitle>
+            <DialogDescription>
+              Update your monthly giving amount. Changes take effect on your next billing date.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div>
+              <Label>Current amount: {selectedSubscription ? formatAmount(selectedSubscription.amount) : ""}/month</Label>
+            </div>
+            <div>
+              <Label htmlFor="new-amount">New Amount</Label>
+              <div className="flex items-center gap-2 mt-2">
+                <span className="text-charcoal font-medium">$</span>
+                <Input
+                  id="new-amount"
+                  type="number"
+                  min="1"
+                  step="1"
+                  value={newAmount}
+                  onChange={(e) => setNewAmount(e.target.value)}
+                  className="flex-1"
+                  data-testid="input-new-amount"
+                />
+                <span className="text-charcoal-muted">/month</span>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {presetAmounts.map((amount) => (
+                <Button
+                  key={amount}
+                  variant={newAmount === amount.toString() ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setNewAmount(amount.toString())}
+                  className={newAmount === amount.toString() ? "bg-primary text-cream" : ""}
+                  data-testid={`button-preset-${amount}`}
+                >
+                  ${amount}
+                </Button>
+              ))}
+            </div>
+            {selectedSubscription && parseFloat(newAmount) < selectedSubscription.amount / 100 && (
+              <div className="flex items-start gap-2 p-3 bg-gold/10 rounded-md">
+                <ArrowDown className="w-4 h-4 text-gold-dark mt-0.5" />
+                <p className="text-sm text-charcoal">
+                  Even a smaller monthly gift makes a real difference. Thank you for continuing to support our mission!
+                </p>
+              </div>
+            )}
+            {selectedSubscription && parseFloat(newAmount) > selectedSubscription.amount / 100 && (
+              <div className="flex items-start gap-2 p-3 bg-primary/10 rounded-md">
+                <ArrowUp className="w-4 h-4 text-primary mt-0.5" />
+                <p className="text-sm text-charcoal">
+                  Thank you for increasing your support! Your generosity helps us reach more churches.
+                </p>
+              </div>
+            )}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setAdjustModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleUpdateAmount} 
+              disabled={isUpdating}
+              className="bg-primary text-cream"
+              data-testid="button-confirm-adjust"
+            >
+              {isUpdating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Updating...
+                </>
+              ) : (
+                "Update Donation"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Cancel Modal with Intervention */}
+      <Dialog open={cancelModalOpen} onOpenChange={setCancelModalOpen}>
+        <DialogContent className="sm:max-w-lg">
+          {cancelStep === "intervention" ? (
+            <>
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <Heart className="w-5 h-5 text-primary" />
+                  Before You Go...
+                </DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 py-4">
+                <p className="text-charcoal leading-relaxed">
+                  We understand circumstances change. But before you cancel, would you consider reducing your monthly gift instead?
+                </p>
+                <div className="bg-cream-dark p-4 rounded-lg space-y-3">
+                  <div className="flex items-start gap-3">
+                    <Users className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <p className="text-sm text-charcoal">
+                      <strong>Every donor counts.</strong> The number of monthly supporters speaks volumes about the Christian community's commitment to engaging with AI thoughtfully.
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Heart className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <p className="text-sm text-charcoal">
+                      <strong>Small gifts add up.</strong> Even $5/month helps us develop resources, conduct research, and ensure Christian perspectives are represented in AI discussions.
+                    </p>
+                  </div>
+                </div>
+                {selectedSubscription && (
+                  <p className="text-charcoal-muted text-sm">
+                    Your current gift: {formatAmount(selectedSubscription.amount)}/month
+                  </p>
+                )}
+              </div>
+              <DialogFooter className="flex-col sm:flex-row gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => setCancelStep("confirm")}
+                  className="text-charcoal-muted"
+                >
+                  Continue to Cancel
+                </Button>
+                <Button 
+                  onClick={handleReduceInstead}
+                  className="bg-primary text-cream"
+                  data-testid="button-reduce-instead"
+                >
+                  Reduce My Gift Instead
+                </Button>
+              </DialogFooter>
+            </>
+          ) : (
+            <>
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <XCircle className="w-5 h-5 text-destructive" />
+                  Confirm Cancellation
+                </DialogTitle>
+                <DialogDescription>
+                  Your recurring donation will end after the current billing period. You won't be charged again.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="py-4">
+                <p className="text-charcoal">
+                  Are you sure you want to cancel your {selectedSubscription ? formatAmount(selectedSubscription.amount) : ""}/month recurring donation?
+                </p>
+              </div>
+              <DialogFooter>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setCancelStep("intervention")}
+                >
+                  Go Back
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={handleConfirmCancel}
+                  disabled={isCanceling}
+                  data-testid="button-confirm-cancel"
+                >
+                  {isCanceling ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Canceling...
+                    </>
+                  ) : (
+                    "Yes, Cancel Donation"
+                  )}
+                </Button>
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </div>
