@@ -2,46 +2,40 @@ const challenges = [
   {
     category: "Ministry",
     story: "A pastor uses AI to draft his sermons, saying it frees him for counseling and hospital visits. But part of him misses the wrestling he used to do alone with the text.",
-    accentColor: "text-primary",
-    bgColor: "bg-primary/5",
   },
   {
     category: "Parenting",
     story: "A father learns his teenage son has been using AI to complete school assignments. Is this cheating—or just using a new tool? He wants his son to develop his own thinking, but he also uses AI at work. Where's the line?",
-    accentColor: "text-primary",
-    bgColor: "bg-primary/5",
   },
   {
     category: "AI Advice",
     story: "A husband shares that he's been processing his marriage problems with an AI chatbot rather than the church counselor. His pastor wonders what marital counsel he'll get from a chatbot that only knows what you tell it.",
-    accentColor: "text-coral",
-    bgColor: "bg-coral/5",
   },
   {
     category: "Employment",
     story: "A skilled bookkeeper was let go when her firm adopted AI software and isn't sure her skills will ever be marketable again.",
-    accentColor: "text-gold-dark",
-    bgColor: "bg-gold/5",
   },
   {
     category: "Youth",
     story: "A 13-year-old girl, already anxious about the future, hears a woman she admires at church say about AI superintelligence, \"I'm glad I won't be around to see it.\" The girl wonders if she'd be better off dead too.",
-    accentColor: "text-coral",
-    bgColor: "bg-coral/5",
   },
   {
     category: "AI Relationships",
     story: "A college student admits he finds it easier to talk to an AI girlfriend than to date. He wants a real girlfriend, but it's awkward and the Christian women he meets aren't interested in him.",
-    accentColor: "text-primary",
-    bgColor: "bg-primary/5",
   },
   {
     category: "Ethics",
     story: "A software engineer is building AI systems at work. She's proud of what she's creating—but lately wonders if she should be. She doesn't know how to think Christianly about it, and no one at church has asked.",
-    accentColor: "text-gold-dark",
-    bgColor: "bg-gold/5",
   },
 ];
+
+const getCardColors = (index: number) => {
+  const isEven = index % 2 === 0;
+  return {
+    accentColor: isEven ? "text-primary" : "text-gold-dark",
+    bgColor: isEven ? "bg-primary/5" : "bg-gold/5",
+  };
+};
 
 export default function ChallengeSection() {
   return (
@@ -57,19 +51,22 @@ export default function ChallengeSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {challenges.map((item, index) => (
-            <div 
-              key={index}
-              className={`p-5 rounded-2xl ${item.bgColor} border border-charcoal/5 shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-300`}
-            >
-              <span className={`text-xs font-semibold ${item.accentColor} uppercase tracking-wide mb-3 block`}>
-                {item.category}
-              </span>
-              <p className="text-charcoal text-sm leading-relaxed">
-                {item.story}
-              </p>
-            </div>
-          ))}
+          {challenges.map((item, index) => {
+            const colors = getCardColors(index);
+            return (
+              <div 
+                key={index}
+                className={`p-5 rounded-2xl ${colors.bgColor} border border-charcoal/5 shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-300`}
+              >
+                <span className={`text-xs font-semibold ${colors.accentColor} uppercase tracking-wide mb-3 block`}>
+                  {item.category}
+                </span>
+                <p className="text-charcoal text-sm leading-relaxed">
+                  {item.story}
+                </p>
+              </div>
+            );
+          })}
         </div>
 
         <blockquote className="mt-16 max-w-3xl mx-auto text-center">
