@@ -11,7 +11,7 @@ const stats = [
   },
   {
     value: "190 Million",
-    label: "People using just one AI chatbot daily",
+    label: "People using AI chatbot ChatGPT daily",
     accent: "text-gold",
   },
 ];

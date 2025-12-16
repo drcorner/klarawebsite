@@ -4,28 +4,23 @@ import { Button } from "@/components/ui/button";
 
 const items = [
   {
-    title: "Video-Based Curriculum",
-    description: "A 13-week series for small groups, Sunday school, or workshops—helping Christians apply biblical principles to AI challenges.",
+    title: "Curricula and Conversation Guides",
+    description: "Series for small groups, Sunday school, or workshops—helping Christians apply biblical principles to AI challenges.",
     status: "In Progress",
   },
   {
-    title: "Conversation Guides",
-    description: "Practical frameworks for pastors on job displacement, raising children in the AI age, and everyday ethical decisions.",
-    status: "In Progress",
-  },
-  {
-    title: "Student Essay Competition",
-    description: "Annual competition where students use AI and submit their process—judged on both product and discernment.",
+    title: "Next Generation Grants and Competitions",
+    description: "Funding and challenges that equip young Christians to engage AI thoughtfully—judged on both product and Christian discernment.",
     status: "Coming Soon",
   },
   {
-    title: "Educational Grants",
-    description: "Research funding for students exploring AI, faith, and ethics.",
+    title: "Family Resources",
+    description: "Practical resources for pastors and families on job displacement, raising children in the AI age, and everyday ethical decisions.",
     status: "Coming Soon",
   },
   {
-    title: "Pastoral Care Resources",
-    description: "Training for ministering to families affected by technological unemployment.",
+    title: "Public Engagement",
+    description: "Coalition building, media presence, and thought leadership positioning Christians as constructive partners in AI development.",
     status: "Coming Soon",
   },
 ];
@@ -58,10 +53,7 @@ export default function WhatWereBuildingSection() {
               className="group relative p-6 rounded-2xl bg-cream border border-charcoal/10 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300"
               data-testid={`card-building-${index}`}
             >
-              <div className="flex items-start justify-between mb-4">
-                <span className="font-serif text-5xl font-bold text-primary/20 leading-none">
-                  {String(index + 1).padStart(2, '0')}
-                </span>
+              <div className="flex items-start justify-end mb-4">
                 <span className={`text-xs font-semibold px-3 py-1 rounded-full ${
                   item.status === "In Progress" 
                     ? "bg-primary/10 text-primary" 
