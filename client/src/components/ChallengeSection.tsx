@@ -46,7 +46,7 @@ export default function ChallengeSection() {
             The Challenge
           </span>
           <h2 className="font-sans text-3xl md:text-4xl font-bold text-charcoal">
-            Faithful Christians face challenges in the age of AI
+            Faithful Christians face real challenges
           </h2>
         </div>
 
