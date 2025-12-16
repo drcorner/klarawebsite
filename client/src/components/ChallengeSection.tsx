@@ -50,6 +50,15 @@ export default function ChallengeSection() {
           </h2>
         </div>
 
+        <div className="max-w-4xl mx-auto mb-12">
+          <p className="text-charcoal text-lg leading-relaxed mb-4">
+            AI is transforming how we work, learn, and live—faster than anyone predicted. Families wrestle with AI's influence on their children. Christians form emotional bonds with AI systems that simulate companionship. Churches will soon face waves of members navigating technological unemployment.
+          </p>
+          <p className="text-charcoal text-lg leading-relaxed">
+            Yet many Christians—though grounded in Scripture—feel unprepared to apply biblical principles to challenges this new, and Christian voices are absent from the rooms where AI's future is being decided.
+          </p>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {challenges.map((item, index) => {
             const colors = getCardColors(index);
