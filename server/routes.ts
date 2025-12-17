@@ -488,20 +488,24 @@ export async function registerRoutes(
 
       const amountInCents = Math.round(newAmount * 100);
 
-      // Update the subscription with a new price
+      // Create a new price for the updated amount
+      // We create inline price_data with product_data to avoid issues with inactive products
+      const newPrice = await stripe.prices.create({
+        currency: 'usd',
+        unit_amount: amountInCents,
+        recurring: {
+          interval: subscriptionItem.price.recurring?.interval || 'month',
+        },
+        product_data: {
+          name: 'Monthly Donation to Klara Project',
+        },
+      });
+
+      // Update the subscription with the new price
       await stripe.subscriptions.update(subscriptionId, {
         items: [{
           id: subscriptionItem.id,
-          price_data: {
-            currency: 'usd',
-            product: typeof subscriptionItem.price.product === 'string' 
-              ? subscriptionItem.price.product 
-              : subscriptionItem.price.product.id,
-            unit_amount: amountInCents,
-            recurring: {
-              interval: subscriptionItem.price.recurring?.interval || 'month',
-            },
-          },
+          price: newPrice.id,
         }],
         proration_behavior: 'create_prorations',
       });
