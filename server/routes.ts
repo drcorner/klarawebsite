@@ -240,30 +240,21 @@ export async function registerRoutes(
       const amountInCents = Math.round(amount * 100);
 
       if (frequency === 'monthly') {
-        const subscriptionData: any = {};
-        
-        if (duration && duration !== 'ongoing') {
-          const months = parseInt(duration);
-          if ([3, 6, 12].includes(months)) {
-            const now = new Date();
-            const originalDay = now.getDate();
-            const cancelDate = new Date(now);
-            cancelDate.setMonth(cancelDate.getMonth() + months);
-            
-            if (cancelDate.getDate() !== originalDay) {
-              cancelDate.setDate(0);
-            }
-            subscriptionData.cancel_at = Math.floor(cancelDate.getTime() / 1000);
-          }
-        }
-
         const durationLabel = duration && duration !== 'ongoing' ? ` (${duration} months)` : '';
+        
+        // Build subscription_data with metadata for fixed-term donations
+        const subscriptionData: any = {
+          metadata: {
+            duration: duration || 'ongoing',
+            donor_name: name,
+          }
+        };
         
         const session = await stripe.checkout.sessions.create({
           payment_method_types: ['card'],
           mode: 'subscription',
           customer_email: email,
-          subscription_data: Object.keys(subscriptionData).length > 0 ? subscriptionData : undefined,
+          subscription_data: subscriptionData,
           line_items: [
             {
               price_data: {
@@ -601,6 +592,35 @@ export async function registerRoutes(
         date: new Date(),
         manageUrl: `${baseUrl}/manage-donation`,
       });
+
+      // Set cancel_at for fixed-term subscriptions
+      if (donationType === 'monthly' && duration && duration !== 'ongoing' && session.subscription) {
+        const months = parseInt(duration);
+        if ([3, 6, 12].includes(months)) {
+          try {
+            const subscriptionId = typeof session.subscription === 'string' 
+              ? session.subscription 
+              : session.subscription.id;
+            
+            const now = new Date();
+            const originalDay = now.getDate();
+            const cancelDate = new Date(now);
+            cancelDate.setMonth(cancelDate.getMonth() + months);
+            
+            // Handle month overflow (e.g., Jan 31 + 1 month = Feb 28)
+            if (cancelDate.getDate() !== originalDay) {
+              cancelDate.setDate(0);
+            }
+            
+            await stripe.subscriptions.update(subscriptionId, {
+              cancel_at: Math.floor(cancelDate.getTime() / 1000),
+            });
+            console.log(`Set subscription ${subscriptionId} to cancel at ${cancelDate.toISOString()}`);
+          } catch (cancelError: any) {
+            console.error('Error setting fixed-term cancellation:', cancelError);
+          }
+        }
+      }
 
       // Track donation in HubSpot
       try {
