@@ -8,6 +8,7 @@ const navItems = [
   { label: "Why Klara Project?", href: "/why-klara-project" },
   { label: "Resources", href: "/resources" },
   { label: "Get Involved", href: "/get-involved" },
+  { label: "Manage Giving", href: "/manage-donation" },
 ];
 
 export default function Header() {
