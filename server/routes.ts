@@ -298,6 +298,7 @@ export async function registerRoutes(
           payment_method_types: ['card'],
           mode: 'subscription',
           customer: customerId,
+          billing_address_collection: 'required',
           subscription_data: subscriptionData,
           line_items: [
             {
@@ -334,6 +335,7 @@ export async function registerRoutes(
           payment_method_types: ['card'],
           mode: 'payment',
           customer: customerId,
+          billing_address_collection: 'required',
           line_items: [
             {
               price_data: {
