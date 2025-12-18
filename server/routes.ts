@@ -230,10 +230,30 @@ export async function registerRoutes(
 
   app.post('/api/create-checkout-session', eventFriendlyRateLimiter, async (req, res) => {
     try {
-      const { amount, frequency, email, name, phone, duration, successUrl, cancelUrl, communicationConsent } = req.body;
+      const { amount, frequency, email, name, phone, duration, successUrl, cancelUrl, communicationConsent, recaptchaToken } = req.body;
 
       if (!amount || !email || !name) {
         return res.status(400).json({ error: 'Missing required fields' });
+      }
+
+      // Verify reCAPTCHA token
+      if (recaptchaToken && process.env.RECAPTCHA_SECRET_KEY) {
+        try {
+          const recaptchaResponse = await fetch(
+            `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`,
+            { method: 'POST' }
+          );
+          const recaptchaData = await recaptchaResponse.json();
+          
+          if (!recaptchaData.success || recaptchaData.score < 0.5) {
+            console.log(`reCAPTCHA failed: success=${recaptchaData.success}, score=${recaptchaData.score}`);
+            return res.status(400).json({ error: 'Security verification failed. Please try again.' });
+          }
+          console.log(`reCAPTCHA passed: score=${recaptchaData.score}`);
+        } catch (recaptchaError) {
+          console.error('reCAPTCHA verification error:', recaptchaError);
+          // Continue without blocking if reCAPTCHA service is down
+        }
       }
 
       const stripe = await getUncachableStripeClient();

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Lock, Calendar, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 const monthlyAmounts = [25, 50, 100, 250];
 const oneTimeAmounts = [50, 100, 250, 500, 1000];
@@ -42,11 +43,12 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
   const [communicationConsent, setCommunicationConsent] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const { toast } = useToast();
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
   const amounts = frequency === "monthly" ? monthlyAmounts : oneTimeAmounts;
   const currentAmount = customAmount ? parseInt(customAmount) : selectedAmount;
 
-  const handleDonate = async (e: React.FormEvent) => {
+  const handleDonate = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     if (!currentAmount || !email || !name) {
       toast({
@@ -56,10 +58,22 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
       });
       return;
     }
+
+    if (!executeRecaptcha) {
+      toast({
+        title: "Security check loading",
+        description: "Please wait a moment and try again.",
+        variant: "destructive",
+      });
+      return;
+    }
     
     setIsProcessing(true);
     
     try {
+      // Execute reCAPTCHA v3 verification
+      const recaptchaToken = await executeRecaptcha('donation');
+      
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: {
@@ -73,6 +87,7 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
           phone: phone || undefined,
           duration: frequency === "monthly" ? duration : undefined,
           communicationConsent,
+          recaptchaToken,
         }),
       });
 
@@ -94,7 +109,7 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
       });
       setIsProcessing(false);
     }
-  };
+  }, [currentAmount, email, name, phone, frequency, duration, communicationConsent, executeRecaptcha, toast]);
 
   return (
     <div className="space-y-8">

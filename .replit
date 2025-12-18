@@ -40,3 +40,8 @@ waitForPort = 5000
 
 [agent]
 integrations = ["stripe:2.0.0", "sendgrid:1.0.0", "hubspot:1.0.0"]
+
+[userenv]
+
+[userenv.shared]
+VITE_RECAPTCHA_SITE_KEY = "6LeOwC8sAAAAAMn8Qn0PSNqpIBytb9M1CvOTuXnE"
