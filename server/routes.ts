@@ -239,6 +239,30 @@ export async function registerRoutes(
       const stripe = await getUncachableStripeClient();
       const amountInCents = Math.round(amount * 100);
 
+      // Check for existing customer with this email
+      let customerId: string | undefined;
+      const existingCustomers = await stripe.customers.list({
+        email: email,
+        limit: 1,
+      });
+      
+      if (existingCustomers.data.length > 0) {
+        customerId = existingCustomers.data[0].id;
+        console.log(`Reusing existing Stripe customer ${customerId} for ${email}`);
+      } else {
+        // Create new customer
+        const newCustomer = await stripe.customers.create({
+          email: email,
+          name: name,
+          phone: phone || undefined,
+          metadata: {
+            source: 'klara_project_website',
+          },
+        });
+        customerId = newCustomer.id;
+        console.log(`Created new Stripe customer ${customerId} for ${email}`);
+      }
+
       if (frequency === 'monthly') {
         const durationLabel = duration && duration !== 'ongoing' ? ` (${duration} months)` : '';
         
@@ -253,7 +277,7 @@ export async function registerRoutes(
         const session = await stripe.checkout.sessions.create({
           payment_method_types: ['card'],
           mode: 'subscription',
-          customer_email: email,
+          customer: customerId,
           subscription_data: subscriptionData,
           line_items: [
             {
@@ -289,7 +313,7 @@ export async function registerRoutes(
         const session = await stripe.checkout.sessions.create({
           payment_method_types: ['card'],
           mode: 'payment',
-          customer_email: email,
+          customer: customerId,
           line_items: [
             {
               price_data: {
