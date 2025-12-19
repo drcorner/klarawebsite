@@ -230,9 +230,12 @@ export async function registerRoutes(
 
   app.post('/api/create-checkout-session', eventFriendlyRateLimiter, async (req, res) => {
     try {
-      const { amount, frequency, email, name, phone, duration, successUrl, cancelUrl, communicationConsent, recaptchaToken } = req.body;
+      const { amount, frequency, email, firstName, lastName, phone, duration, successUrl, cancelUrl, communicationConsent, recaptchaToken } = req.body;
 
-      if (!amount || !email || !name) {
+      // Combine first and last name for Stripe
+      const name = `${firstName} ${lastName}`.trim();
+
+      if (!amount || !email || !firstName || !lastName) {
         return res.status(400).json({ error: 'Missing required fields' });
       }
 
@@ -317,6 +320,8 @@ export async function registerRoutes(
             },
           ],
           metadata: {
+            donor_first_name: firstName,
+            donor_last_name: lastName,
             donor_name: name,
             donor_email: email,
             donor_phone: phone || '',
@@ -350,6 +355,8 @@ export async function registerRoutes(
             },
           ],
           metadata: {
+            donor_first_name: firstName,
+            donor_last_name: lastName,
             donor_name: name,
             donor_email: email,
             donor_phone: phone || '',

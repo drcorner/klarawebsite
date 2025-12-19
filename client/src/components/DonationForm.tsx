@@ -38,7 +38,8 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
   const [selectedAmount, setSelectedAmount] = useState<number | null>(50);
   const [customAmount, setCustomAmount] = useState("");
   const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [communicationConsent, setCommunicationConsent] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -50,7 +51,7 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
 
   const handleDonate = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!currentAmount || !email || !name) {
+    if (!currentAmount || !email || !firstName || !lastName) {
       toast({
         title: "Missing information",
         description: "Please fill in all required fields.",
@@ -83,7 +84,8 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
           amount: currentAmount,
           frequency,
           email,
-          name,
+          firstName,
+          lastName,
           phone: phone || undefined,
           duration: frequency === "monthly" ? duration : undefined,
           communicationConsent,
@@ -109,7 +111,7 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
       });
       setIsProcessing(false);
     }
-  }, [currentAmount, email, name, phone, frequency, duration, communicationConsent, executeRecaptcha, toast]);
+  }, [currentAmount, email, firstName, lastName, phone, frequency, duration, communicationConsent, executeRecaptcha, toast]);
 
   return (
     <div className="space-y-8">
@@ -219,29 +221,42 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="name">Full Name *</Label>
+              <Label htmlFor="firstName">First Name *</Label>
               <Input
-                id="name"
+                id="firstName"
                 type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Your full name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="First name"
                 required
-                data-testid="input-donor-name"
+                data-testid="input-donor-first-name"
               />
             </div>
             <div>
-              <Label htmlFor="email">Email *</Label>
+              <Label htmlFor="lastName">Last Name *</Label>
               <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
+                id="lastName"
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="Last name"
                 required
-                data-testid="input-donor-email"
+                data-testid="input-donor-last-name"
               />
             </div>
+          </div>
+
+          <div>
+            <Label htmlFor="email">Email *</Label>
+            <Input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              required
+              data-testid="input-donor-email"
+            />
           </div>
 
           <div>

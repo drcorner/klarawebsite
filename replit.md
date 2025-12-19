@@ -67,6 +67,9 @@ A sophisticated nonprofit website for The Klara Project, a Christian nonprofit w
 - Page visit tracking to HubSpot (gated behind cookie consent)
 - Communication consent checkbox on donation form (synced to HubSpot)
 - Rate limiting on all API endpoints (event-friendly high limits on donation flows, moderate on marketing)
+- reCAPTCHA v3 spam protection on donation form (invisible, score-based)
+- Billing address collection required on Stripe checkout
+- Separate first/last name fields on all forms for cleaner HubSpot data
 
 ## Development Notes
 - Run with `npm run dev`

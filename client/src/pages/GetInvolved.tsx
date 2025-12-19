@@ -16,7 +16,8 @@ import familyImage from "@assets/generated_images/christian_family_dinner_conver
 
 export default function GetInvolved() {
   const [volunteerForm, setVolunteerForm] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     expertise: "",
     message: "",
@@ -24,7 +25,8 @@ export default function GetInvolved() {
   const [volunteerSubmitted, setVolunteerSubmitted] = useState(false);
   const [copied, setCopied] = useState(false);
   const [experienceForm, setExperienceForm] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     experience: "",
     namePermission: "use-name",
@@ -111,28 +113,39 @@ export default function GetInvolved() {
                   <form onSubmit={handleVolunteerSubmit} className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="vol-name">Name *</Label>
+                        <Label htmlFor="vol-first-name">First Name *</Label>
                         <Input
-                          id="vol-name"
-                          value={volunteerForm.name}
-                          onChange={(e) => setVolunteerForm({ ...volunteerForm, name: e.target.value })}
+                          id="vol-first-name"
+                          value={volunteerForm.firstName}
+                          onChange={(e) => setVolunteerForm({ ...volunteerForm, firstName: e.target.value })}
                           required
-                          placeholder="Your name"
-                          data-testid="input-volunteer-name"
+                          placeholder="First name"
+                          data-testid="input-volunteer-first-name"
                         />
                       </div>
                       <div>
-                        <Label htmlFor="vol-email">Email *</Label>
+                        <Label htmlFor="vol-last-name">Last Name *</Label>
                         <Input
-                          id="vol-email"
-                          type="email"
-                          value={volunteerForm.email}
-                          onChange={(e) => setVolunteerForm({ ...volunteerForm, email: e.target.value })}
+                          id="vol-last-name"
+                          value={volunteerForm.lastName}
+                          onChange={(e) => setVolunteerForm({ ...volunteerForm, lastName: e.target.value })}
                           required
-                          placeholder="you@example.com"
-                          data-testid="input-volunteer-email"
+                          placeholder="Last name"
+                          data-testid="input-volunteer-last-name"
                         />
                       </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="vol-email">Email *</Label>
+                      <Input
+                        id="vol-email"
+                        type="email"
+                        value={volunteerForm.email}
+                        onChange={(e) => setVolunteerForm({ ...volunteerForm, email: e.target.value })}
+                        required
+                        placeholder="you@example.com"
+                        data-testid="input-volunteer-email"
+                      />
                     </div>
                     <div>
                       <Label htmlFor="vol-expertise">Area of Expertise</Label>
@@ -302,28 +315,39 @@ export default function GetInvolved() {
                   <form onSubmit={handleExperienceSubmit} className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="exp-name">Name *</Label>
+                        <Label htmlFor="exp-first-name">First Name *</Label>
                         <Input
-                          id="exp-name"
-                          value={experienceForm.name}
-                          onChange={(e) => setExperienceForm({ ...experienceForm, name: e.target.value })}
+                          id="exp-first-name"
+                          value={experienceForm.firstName}
+                          onChange={(e) => setExperienceForm({ ...experienceForm, firstName: e.target.value })}
                           required
-                          placeholder="Your name"
-                          data-testid="input-experience-name"
+                          placeholder="First name"
+                          data-testid="input-experience-first-name"
                         />
                       </div>
                       <div>
-                        <Label htmlFor="exp-email">Email *</Label>
+                        <Label htmlFor="exp-last-name">Last Name *</Label>
                         <Input
-                          id="exp-email"
-                          type="email"
-                          value={experienceForm.email}
-                          onChange={(e) => setExperienceForm({ ...experienceForm, email: e.target.value })}
+                          id="exp-last-name"
+                          value={experienceForm.lastName}
+                          onChange={(e) => setExperienceForm({ ...experienceForm, lastName: e.target.value })}
                           required
-                          placeholder="you@example.com"
-                          data-testid="input-experience-email"
+                          placeholder="Last name"
+                          data-testid="input-experience-last-name"
                         />
                       </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="exp-email">Email *</Label>
+                      <Input
+                        id="exp-email"
+                        type="email"
+                        value={experienceForm.email}
+                        onChange={(e) => setExperienceForm({ ...experienceForm, email: e.target.value })}
+                        required
+                        placeholder="you@example.com"
+                        data-testid="input-experience-email"
+                      />
                     </div>
                     <div>
                       <Label htmlFor="exp-experience">Your Experience or Question *</Label>
