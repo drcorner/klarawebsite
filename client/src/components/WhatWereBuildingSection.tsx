@@ -1,21 +1,17 @@
-import { ArrowRight } from "lucide-react";
-import { Link } from "wouter";
-import { Button } from "@/components/ui/button";
-
 const items = [
   {
-    title: "Curricula and Conversation Guides",
-    description: "Series for small groups, Sunday school, or workshops—helping Christians apply biblical principles to AI challenges.",
-    status: "In Progress",
+    title: "Video-Based Curriculum",
+    description: "A 13-week series for small groups and Sunday school. Each session introduces key concepts, then guides participants in applying biblical principles to AI challenges in their families and workplaces.",
+    status: "In Development",
   },
   {
-    title: "Next Generation Grants and Competitions",
-    description: "Funding and challenges that equip young Christians to engage AI thoughtfully—judged on both product and Christian discernment.",
-    status: "Coming Soon",
+    title: "Conversation Guides",
+    description: "Practical frameworks for church leaders: 'When AI Takes Jobs,' 'Raising Children in the Age of AI,' 'Christian Ethics for Everyday AI Decisions,' and 'Relationships in an AI World.'",
+    status: "In Development",
   },
   {
     title: "Family Resources",
-    description: "Practical resources for pastors and families on job displacement, raising children in the AI age, and everyday ethical decisions.",
+    description: "Guidance for parents making decisions about AI tools, educational technology, and home robotics—grounded in biblical wisdom.",
     status: "Coming Soon",
   },
   {
@@ -29,21 +25,13 @@ export default function WhatWereBuildingSection() {
   return (
     <section className="bg-cream py-20 md:py-28">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
-          <div>
-            <p className="text-primary uppercase tracking-[0.2em] text-sm font-medium mb-4">
-              Our Programs
-            </p>
-            <h2 className="font-serif text-3xl md:text-4xl font-normal text-charcoal">
-              What We're Building
-            </h2>
-          </div>
-          <Link href="/resources">
-            <Button variant="outline" className="border-primary text-primary rounded-full group font-semibold">
-              View All Resources
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-          </Link>
+        <div className="mb-12">
+          <p className="text-primary uppercase tracking-[0.2em] text-sm font-medium mb-4">
+            Our Programs
+          </p>
+          <h2 className="font-serif text-3xl md:text-4xl font-normal text-charcoal">
+            What We're Building
+          </h2>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -55,8 +43,8 @@ export default function WhatWereBuildingSection() {
             >
               <div className="flex items-start justify-end mb-4">
                 <span className={`text-xs font-semibold px-3 py-1 rounded-full ${
-                  item.status === "In Progress" 
-                    ? "bg-primary/10 text-primary" 
+                  item.status === "In Development"
+                    ? "bg-primary/10 text-primary"
                     : "bg-charcoal/5 text-charcoal-muted"
                 }`}>
                   {item.status}
