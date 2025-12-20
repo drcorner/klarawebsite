@@ -85,7 +85,29 @@ export default function WhyKlaraProject() {
           </div>
         </section>
 
-        <section className="py-16 md:py-24">
+        <section className="py-16 md:py-20">
+          <div className="max-w-7xl mx-auto px-6 md:px-10">
+            <Card className="max-w-2xl mx-auto p-8 bg-primary/5 border-primary/20 text-center">
+              <h3 className="font-serif text-2xl font-semibold text-charcoal mb-4">
+                Founding White Paper
+              </h3>
+              <p className="text-charcoal-muted mb-6">
+                Our founding document: a clear-eyed analysis of the challenges Christians face
+                in AI development—and a roadmap for meaningful engagement.
+              </p>
+              <Button
+                onClick={() => setIsModalOpen(true)}
+                className="bg-primary text-cream"
+                data-testid="button-download-whitepaper"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Download White Paper (PDF)
+              </Button>
+            </Card>
+          </div>
+        </section>
+
+        <section className="bg-cream-dark py-16 md:py-24">
           <div className="max-w-7xl mx-auto px-6 md:px-10">
             <div className="max-w-3xl mx-auto">
               <h2 className="font-serif text-3xl font-semibold text-charcoal mb-6">
@@ -208,28 +230,6 @@ export default function WhyKlaraProject() {
                 </p>
               </div>
             </div>
-          </div>
-        </section>
-
-        <section className="bg-primary py-16 md:py-20">
-          <div className="max-w-7xl mx-auto px-6 md:px-10">
-            <Card className="max-w-2xl mx-auto p-8 bg-cream text-center">
-              <h3 className="font-serif text-2xl font-semibold text-charcoal mb-4">
-                Founding White Paper
-              </h3>
-              <p className="text-charcoal-muted mb-6">
-                Our founding document: a clear-eyed analysis of the challenges Christians face
-                in AI development—and a roadmap for meaningful engagement.
-              </p>
-              <Button 
-                onClick={() => setIsModalOpen(true)}
-                className="bg-primary text-cream"
-                data-testid="button-download-whitepaper"
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Download White Paper (PDF)
-              </Button>
-            </Card>
           </div>
         </section>
       </main>

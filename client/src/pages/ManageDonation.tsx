@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { Mail, Loader2, CreditCard, Calendar, ExternalLink, LogOut, DollarSign, Download, FileText, Pencil, XCircle, Heart, Users, ArrowDown, ArrowUp } from "lucide-react";
+import { Link } from "wouter";
+import { Mail, Loader2, CreditCard, Calendar, ExternalLink, LogOut, DollarSign, Download, FileText, Pencil, XCircle, Heart, Users, ArrowDown, ArrowUp, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -498,9 +499,15 @@ export default function ManageDonation() {
             <h1 className="font-serif text-4xl font-bold text-charcoal mb-4">
               Manage Your Giving
             </h1>
-            <p className="text-charcoal-muted text-lg">
+            <p className="text-charcoal-muted text-lg mb-4">
               View your giving history and update your recurring donations
             </p>
+            <Link href="/donate">
+              <span className="inline-flex items-center text-sm text-primary hover:text-primary/80 transition-colors">
+                Want to make a donation?
+                <ArrowRight className="ml-1 h-4 w-4" />
+              </span>
+            </Link>
           </div>
 
           {step === "email" && (
