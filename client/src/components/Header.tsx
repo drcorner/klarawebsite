@@ -8,7 +8,6 @@ const navItems = [
   { label: "Why Klara Project?", href: "/why-klara-project" },
   { label: "Next Generation", href: "/next-generation" },
   { label: "Get Involved", href: "/get-involved" },
-  { label: "Manage Giving", href: "/manage-donation" },
 ];
 
 export default function Header() {
@@ -36,15 +35,22 @@ export default function Header() {
                 </Button>
               </Link>
             ))}
-            <Link href="/donate">
-              <Button 
-                size="sm"
-                className="ml-3 bg-gradient-to-r from-primary to-primary/80 text-cream font-semibold rounded-full px-6 shadow-sm shadow-primary/20" 
-                data-testid="nav-donate"
-              >
-                Donate
-              </Button>
-            </Link>
+            <div className="ml-3 flex flex-col items-center">
+              <Link href="/donate">
+                <Button
+                  size="sm"
+                  className="bg-gradient-to-r from-primary to-primary/80 text-cream font-semibold rounded-full px-6 shadow-sm shadow-primary/20"
+                  data-testid="nav-donate"
+                >
+                  Donate
+                </Button>
+              </Link>
+              <Link href="/manage-donation">
+                <span className="text-xs text-charcoal-muted hover:text-primary transition-colors mt-1">
+                  Manage your giving
+                </span>
+              </Link>
+            </div>
           </nav>
 
           <Button
@@ -93,15 +99,25 @@ export default function Header() {
                   </Button>
                 </Link>
               ))}
-              <Link href="/donate">
-                <Button 
-                  className="w-full mt-4 bg-gradient-to-r from-primary to-primary/80 text-cream font-semibold text-lg rounded-full"
-                  onClick={() => setIsMenuOpen(false)}
-                  data-testid="mobile-nav-donate"
-                >
-                  Donate
-                </Button>
-              </Link>
+              <div className="mt-4 flex flex-col items-center">
+                <Link href="/donate">
+                  <Button
+                    className="w-full bg-gradient-to-r from-primary to-primary/80 text-cream font-semibold text-lg rounded-full"
+                    onClick={() => setIsMenuOpen(false)}
+                    data-testid="mobile-nav-donate"
+                  >
+                    Donate
+                  </Button>
+                </Link>
+                <Link href="/manage-donation">
+                  <span
+                    className="text-sm text-charcoal-muted hover:text-primary transition-colors mt-2 block"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Manage your giving
+                  </span>
+                </Link>
+              </div>
             </nav>
           </div>
         </>
