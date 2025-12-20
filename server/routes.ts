@@ -45,7 +45,7 @@ export async function registerRoutes(
       await db.delete(verificationCodes).where(eq(verificationCodes.email, email));
       await db.insert(verificationCodes).values({ email, code, expiresAt });
 
-      console.log(`Verification code for ${email}: ${code}`);
+      console.log(`Verification code sent to ${email}`);
 
       try {
         await sendVerificationEmail(email, code);
@@ -239,6 +239,12 @@ export async function registerRoutes(
         return res.status(400).json({ error: 'Missing required fields' });
       }
 
+      // Validate amount is a positive number (minimum $1)
+      const parsedAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
+      if (typeof parsedAmount !== 'number' || isNaN(parsedAmount) || parsedAmount < 1) {
+        return res.status(400).json({ error: 'Invalid donation amount. Minimum donation is $1.' });
+      }
+
       // Verify reCAPTCHA token
       if (recaptchaToken && process.env.RECAPTCHA_SECRET_KEY) {
         try {
@@ -260,7 +266,7 @@ export async function registerRoutes(
       }
 
       const stripe = await getUncachableStripeClient();
-      const amountInCents = Math.round(amount * 100);
+      const amountInCents = Math.round(parsedAmount * 100);
 
       // Check for existing customer with this email
       let customerId: string | undefined;
@@ -309,7 +315,7 @@ export async function registerRoutes(
                 currency: 'usd',
                 product_data: {
                   name: 'Monthly Donation to Klara Project',
-                  description: `$${amount}/month recurring donation${durationLabel}`,
+                  description: `$${parsedAmount}/month recurring donation${durationLabel}`,
                 },
                 unit_amount: amountInCents,
                 recurring: {
@@ -326,7 +332,7 @@ export async function registerRoutes(
             donor_email: email,
             donor_phone: phone || '',
             donation_type: 'monthly',
-            amount: amount.toString(),
+            amount: parsedAmount.toString(),
             duration: duration || 'ongoing',
             communication_consent: communicationConsent ? 'true' : 'false',
           },
@@ -347,7 +353,7 @@ export async function registerRoutes(
                 currency: 'usd',
                 product_data: {
                   name: 'One-Time Donation to Klara Project',
-                  description: `$${amount} donation`,
+                  description: `$${parsedAmount} donation`,
                 },
                 unit_amount: amountInCents,
               },
@@ -361,7 +367,7 @@ export async function registerRoutes(
             donor_email: email,
             donor_phone: phone || '',
             donation_type: 'one-time',
-            amount: amount.toString(),
+            amount: parsedAmount.toString(),
             communication_consent: communicationConsent ? 'true' : 'false',
           },
           success_url: successUrl || `${req.protocol}://${req.get('host')}/donate/thank-you?session_id={CHECKOUT_SESSION_ID}`,
@@ -657,12 +663,17 @@ export async function registerRoutes(
             
             const now = new Date();
             const originalDay = now.getDate();
-            const cancelDate = new Date(now);
-            cancelDate.setMonth(cancelDate.getMonth() + months);
-            
-            // Handle month overflow (e.g., Jan 31 + 1 month = Feb 28)
-            if (cancelDate.getDate() !== originalDay) {
-              cancelDate.setDate(0);
+            const targetMonth = now.getMonth() + months;
+            const targetYear = now.getFullYear() + Math.floor(targetMonth / 12);
+            const normalizedMonth = targetMonth % 12;
+
+            // Create date in target month, then handle overflow
+            const cancelDate = new Date(targetYear, normalizedMonth, originalDay);
+
+            // Handle month overflow (e.g., Jan 31 + 1 month should be Feb 28)
+            // If the date rolled over to the next month, go back to last day of intended month
+            if (cancelDate.getMonth() !== normalizedMonth) {
+              cancelDate.setDate(0); // Sets to last day of previous month (the intended month)
             }
             
             await stripe.subscriptions.update(subscriptionId, {
