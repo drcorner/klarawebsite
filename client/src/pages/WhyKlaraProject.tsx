@@ -12,10 +12,10 @@ import { Label } from "@/components/ui/label";
 import churchImage from "@assets/generated_images/church_small_group_bible_study.png";
 
 const approachItems = [
-  { icon: Building2, title: "Infrastructure first", description: "Legal formation, website, donor systems before programming." },
-  { icon: Users, title: "Intergenerational Leadership", description: "Build a team that can unite churches and donors across generational divides." },
-  { icon: BookOpen, title: "Exceptional content", description: "Video curricula developed by professionals." },
-  { icon: TrendingUp, title: "Phased complexity", description: "Advanced initiatives only after establishing credibility and expertise." },
+  { icon: Building2, title: "Infrastructure first", description: "Build the foundation first—legal structure, digital presence, and sustainable funding—before launching programs." },
+  { icon: Users, title: "Intergenerational leadership", description: "Assemble leadership that bridges generational divides, combining seasoned wisdom with emerging voices." },
+  { icon: BookOpen, title: "Exceptional content", description: "Produce video curricula with professional polish and theological depth." },
+  { icon: TrendingUp, title: "Phased complexity", description: "Pursue advanced initiatives only after earning credibility through proven results." },
 ];
 
 export default function WhyKlaraProject() {
@@ -47,19 +47,17 @@ export default function WhyKlaraProject() {
                 What Makes Us Different
               </h2>
               <p className="text-charcoal leading-relaxed mb-4">
-                Other faith-based organizations address technology ethics at the policy or academic level. 
-                The Ethics and Religious Liberty Commission, the Center for Public Justice, various Catholic 
-                initiatives—we welcome their work. But Klara Project fills a different gap.
+                Most faith-based technology initiatives focus on policy advocacy or academic research—important
+                work, but far from the average church member's Sunday morning.
               </p>
               <p className="text-charcoal leading-relaxed mb-4">
-                We focus on <strong>practical equipping for local churches</strong> while building toward 
-                credible engagement with the technology industry. We create the Sunday school curricula, 
-                pastoral frameworks, and conversation guides that ordinary congregations need right now.
+                Klara Project starts where churches actually live. We create the Sunday school curricula,
+                pastoral frameworks, and conversation guides that ordinary congregations need <em>right now</em>—then
+                build toward credible engagement with the technology industry.
               </p>
               <p className="text-charcoal leading-relaxed">
-                We position Christians as constructive partners—not just critics—in technology development. 
-                We believe influence must be earned through demonstrated expertise and genuine service. 
-                That's why we start with equipping and build toward engagement.
+                We position Christians as constructive partners, not just critics. Influence must be earned
+                through demonstrated expertise and genuine service. That's why we equip first and engage second.
               </p>
             </div>
           </div>
@@ -71,16 +69,16 @@ export default function WhyKlaraProject() {
               <Card className="p-8 bg-card border-l-4 border-l-primary">
                 <h3 className="font-serif text-2xl font-semibold text-charcoal mb-4">Our Mission</h3>
                 <ul className="space-y-3 text-charcoal">
-                  <li><strong>Equip</strong> churches and Christians with practical resources for the AI age.</li>
-                  <li><strong>Engage</strong> the broader culture to ensure Christian perspectives shape technology development.</li>
+                  <li><strong>Equip</strong> churches with practical resources for the AI age.</li>
+                  <li><strong>Engage</strong> culture to ensure Christian perspectives shape technology.</li>
+                  <li><strong>Empower</strong> the next generation to lead with wisdom and faith.</li>
                 </ul>
               </Card>
               <Card className="p-8 bg-card border-l-4 border-l-gold">
                 <h3 className="font-serif text-2xl font-semibold text-charcoal mb-4">Our Vision</h3>
                 <p className="text-charcoal leading-relaxed">
-                  A future where Christians have both a voice and real choices in the development of 
-                  artificial intelligence and robotics—technologies that will define not just our 
-                  children's future, but our present reality.
+                  A future where Christians have both a voice and real choices in AI and robotics
+                  development—technologies shaping not just our children's world, but ours today.
                 </p>
               </Card>
             </div>
@@ -98,9 +96,9 @@ export default function WhyKlaraProject() {
                 Christian tradition offers intellectual resources that secular AI ethics lacks.
               </p>
               <p className="text-charcoal leading-relaxed mb-4">
-                The doctrine of <em>imago Dei</em>—that humans are made in God's image—grounds human 
-                dignity in something transcendent, not merely cognitive capability. But if machines 
-                can reason and create, what does make humans unique?
+                The doctrine of <em>imago Dei</em>—that humans are made in God's image—grounds human
+                dignity in something transcendent, not merely cognitive capability. But if machines
+                can reason and create, what <em>still</em> makes humans unique?
               </p>
               <p className="text-charcoal leading-relaxed mb-4">
                 The Christian answer has never been intellect alone. We are embodied souls, created 
@@ -109,9 +107,9 @@ export default function WhyKlaraProject() {
                 We worship. We hope. We were made to know and be known.
               </p>
               <p className="text-charcoal leading-relaxed font-medium">
-                We bring two thousand years of reflection on moral decision-making, the limits of 
-                human power, and the nature of genuine relationship. These insights deserve a seat 
-                at the table where AI's future is being decided.
+                We bring two thousand years of reflection on moral decision-making, the limits of
+                human power, and the nature of genuine relationship. These insights don't just
+                deserve a seat at the table—they're essential to getting AI right.
               </p>
             </div>
           </div>
@@ -143,10 +141,9 @@ export default function WhyKlaraProject() {
                 Investing in the Next Generation
               </h2>
               <p className="text-charcoal leading-relaxed mb-4">
-                Investing in the next generation is not just part of The Klara Project's mission—it is 
-                central to how we operate. Two generations will be most shaped by AI and robotics: 
-                Generation Z and Generation Alpha. We create resources to serve them and their parents, 
-                and we build our organization by developing young leaders from within.
+                Investing in the next generation isn't just part of our mission—it's how we operate.
+                Gen Z and Gen Alpha will be most shaped by AI and robotics. We create resources to
+                serve them and their parents, and we develop young leaders from within our own organization.
               </p>
               <Link href="/next-generation">
                 <Button 
@@ -168,10 +165,19 @@ export default function WhyKlaraProject() {
               <h2 className="font-serif text-3xl font-semibold text-charcoal mb-4">
                 Advisory Board
               </h2>
-              <p className="text-charcoal-muted">
-                Coming Soon — We are assembling an advisory board with expertise in AI, theology, 
-                social enterprise, and education. Announcement forthcoming.
+              <p className="text-charcoal-muted mb-6">
+                We're assembling an advisory board with expertise spanning AI research, theology,
+                social enterprise, and education.
               </p>
+              <Link href="/get-involved">
+                <Button
+                  variant="outline"
+                  className="rounded-full group font-semibold"
+                >
+                  Interested in serving? Get in touch
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </Link>
             </div>
           </div>
         </section>
@@ -197,7 +203,8 @@ export default function WhyKlaraProject() {
                   culture, including technology, with wisdom, discernment, and love.
                 </p>
                 <p className="font-medium">
-                  We welcome Christians from all traditions who share these convictions and this mission.
+                  Whether you're Catholic, Orthodox, Protestant, or simply exploring—if you share
+                  these convictions and this mission, you're welcome here.
                 </p>
               </div>
             </div>
@@ -211,8 +218,8 @@ export default function WhyKlaraProject() {
                 Founding White Paper
               </h3>
               <p className="text-charcoal-muted mb-6">
-                A full analysis of the challenges Christians face in AI and robotics development, 
-                and our vision for addressing them.
+                Our founding document: a clear-eyed analysis of the challenges Christians face
+                in AI development—and a roadmap for meaningful engagement.
               </p>
               <Button 
                 onClick={() => setIsModalOpen(true)}
