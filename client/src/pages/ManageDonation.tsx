@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Mail, Loader2, CreditCard, Calendar, ExternalLink, LogOut, DollarSign, Download, FileText, Pencil, XCircle, Heart, Users, ArrowDown, ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -53,14 +53,19 @@ export default function ManageDonation() {
   const [cancelStep, setCancelStep] = useState<"intervention" | "confirm">("intervention");
   const [isCanceling, setIsCanceling] = useState(false);
 
-  useEffect(() => {
-    const savedSession = localStorage.getItem("donorSessionId");
-    if (savedSession) {
-      validateSession(savedSession);
+  const fetchDonations = useCallback(async (sessionIdToUse: string) => {
+    try {
+      const response = await fetch(`/api/donor/donations/${sessionIdToUse}`);
+      if (response.ok) {
+        const data = await response.json();
+        setDonationData(data);
+      }
+    } catch (error) {
+      console.error("Error fetching donations:", error);
     }
   }, []);
 
-  const validateSession = async (sessionIdToValidate: string) => {
+  const validateSession = useCallback(async (sessionIdToValidate: string) => {
     try {
       const response = await fetch(`/api/donor/session/${sessionIdToValidate}`);
       if (response.ok) {
@@ -73,19 +78,14 @@ export default function ManageDonation() {
     } catch {
       localStorage.removeItem("donorSessionId");
     }
-  };
+  }, [fetchDonations]);
 
-  const fetchDonations = async (sessionIdToUse: string) => {
-    try {
-      const response = await fetch(`/api/donor/donations/${sessionIdToUse}`);
-      if (response.ok) {
-        const data = await response.json();
-        setDonationData(data);
-      }
-    } catch (error) {
-      console.error("Error fetching donations:", error);
+  useEffect(() => {
+    const savedSession = localStorage.getItem("donorSessionId");
+    if (savedSession) {
+      validateSession(savedSession);
     }
-  };
+  }, [validateSession]);
 
   const handleSendCode = async (e: React.FormEvent) => {
     e.preventDefault();
