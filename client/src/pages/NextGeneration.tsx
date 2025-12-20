@@ -122,6 +122,55 @@ export default function NextGeneration() {
           </div>
         </section>
 
+        <section className="bg-cream-dark py-16 md:py-24">
+          <div className="max-w-7xl mx-auto px-6 md:px-10">
+            <div className="max-w-3xl mx-auto">
+              <div className="w-16 h-1 bg-gold rounded-full mb-6"></div>
+              <h2 className="font-serif text-3xl font-semibold text-charcoal mb-6">
+                Future Programs
+              </h2>
+              <p className="text-charcoal leading-relaxed mb-8">
+                As funding allows, we're building programs that invest directly in emerging Christian voices.
+              </p>
+
+              <div className="space-y-6">
+                <Card className="p-6 bg-card border-card-border">
+                  <div className="flex items-start justify-between gap-4 mb-3">
+                    <h3 className="font-serif text-xl font-semibold text-charcoal">
+                      Student Essay Competition
+                    </h3>
+                    <span className="text-xs font-semibold px-3 py-1 rounded-full bg-charcoal/5 text-charcoal-muted shrink-0">
+                      Coming Soon
+                    </span>
+                  </div>
+                  <p className="text-charcoal-muted leading-relaxed">
+                    An annual competition inviting students from Christian colleges to write original essays on
+                    what the church needs in the age of AI. Students must use AI in their writing process and
+                    submit their complete AI conversations—judged on both the final product and their discernment
+                    in using these tools.
+                  </p>
+                </Card>
+
+                <Card className="p-6 bg-card border-card-border">
+                  <div className="flex items-start justify-between gap-4 mb-3">
+                    <h3 className="font-serif text-xl font-semibold text-charcoal">
+                      Educational Grants
+                    </h3>
+                    <span className="text-xs font-semibold px-3 py-1 rounded-full bg-charcoal/5 text-charcoal-muted shrink-0">
+                      Coming Soon
+                    </span>
+                  </div>
+                  <p className="text-charcoal-muted leading-relaxed">
+                    Small research grants for undergraduate and graduate students exploring questions at the
+                    intersection of AI, faith, and ethics. These grants cultivate the next generation of
+                    Christian voices in technology while producing scholarship that benefits the broader community.
+                  </p>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="py-16 md:py-24">
           <div className="max-w-7xl mx-auto px-6 md:px-10 text-center">
             <h2 className="font-serif text-2xl font-semibold text-charcoal mb-6">

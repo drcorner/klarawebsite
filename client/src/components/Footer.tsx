@@ -8,7 +8,7 @@ import Logo from "./Logo";
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "Why Klara Project?", href: "/why-klara-project" },
-  { label: "Resources", href: "/resources" },
+  { label: "Next Generation", href: "/next-generation" },
   { label: "Get Involved", href: "/get-involved" },
   { label: "Donate", href: "/donate" },
   { label: "Manage Donation", href: "/manage-donation" },
@@ -53,8 +53,9 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <Logo variant="light" />
             <p className="mt-4 text-cream/60 text-sm leading-relaxed max-w-md">
-              Equipping churches with practical resources. Engaging the culture to ensure 
-              Christian perspectives shape technology development.
+              <strong className="text-cream/80">Equip.</strong> Churches with practical resources for the AI age.{" "}
+              <strong className="text-cream/80">Engage.</strong> Culture to shape technology development.{" "}
+              <strong className="text-cream/80">Empower.</strong> The next generation to lead with wisdom and faith.
             </p>
           </div>
 
