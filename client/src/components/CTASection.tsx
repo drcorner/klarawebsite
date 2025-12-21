@@ -19,7 +19,7 @@ export default function CTASection() {
               className="bg-transparent border-cream text-cream hover:bg-cream hover:text-primary rounded-full group font-semibold px-8"
               data-testid="button-cta-about"
             >
-              About Us
+              Learn About Klara Project
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
           </Link>

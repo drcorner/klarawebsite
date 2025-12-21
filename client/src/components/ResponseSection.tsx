@@ -11,26 +11,32 @@ export default function ResponseSection() {
             Our Approach
           </p>
           <h2 className="font-serif text-3xl md:text-4xl font-normal text-charcoal">
-            Equip and Engage
+            Equip. Engage. Empower.
           </h2>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-12">
           <div className="p-8 rounded-2xl bg-cream border border-charcoal/5 shadow-sm hover:shadow-md transition-shadow">
             <div className="w-12 h-1 bg-primary rounded-full mb-6"></div>
             <h3 className="font-bold text-xl text-charcoal mb-3">Equip</h3>
             <p className="text-charcoal-muted leading-relaxed">
-              We provide churches with practical resources—curricula, conversation guides, and 
-              pastoral frameworks that help congregations think clearly about AI.
+              Churches with practical resources for the AI age.
             </p>
           </div>
-          
+
           <div className="p-8 rounded-2xl bg-cream border border-charcoal/5 shadow-sm hover:shadow-md transition-shadow">
             <div className="w-12 h-1 bg-gold rounded-full mb-6"></div>
             <h3 className="font-bold text-xl text-charcoal mb-3">Engage</h3>
             <p className="text-charcoal-muted leading-relaxed">
-              Building on that foundation, we engage the broader culture to ensure Christian 
-              perspectives shape technology development. Influence is earned.
+              Culture to shape technology development.
+            </p>
+          </div>
+
+          <div className="p-8 rounded-2xl bg-cream border border-charcoal/5 shadow-sm hover:shadow-md transition-shadow">
+            <div className="w-12 h-1 bg-coral rounded-full mb-6"></div>
+            <h3 className="font-bold text-xl text-charcoal mb-3">Empower</h3>
+            <p className="text-charcoal-muted leading-relaxed">
+              The next generation to lead with wisdom and faith.
             </p>
           </div>
         </div>
