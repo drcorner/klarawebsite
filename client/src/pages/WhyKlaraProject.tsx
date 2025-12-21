@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link } from "wouter";
 import { Building2, Users, BookOpen, TrendingUp, Download, ArrowRight } from "lucide-react";
 import Header from "@/components/Header";
@@ -6,9 +5,6 @@ import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import churchImage from "@assets/generated_images/church_small_group_bible_study.png";
 
 const approachItems = [
@@ -19,16 +15,6 @@ const approachItems = [
 ];
 
 export default function WhyKlaraProject() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("White paper download:", email);
-    setSubmitted(true);
-  };
-
   return (
     <div className="min-h-screen bg-cream">
       <Header />
@@ -89,20 +75,26 @@ export default function WhyKlaraProject() {
           <div className="max-w-7xl mx-auto px-6 md:px-10">
             <Card className="max-w-2xl mx-auto p-8 bg-primary/5 border-primary/20 text-center">
               <h3 className="font-serif text-2xl font-semibold text-charcoal mb-4">
-                Founding White Paper
+                Want to go deeper?
               </h3>
               <p className="text-charcoal-muted mb-6">
-                Our founding document: a clear-eyed analysis of the challenges Christians face
-                in AI development—and a roadmap for meaningful engagement.
+                Our founding white paper offers a fuller analysis of the challenges Christians
+                face in AI development—and a detailed roadmap for meaningful engagement.
               </p>
-              <Button
-                onClick={() => setIsModalOpen(true)}
-                className="bg-primary text-cream"
-                data-testid="button-download-whitepaper"
+              <a
+                href="/klara-project-white-paper.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                download
               >
-                <Download className="w-4 h-4 mr-2" />
-                Download White Paper (PDF)
-              </Button>
+                <Button
+                  className="bg-primary text-cream"
+                  data-testid="button-download-whitepaper"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Download White Paper (PDF)
+                </Button>
+              </a>
             </Card>
           </div>
         </section>
@@ -234,41 +226,6 @@ export default function WhyKlaraProject() {
         </section>
       </main>
       <Footer />
-
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="font-serif text-2xl">Founding White Paper</DialogTitle>
-            <DialogDescription>
-              Enter your email to download the white paper and receive occasional updates.
-            </DialogDescription>
-          </DialogHeader>
-          {!submitted ? (
-            <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-              <div>
-                <Label htmlFor="email">Email *</Label>
-                <Input 
-                  id="email" 
-                  type="email" 
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required 
-                  placeholder="you@example.com"
-                  data-testid="input-modal-email"
-                />
-              </div>
-              <Button type="submit" className="w-full bg-primary text-cream" data-testid="button-modal-download">
-                Download White Paper
-              </Button>
-            </form>
-          ) : (
-            <div className="text-center py-6">
-              <Download className="h-8 w-8 text-primary mx-auto mb-4" />
-              <p className="text-charcoal">Thank you! Your download will begin shortly.</p>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
