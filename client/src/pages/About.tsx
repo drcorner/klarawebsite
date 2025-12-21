@@ -181,16 +181,16 @@ export default function About() {
               </h2>
               <div className="space-y-4 text-charcoal leading-relaxed">
                 <p>
-                  We affirm the historic Christian faith as expressed in the Nicene Creed—belief in 
-                  one God, Father, Son, and Holy Spirit; in Jesus Christ as Lord and Savior; in the 
+                  We affirm the historic Christian faith as expressed in the Nicene Creed—belief in
+                  one God, Father, Son, and Holy Spirit; in Jesus Christ as Lord and Savior; in the
                   Holy Spirit who gives life to the Church; and in the hope of resurrection.
                 </p>
                 <p>
-                  We believe that all people are created in the image of God (<em>imago Dei</em>), 
+                  We believe that all people are created in the image of God (<em>imago Dei</em>),
                   possessing inherent dignity and worth that no technology can replicate or replace.
                 </p>
                 <p>
-                  We believe the Scriptures call Christians to be salt and light in the world—engaging 
+                  We believe the Scriptures call Christians to be salt and light in the world—engaging
                   culture, including technology, with wisdom, discernment, and love.
                 </p>
                 <p className="font-medium">
@@ -198,6 +198,34 @@ export default function About() {
                   these convictions and this mission, you're welcome here.
                 </p>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-primary py-16 md:py-24">
+          <div className="max-w-7xl mx-auto px-6 md:px-10 text-center">
+            <h2 className="font-serif text-2xl font-semibold text-cream mb-6">
+              Ready to get involved?
+            </h2>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/get-involved">
+                <Button
+                  variant="outline"
+                  className="bg-transparent border-cream text-cream hover:bg-cream hover:text-primary rounded-full group font-semibold px-8"
+                  data-testid="button-cta-get-involved"
+                >
+                  Get Involved
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </Link>
+              <Link href="/donate">
+                <Button
+                  className="bg-cream text-primary hover:bg-cream/90 rounded-full font-semibold px-8"
+                  data-testid="button-cta-donate"
+                >
+                  Donate
+                </Button>
+              </Link>
             </div>
           </div>
         </section>

@@ -399,6 +399,22 @@ export default function GetInvolved() {
             </div>
           </div>
         </section>
+
+        <section className="bg-primary py-16 md:py-24">
+          <div className="max-w-7xl mx-auto px-6 md:px-10 text-center">
+            <h2 className="font-serif text-2xl font-semibold text-cream mb-6">
+              Ready to make a difference?
+            </h2>
+            <Link href="/donate">
+              <Button
+                className="bg-cream text-primary hover:bg-cream/90 rounded-full font-semibold px-8"
+                data-testid="button-cta-donate"
+              >
+                Donate
+              </Button>
+            </Link>
+          </div>
+        </section>
       </main>
       <Footer />
     </div>
