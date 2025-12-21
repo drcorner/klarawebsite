@@ -14,13 +14,13 @@ const approachItems = [
   { icon: TrendingUp, title: "Phased complexity", description: "Pursue advanced initiatives only after earning credibility through proven results." },
 ];
 
-export default function WhyKlaraProject() {
+export default function About() {
   return (
     <div className="min-h-screen bg-cream">
       <Header />
       <main>
-        <PageHero 
-          title="Why Klara Project?" 
+        <PageHero
+          title="About"
           subtitle="Filling a gap no one else is filling"
           variant="image"
           imageSrc={churchImage}
@@ -166,29 +166,6 @@ export default function WhyKlaraProject() {
                   data-testid="button-learn-next-gen"
                 >
                   Learn More About Our Commitment
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-cream-dark py-16 md:py-24">
-          <div className="max-w-7xl mx-auto px-6 md:px-10">
-            <div className="max-w-3xl mx-auto text-center">
-              <h2 className="font-serif text-3xl font-semibold text-charcoal mb-4">
-                Advisory Board
-              </h2>
-              <p className="text-charcoal-muted mb-6">
-                We're assembling an advisory board with expertise spanning AI research, theology,
-                social enterprise, and education.
-              </p>
-              <Link href="/get-involved">
-                <Button
-                  variant="outline"
-                  className="rounded-full group font-semibold"
-                >
-                  Interested in serving? Get in touch
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>

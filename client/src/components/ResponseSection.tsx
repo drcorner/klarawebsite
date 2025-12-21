@@ -36,7 +36,7 @@ export default function ResponseSection() {
         </div>
 
         <div className="text-center">
-          <Link href="/why-klara-project">
+          <Link href="/about">
             <Button className="bg-primary text-cream rounded-full group font-semibold shadow-sm" data-testid="button-see-building">
               Learn More About Our Mission
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />

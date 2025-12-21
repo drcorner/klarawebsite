@@ -6,7 +6,7 @@ import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Home from "@/pages/Home";
-import WhyKlaraProject from "@/pages/WhyKlaraProject";
+import About from "@/pages/About";
 import GetInvolved from "@/pages/GetInvolved";
 import Donate from "@/pages/Donate";
 import DonateThankYou from "@/pages/DonateThankYou";
@@ -39,7 +39,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
-      <Route path="/why-klara-project" component={WhyKlaraProject} />
+      <Route path="/about" component={About} />
       <Route path="/get-involved" component={GetInvolved} />
       <Route path="/donate" component={Donate} />
       <Route path="/donate/thank-you" component={DonateThankYou} />

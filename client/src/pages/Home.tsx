@@ -7,6 +7,7 @@ import ResponseSection from "@/components/ResponseSection";
 import WhatWereBuildingSection from "@/components/WhatWereBuildingSection";
 import FounderSection from "@/components/FounderSection";
 import PartnerSection from "@/components/PartnerSection";
+import CTASection from "@/components/CTASection";
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
         <WhatWereBuildingSection />
         <FounderSection />
         <PartnerSection />
+        <CTASection />
       </main>
       <Footer />
     </div>

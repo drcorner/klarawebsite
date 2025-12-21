@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import Logo from "./Logo";
 
 const navItems = [
-  { label: "Why Klara Project?", href: "/why-klara-project" },
+  { label: "About", href: "/about" },
   { label: "Next Generation", href: "/next-generation" },
   { label: "Get Involved", href: "/get-involved" },
 ];
