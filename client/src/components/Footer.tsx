@@ -7,7 +7,7 @@ import Logo from "./Logo";
 
 const navLinks = [
   { label: "Home", href: "/" },
-  { label: "Why Klara Project?", href: "/why-klara-project" },
+  { label: "About", href: "/about" },
   { label: "Next Generation", href: "/next-generation" },
   { label: "Get Involved", href: "/get-involved" },
   { label: "Donate", href: "/donate" },
