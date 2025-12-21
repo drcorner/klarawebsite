@@ -1,48 +1,34 @@
 // HubSpot integration for CRM data management
 import { Client } from '@hubspot/api-client';
 
-let connectionSettings: any;
-
-async function getAccessToken() {
-  if (connectionSettings && connectionSettings.settings.expires_at && new Date(connectionSettings.settings.expires_at).getTime() > Date.now()) {
-    return connectionSettings.settings.access_token;
+// Environment variable validation
+function getRequiredEnv(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${name}`);
   }
-  
-  const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
-  const xReplitToken = process.env.REPL_IDENTITY 
-    ? 'repl ' + process.env.REPL_IDENTITY 
-    : process.env.WEB_REPL_RENEWAL 
-    ? 'depl ' + process.env.WEB_REPL_RENEWAL 
-    : null;
-
-  if (!xReplitToken) {
-    throw new Error('X_REPLIT_TOKEN not found for repl/depl');
-  }
-
-  connectionSettings = await fetch(
-    'https://' + hostname + '/api/v2/connection?include_secrets=true&connector_names=hubspot',
-    {
-      headers: {
-        'Accept': 'application/json',
-        'X_REPLIT_TOKEN': xReplitToken
-      }
-    }
-  ).then(res => res.json()).then(data => data.items?.[0]);
-
-  const accessToken = connectionSettings?.settings?.access_token || connectionSettings.settings?.oauth?.credentials?.access_token;
-
-  if (!connectionSettings || !accessToken) {
-    throw new Error('HubSpot not connected');
-  }
-  return accessToken;
+  return value;
 }
 
-// WARNING: Never cache this client.
-// Access tokens expire, so a new client must be created each time.
-// Always call this function again to get a fresh client.
+// Check if HubSpot is configured (optional integration)
+function isHubSpotConfigured(): boolean {
+  return !!process.env.HUBSPOT_ACCESS_TOKEN;
+}
+
+// Cached HubSpot client
+let hubspotClient: Client | null = null;
+
+function getHubSpotClient(): Client {
+  if (!hubspotClient) {
+    const accessToken = getRequiredEnv('HUBSPOT_ACCESS_TOKEN');
+    hubspotClient = new Client({ accessToken });
+  }
+  return hubspotClient;
+}
+
+// For backwards compatibility with existing async code
 export async function getUncachableHubSpotClient() {
-  const accessToken = await getAccessToken();
-  return new Client({ accessToken });
+  return getHubSpotClient();
 }
 
 interface ContactData {
@@ -62,9 +48,14 @@ interface DonationData {
 
 // Create or update a contact in HubSpot
 export async function upsertContact(data: ContactData): Promise<string | null> {
+  if (!isHubSpotConfigured()) {
+    console.log('HubSpot not configured - skipping contact upsert');
+    return null;
+  }
+
   try {
-    const client = await getUncachableHubSpotClient();
-    
+    const client = getHubSpotClient();
+
     // Search for existing contact by email
     const searchResponse = await client.crm.contacts.searchApi.doSearch({
       filterGroups: [{
@@ -106,6 +97,11 @@ export async function upsertContact(data: ContactData): Promise<string | null> {
 
 // Track newsletter subscription
 export async function trackNewsletterSignup(email: string): Promise<void> {
+  if (!isHubSpotConfigured()) {
+    console.log('HubSpot not configured - skipping newsletter signup tracking');
+    return;
+  }
+
   try {
     const contactId = await upsertContact({
       email,
@@ -113,8 +109,8 @@ export async function trackNewsletterSignup(email: string): Promise<void> {
     });
 
     if (contactId) {
-      const client = await getUncachableHubSpotClient();
-      
+      const client = getHubSpotClient();
+
       // Update contact with newsletter subscription info
       await client.crm.contacts.basicApi.update(contactId, {
         properties: {
@@ -122,7 +118,7 @@ export async function trackNewsletterSignup(email: string): Promise<void> {
           hs_lead_status: 'Newsletter Subscriber',
         },
       });
-      
+
       console.log(`HubSpot: Tracked newsletter signup for ${email}`);
     }
   } catch (error: any) {
@@ -132,6 +128,11 @@ export async function trackNewsletterSignup(email: string): Promise<void> {
 
 // Track donation and update contact
 export async function trackDonation(data: DonationData): Promise<void> {
+  if (!isHubSpotConfigured()) {
+    console.log('HubSpot not configured - skipping donation tracking');
+    return;
+  }
+
   try {
     // Parse name into first and last
     const nameParts = data.donorName.trim().split(' ');
@@ -146,10 +147,10 @@ export async function trackDonation(data: DonationData): Promise<void> {
     });
 
     if (contactId) {
-      const client = await getUncachableHubSpotClient();
-      
+      const client = getHubSpotClient();
+
       const donationAmount = (data.amount / 100).toFixed(2);
-      const donationInfo = data.donationType === 'monthly' 
+      const donationInfo = data.donationType === 'monthly'
         ? `Monthly: $${donationAmount}${data.duration && data.duration !== 'ongoing' ? ` (${data.duration} months)` : ' (ongoing)'}`
         : `One-time: $${donationAmount}`;
 
@@ -188,6 +189,11 @@ export async function trackDonation(data: DonationData): Promise<void> {
 
 // Track white paper download
 export async function trackWhitePaperDownload(email: string): Promise<void> {
+  if (!isHubSpotConfigured()) {
+    console.log('HubSpot not configured - skipping white paper download tracking');
+    return;
+  }
+
   try {
     const contactId = await upsertContact({
       email,
@@ -195,15 +201,15 @@ export async function trackWhitePaperDownload(email: string): Promise<void> {
     });
 
     if (contactId) {
-      const client = await getUncachableHubSpotClient();
-      
+      const client = getHubSpotClient();
+
       await client.crm.contacts.basicApi.update(contactId, {
         properties: {
           lifecyclestage: 'lead',
           hs_lead_status: 'White Paper Downloaded',
         },
       });
-      
+
       console.log(`HubSpot: Tracked white paper download for ${email}`);
     }
   } catch (error: any) {
@@ -219,6 +225,11 @@ interface PageVisitData {
 
 // Track page visit for returning visitors
 export async function trackPageVisit(data: PageVisitData): Promise<void> {
+  if (!isHubSpotConfigured()) {
+    console.log(`Page visit tracked locally: ${data.visitorId} visited ${data.page}`);
+    return;
+  }
+
   try {
     if (!data.email) {
       console.log(`Page visit tracked locally: ${data.visitorId} visited ${data.page}`);
@@ -231,14 +242,14 @@ export async function trackPageVisit(data: PageVisitData): Promise<void> {
     });
 
     if (contactId) {
-      const client = await getUncachableHubSpotClient();
-      
+      const client = getHubSpotClient();
+
       await client.crm.contacts.basicApi.update(contactId, {
         properties: {
           notes_last_updated: new Date().toISOString(),
         },
       });
-      
+
       console.log(`HubSpot: Tracked page visit for ${data.email} on ${data.page}`);
     }
   } catch (error: any) {
@@ -248,20 +259,25 @@ export async function trackPageVisit(data: PageVisitData): Promise<void> {
 
 // Update contact communication consent
 export async function updateCommunicationConsent(email: string, hasConsent: boolean): Promise<void> {
+  if (!isHubSpotConfigured()) {
+    console.log('HubSpot not configured - skipping communication consent update');
+    return;
+  }
+
   try {
     const contactId = await upsertContact({
       email,
     });
 
     if (contactId) {
-      const client = await getUncachableHubSpotClient();
-      
+      const client = getHubSpotClient();
+
       await client.crm.contacts.basicApi.update(contactId, {
         properties: {
           hs_email_optout: hasConsent ? 'false' : 'true',
         },
       });
-      
+
       console.log(`HubSpot: Updated communication consent for ${email}: ${hasConsent}`);
     }
   } catch (error: any) {

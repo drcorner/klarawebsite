@@ -1,79 +1,45 @@
 import Stripe from 'stripe';
 
-let connectionSettings: any;
-
-async function getCredentials() {
-  const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
-  const xReplitToken = process.env.REPL_IDENTITY
-    ? 'repl ' + process.env.REPL_IDENTITY
-    : process.env.WEB_REPL_RENEWAL
-      ? 'depl ' + process.env.WEB_REPL_RENEWAL
-      : null;
-
-  if (!xReplitToken) {
-    throw new Error('X_REPLIT_TOKEN not found for repl/depl');
+// Environment variable validation
+function getRequiredEnv(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${name}`);
   }
-
-  const connectorName = 'stripe';
-  const isProduction = process.env.REPLIT_DEPLOYMENT === '1';
-  const targetEnvironment = isProduction ? 'production' : 'development';
-
-  const url = new URL(`https://${hostname}/api/v2/connection`);
-  url.searchParams.set('include_secrets', 'true');
-  url.searchParams.set('connector_names', connectorName);
-  url.searchParams.set('environment', targetEnvironment);
-
-  const response = await fetch(url.toString(), {
-    headers: {
-      'Accept': 'application/json',
-      'X_REPLIT_TOKEN': xReplitToken
-    }
-  });
-
-  const data = await response.json();
-  connectionSettings = data.items?.[0];
-
-  if (!connectionSettings || (!connectionSettings.settings.publishable || !connectionSettings.settings.secret)) {
-    throw new Error(`Stripe ${targetEnvironment} connection not found`);
-  }
-
-  return {
-    publishableKey: connectionSettings.settings.publishable,
-    secretKey: connectionSettings.settings.secret,
-  };
+  return value;
 }
 
-export async function getUncachableStripeClient() {
-  const { secretKey } = await getCredentials();
-  return new Stripe(secretKey, {
-    apiVersion: '2025-11-17.clover',
-  });
-}
+// Cached Stripe client (safe to cache since env vars don't change at runtime)
+let stripeClient: Stripe | null = null;
 
-export async function getStripePublishableKey() {
-  const { publishableKey } = await getCredentials();
-  return publishableKey;
-}
-
-export async function getStripeSecretKey() {
-  const { secretKey } = await getCredentials();
-  return secretKey;
-}
-
-let stripeSync: any = null;
-
-export async function getStripeSync() {
-  if (!stripeSync) {
-    const { StripeSync } = await import('stripe-replit-sync');
-    const secretKey = await getStripeSecretKey();
-
-    stripeSync = new StripeSync({
-      poolConfig: {
-        connectionString: process.env.DATABASE_URL!,
-        max: 2,
-      },
-      stripeSecretKey: secretKey,
+export function getStripeClient(): Stripe {
+  if (!stripeClient) {
+    const secretKey = getRequiredEnv('STRIPE_SECRET_KEY');
+    stripeClient = new Stripe(secretKey, {
+      apiVersion: '2025-11-17.clover',
     });
   }
-  return stripeSync;
+  return stripeClient;
+}
+
+// For backwards compatibility with existing code that uses async pattern
+export async function getUncachableStripeClient(): Promise<Stripe> {
+  return getStripeClient();
+}
+
+export function getStripePublishableKey(): string {
+  return getRequiredEnv('STRIPE_PUBLISHABLE_KEY');
+}
+
+// Async version for backwards compatibility
+export async function getStripePublishableKeyAsync(): Promise<string> {
+  return getStripePublishableKey();
+}
+
+export function getStripeSecretKey(): string {
+  return getRequiredEnv('STRIPE_SECRET_KEY');
+}
+
+export function getStripeWebhookSecret(): string {
+  return getRequiredEnv('STRIPE_WEBHOOK_SECRET');
 }

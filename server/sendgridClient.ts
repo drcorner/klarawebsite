@@ -1,51 +1,45 @@
 // SendGrid integration for sending transactional emails
 import sgMail from '@sendgrid/mail';
 
-let connectionSettings: any;
-
-async function getCredentials() {
-  const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
-  const xReplitToken = process.env.REPL_IDENTITY 
-    ? 'repl ' + process.env.REPL_IDENTITY 
-    : process.env.WEB_REPL_RENEWAL 
-    ? 'depl ' + process.env.WEB_REPL_RENEWAL 
-    : null;
-
-  if (!xReplitToken) {
-    throw new Error('X_REPLIT_TOKEN not found for repl/depl');
+// Environment variable validation
+function getRequiredEnv(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${name}`);
   }
-
-  connectionSettings = await fetch(
-    'https://' + hostname + '/api/v2/connection?include_secrets=true&connector_names=sendgrid',
-    {
-      headers: {
-        'Accept': 'application/json',
-        'X_REPLIT_TOKEN': xReplitToken
-      }
-    }
-  ).then(res => res.json()).then(data => data.items?.[0]);
-
-  if (!connectionSettings || (!connectionSettings.settings.api_key || !connectionSettings.settings.from_email)) {
-    throw new Error('SendGrid not connected');
-  }
-  return {apiKey: connectionSettings.settings.api_key, email: connectionSettings.settings.from_email};
+  return value;
 }
 
-// WARNING: Never cache this client.
-// Access tokens expire, so a new client must be created each time.
-// Always call this function again to get a fresh client.
-export async function getUncachableSendGridClient() {
-  const {apiKey, email} = await getCredentials();
-  sgMail.setApiKey(apiKey);
+// Initialize SendGrid once at startup
+let initialized = false;
+let fromEmail: string;
+
+function initializeSendGrid() {
+  if (!initialized) {
+    const apiKey = getRequiredEnv('SENDGRID_API_KEY');
+    fromEmail = getRequiredEnv('SENDGRID_SENDER_EMAIL');
+    sgMail.setApiKey(apiKey);
+    initialized = true;
+  }
+}
+
+// Get SendGrid client - safe to cache since env vars don't change at runtime
+export function getSendGridClient() {
+  initializeSendGrid();
   return {
     client: sgMail,
-    fromEmail: email
+    fromEmail: fromEmail
   };
 }
 
+// For backwards compatibility with existing async code
+export async function getUncachableSendGridClient() {
+  return getSendGridClient();
+}
+
 export async function sendVerificationEmail(toEmail: string, code: string): Promise<void> {
-  const { client, fromEmail } = await getUncachableSendGridClient();
-  
+  const { client, fromEmail } = getSendGridClient();
+
   const msg = {
     to: toEmail,
     from: { email: fromEmail, name: 'The Klara Project' },
@@ -91,16 +85,16 @@ interface DonationDetails {
 }
 
 export async function sendDonationThankYouEmail(details: DonationDetails): Promise<void> {
-  const { client, fromEmail } = await getUncachableSendGridClient();
-  
+  const { client, fromEmail } = getSendGridClient();
+
   const formattedAmount = `$${(details.amount / 100).toFixed(2)}`;
   const formattedDate = details.date.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
   });
-  
-  const donationType = details.isRecurring 
+
+  const donationType = details.isRecurring
     ? details.duration && details.duration !== 'ongoing'
       ? `Monthly (${details.duration} months)`
       : 'Monthly (ongoing)'
@@ -144,20 +138,20 @@ The Klara Project Team
           <h1 style="color: #1E4D4A; font-family: 'Source Serif 4', Georgia, serif; margin-bottom: 20px;">
             Thank You for Your Generosity
           </h1>
-          
+
           <p style="color: #2D2A27; font-size: 16px; margin-bottom: 20px;">
             Dear ${details.donorName},
           </p>
-          
+
           <p style="color: #2D2A27; font-size: 16px; margin-bottom: 20px;">
-            Thank you for your generous <strong>${donationType.toLowerCase()}</strong> donation of 
+            Thank you for your generous <strong>${donationType.toLowerCase()}</strong> donation of
             <strong style="color: #1E4D4A;">${formattedAmount}</strong> to The Klara Project!
           </p>
-          
+
           <p style="color: #2D2A27; font-size: 16px; margin-bottom: 30px;">
             Your support helps us equip Christians with practical resources for engaging thoughtfully with AI and technology.
           </p>
-          
+
           <div style="background-color: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
             <h2 style="color: #1E4D4A; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; border-bottom: 2px solid #C9A962; padding-bottom: 8px;">
               Donation Details - Keep for Your Records
@@ -185,14 +179,14 @@ The Klara Project Team
               </tr>
             </table>
           </div>
-          
+
           <div style="background-color: #C9A962; background-color: rgba(201, 169, 98, 0.15); border-left: 4px solid #C9A962; padding: 15px; margin-bottom: 20px; border-radius: 0 8px 8px 0;">
             <h3 style="color: #2D2A27; font-size: 14px; margin: 0 0 10px 0;">Tax Information</h3>
             <p style="color: #666; font-size: 13px; margin: 0;">
               The Klara Project has applied for 501(c)(3) tax-exempt status. Upon approval, donations will be tax-deductible retroactive to our date of incorporation. We will notify you when approval is received. Please retain this email for your records.
             </p>
           </div>
-          
+
           <div style="text-align: center; margin: 30px 0;">
             <a href="${details.manageUrl}" style="display: inline-block; background-color: #1E4D4A; color: #FAF8F5; text-decoration: none; padding: 12px 30px; border-radius: 6px; font-weight: bold;">
               Manage Your Donation
@@ -201,13 +195,13 @@ The Klara Project Team
               Increase, decrease, or cancel your donation at any time
             </p>
           </div>
-          
+
           <p style="color: #2D2A27; font-size: 16px; margin-top: 30px;">
             With gratitude,<br>
             <strong>The Klara Project Team</strong>
           </p>
         </div>
-        
+
         <p style="color: #999; font-size: 12px; text-align: center; margin-top: 20px;">
           The Klara Project - "Christian Clarity for the AI Age"
         </p>
