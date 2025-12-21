@@ -9,9 +9,9 @@ export default function Donate() {
     <div className="min-h-screen bg-cream">
       <Header />
       <main>
-        <PageHero 
-          title="Support Our Mission" 
-          subtitle="Equipping churches. Engaging the culture."
+        <PageHero
+          title="Donate"
+          subtitle="Equipping churches. Engaging culture. Empowering the next generation."
         />
 
         <section className="py-16 md:py-24">

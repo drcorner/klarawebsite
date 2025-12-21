@@ -185,7 +185,7 @@ export default function NextGeneration() {
               </Link>
               <Link href="/donate">
                 <Button variant="outline" className="rounded-full font-semibold" data-testid="button-donate">
-                  Make a Donation
+                  Donate
                 </Button>
               </Link>
             </div>

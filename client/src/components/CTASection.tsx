@@ -10,7 +10,7 @@ export default function CTASection() {
           Ready to join us?
         </h2>
         <p className="text-cream/80 text-lg mb-8 max-w-2xl mx-auto">
-          Learn more about our mission or support the work of equipping churches for the AI age.
+          Learn more about our mission or help equip churches for the AI age.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/about">
