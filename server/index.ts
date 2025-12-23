@@ -1,9 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
-import { runMigrations } from 'stripe-replit-sync';
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
-import { getStripeSync } from "./stripeClient";
 import { WebhookHandlers } from "./webhookHandlers";
 
 const app = express();
@@ -26,56 +24,49 @@ export function log(message: string, source = "express") {
   console.log(`${formattedTime} [${source}] ${message}`);
 }
 
-async function initStripe() {
-  const databaseUrl = process.env.DATABASE_URL;
+// Validate required environment variables at startup
+function validateEnvironment() {
+  const required = ['STRIPE_SECRET_KEY', 'STRIPE_PUBLISHABLE_KEY', 'DATABASE_URL'];
+  const missing = required.filter(key => !process.env[key]);
 
-  if (!databaseUrl) {
-    console.warn('DATABASE_URL not set - Stripe integration disabled');
-    return;
+  if (missing.length > 0) {
+    console.error('Missing required environment variables:', missing.join(', '));
+    console.error('Please check your .env file or environment configuration.');
+    process.exit(1);
   }
 
-  try {
-    console.log('Initializing Stripe schema...');
-    await runMigrations({ databaseUrl });
-    console.log('Stripe schema ready');
-
-    const stripeSync = await getStripeSync();
-
-    console.log('Setting up managed webhook...');
-    const webhookBaseUrl = `https://${process.env.REPLIT_DOMAINS?.split(',')[0]}`;
-    const { webhook, uuid } = await stripeSync.findOrCreateManagedWebhook(
-      `${webhookBaseUrl}/api/stripe/webhook`,
-      {
-        enabled_events: ['*'],
-        description: 'Managed webhook for Klara Project donations',
-      }
-    );
-    console.log(`Webhook configured: ${webhook.url} (UUID: ${uuid})`);
-
-    console.log('Syncing Stripe data...');
-    stripeSync.syncBackfill()
-      .then(() => {
-        console.log('Stripe data synced');
-      })
-      .catch((err: any) => {
-        console.error('Error syncing Stripe data:', err);
-      });
-  } catch (error) {
-    console.error('Failed to initialize Stripe:', error);
+  // Warn about optional but recommended variables
+  const optional = ['STRIPE_WEBHOOK_SECRET', 'SENDGRID_API_KEY', 'SENDGRID_SENDER_EMAIL'];
+  const missingOptional = optional.filter(key => !process.env[key]);
+  if (missingOptional.length > 0) {
+    console.warn('Optional environment variables not set:', missingOptional.join(', '));
+    console.warn('Some features may be disabled.');
   }
+
+  console.log('Environment validation passed');
 }
 
 (async () => {
-  await initStripe();
+  // Validate environment before starting
+  validateEnvironment();
 
+  // Stripe webhook endpoint - must be registered BEFORE express.json() middleware
+  // This endpoint handles webhook events from Stripe
+  // Set up the webhook URL in Stripe Dashboard: https://yourdomain.com/api/stripe/webhook
   app.post(
-    '/api/stripe/webhook/:uuid',
+    '/api/stripe/webhook',
     express.raw({ type: 'application/json' }),
     async (req, res) => {
       const signature = req.headers['stripe-signature'];
 
       if (!signature) {
         return res.status(400).json({ error: 'Missing stripe-signature' });
+      }
+
+      // Check if webhook secret is configured
+      if (!process.env.STRIPE_WEBHOOK_SECRET) {
+        console.warn('STRIPE_WEBHOOK_SECRET not configured - webhook signature verification skipped');
+        return res.status(200).json({ received: true, warning: 'Signature not verified' });
       }
 
       try {
@@ -86,8 +77,7 @@ async function initStripe() {
           return res.status(500).json({ error: 'Webhook processing error' });
         }
 
-        const { uuid } = req.params;
-        await WebhookHandlers.processWebhook(req.body as Buffer, sig, uuid);
+        await WebhookHandlers.processWebhook(req.body as Buffer, sig);
 
         res.status(200).json({ received: true });
       } catch (error: any) {
