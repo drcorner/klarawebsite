@@ -27,6 +27,10 @@ const challenges = [
     category: "Ethics",
     story: "A software engineer is building AI systems at work. She's proud of what she's creating—but lately wonders if she should be. She doesn't know how to think Christianly about it, and no one at church has asked.",
   },
+  {
+    category: "AI Grief",
+    story: "A widow discovers an app that lets her 'talk' to a chatbot trained on her late husband's texts and emails. She knows it isn't him. She doesn't tell anyone—she knows they'd think it's weird—but she enjoys it and tells herself it's just a more technologically advanced version of looking at photos.",
+  },
 ];
 
 const getCardColors = (index: number) => {
@@ -52,7 +56,7 @@ export default function ChallengeSection() {
 
         <div className="max-w-4xl mx-auto mb-12">
           <p className="text-charcoal text-lg leading-relaxed mb-4">
-            AI is transforming how we work, learn, and live—faster than anyone predicted. Families wrestle with AI's influence on their children. Christians form emotional bonds with AI systems that simulate companionship. Deepfakes erode trust in truth itself. Churches will soon face waves of members navigating technological unemployment—with young adults entering the workforce and family life amid unprecedented uncertainty.
+            AI is transforming how we work, learn, and live—faster than anyone predicted. Families wrestle with AI's influence on their children. Christians form emotional bonds with AI systems that simulate companionship. Deepfakes erode trust in truth itself. Humanoid robots may enter homes within the next decade—not just vacuuming floors, but interacting with our families in ways we're only beginning to imagine. Churches will soon face waves of members navigating technological unemployment—with young adults entering the workforce and family life amid unprecedented uncertainty.
           </p>
           <p className="text-charcoal text-lg leading-relaxed">
             Yet many Christians—though grounded in Scripture—feel unprepared to apply biblical principles to challenges this new, and Christian voices are absent from the rooms where AI's future is being decided.

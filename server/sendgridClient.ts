@@ -48,13 +48,13 @@ export async function sendVerificationEmail(toEmail: string, code: string): Prom
     html: `
       <div style="font-family: 'IBM Plex Sans', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <div style="background-color: #FAF8F5; padding: 30px; border-radius: 8px;">
-          <h1 style="color: #1E4D4A; font-family: 'Source Serif 4', Georgia, serif; margin-bottom: 20px;">
+          <h1 style="color: #243A5E; font-family: 'Source Serif 4', Georgia, serif; margin-bottom: 20px;">
             Klara Project
           </h1>
           <p style="color: #2D2A27; font-size: 16px; margin-bottom: 20px;">
             Your verification code is:
           </p>
-          <div style="background-color: #1E4D4A; color: #FAF8F5; font-size: 32px; font-weight: bold; text-align: center; padding: 20px; border-radius: 8px; letter-spacing: 8px; margin-bottom: 20px;">
+          <div style="background-color: #243A5E; color: #FAF8F5; font-size: 32px; font-weight: bold; text-align: center; padding: 20px; border-radius: 8px; letter-spacing: 8px; margin-bottom: 20px;">
             ${code}
           </div>
           <p style="color: #666; font-size: 14px;">
@@ -135,7 +135,7 @@ The Klara Project Team
     html: `
       <div style="font-family: 'IBM Plex Sans', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <div style="background-color: #FAF8F5; padding: 30px; border-radius: 8px;">
-          <h1 style="color: #1E4D4A; font-family: 'Source Serif 4', Georgia, serif; margin-bottom: 20px;">
+          <h1 style="color: #243A5E; font-family: 'Source Serif 4', Georgia, serif; margin-bottom: 20px;">
             Thank You for Your Generosity
           </h1>
 
@@ -145,7 +145,7 @@ The Klara Project Team
 
           <p style="color: #2D2A27; font-size: 16px; margin-bottom: 20px;">
             Thank you for your generous <strong>${donationType.toLowerCase()}</strong> donation of
-            <strong style="color: #1E4D4A;">${formattedAmount}</strong> to The Klara Project!
+            <strong style="color: #243A5E;">${formattedAmount}</strong> to The Klara Project!
           </p>
 
           <p style="color: #2D2A27; font-size: 16px; margin-bottom: 30px;">
@@ -153,7 +153,7 @@ The Klara Project Team
           </p>
 
           <div style="background-color: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
-            <h2 style="color: #1E4D4A; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; border-bottom: 2px solid #C9A962; padding-bottom: 8px;">
+            <h2 style="color: #243A5E; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; border-bottom: 2px solid #C9A962; padding-bottom: 8px;">
               Donation Details - Keep for Your Records
             </h2>
             <table style="width: 100%; color: #2D2A27; font-size: 14px;">
@@ -163,7 +163,7 @@ The Klara Project Team
               </tr>
               <tr>
                 <td style="padding: 8px 0; font-weight: bold;">Amount:</td>
-                <td style="padding: 8px 0; color: #1E4D4A; font-weight: bold;">${formattedAmount}</td>
+                <td style="padding: 8px 0; color: #243A5E; font-weight: bold;">${formattedAmount}</td>
               </tr>
               <tr>
                 <td style="padding: 8px 0; font-weight: bold;">Type:</td>
@@ -188,7 +188,7 @@ The Klara Project Team
           </div>
 
           <div style="text-align: center; margin: 30px 0;">
-            <a href="${details.manageUrl}" style="display: inline-block; background-color: #1E4D4A; color: #FAF8F5; text-decoration: none; padding: 12px 30px; border-radius: 6px; font-weight: bold;">
+            <a href="${details.manageUrl}" style="display: inline-block; background-color: #243A5E; color: #FAF8F5; text-decoration: none; padding: 12px 30px; border-radius: 6px; font-weight: bold;">
               Manage Your Donation
             </a>
             <p style="color: #666; font-size: 12px; margin-top: 10px;">
