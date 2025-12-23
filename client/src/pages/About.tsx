@@ -30,7 +30,7 @@ export default function About() {
           <div className="max-w-7xl mx-auto px-6 md:px-10">
             <div className="max-w-3xl mx-auto">
               <h2 className="font-serif text-3xl font-semibold text-charcoal mb-6">
-                What Makes Us Different
+                Klara's Contribution
               </h2>
               <p className="text-charcoal leading-relaxed mb-4">
                 Most faith-based technology initiatives focus on policy advocacy or academic research—important
@@ -135,7 +135,7 @@ export default function About() {
               The Klara Project
             </h2>
             <p className="text-charcoal text-center mb-10 max-w-2xl mx-auto">
-              Our name comes from the Latin word for "clear"—reflecting our commitment to bring clarity and thoughtful direction in an age of rapid technological change.
+              Our name comes from the German word for "clear"—reflecting our commitment to bring clarity and thoughtful direction in an age of rapid technological change.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {approachItems.map((item, index) => (
