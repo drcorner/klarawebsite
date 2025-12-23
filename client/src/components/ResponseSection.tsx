@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 export default function ResponseSection() {
   return (
-    <section className="bg-cream-dark py-20 md:py-28">
+    <section className="bg-cream-dark py-14 md:py-20">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="text-center mb-14">
           <p className="text-primary uppercase tracking-[0.2em] text-sm font-medium mb-4">

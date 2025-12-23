@@ -23,7 +23,7 @@ const items = [
 
 export default function WhatWereBuildingSection() {
   return (
-    <section className="bg-cream py-20 md:py-28">
+    <section className="bg-cream py-14 md:py-20">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="mb-12">
           <p className="text-primary uppercase tracking-[0.2em] text-sm font-medium mb-4">
