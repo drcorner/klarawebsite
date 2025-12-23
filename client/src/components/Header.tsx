@@ -25,8 +25,7 @@ export default function Header() {
               <Link key={item.href} href={item.href}>
                 <Button
                   variant={location === item.href ? "secondary" : "ghost"}
-                  size="sm"
-                  className={`rounded-full ${
+                  className={`rounded-full text-[15px] ${
                     location === item.href ? "bg-primary text-cream" : ""
                   }`}
                   data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
@@ -38,8 +37,7 @@ export default function Header() {
             <div className="ml-3 flex flex-col items-center">
               <Link href="/donate">
                 <Button
-                  size="sm"
-                  className="bg-gradient-to-r from-primary to-primary/80 text-cream font-semibold rounded-full px-6 shadow-sm shadow-primary/20"
+                  className="bg-gradient-to-r from-primary to-primary/80 text-cream font-semibold rounded-full px-6 shadow-sm shadow-primary/20 text-[15px]"
                   data-testid="nav-donate"
                 >
                   Donate

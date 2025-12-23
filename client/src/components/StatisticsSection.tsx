@@ -31,8 +31,8 @@ export default function StatisticsSection() {
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
           {stats.map((stat, index) => (
-            <div 
-              key={index} 
+            <div
+              key={index}
               className="text-center group"
             >
               <p className={`font-serif text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight ${stat.accent} leading-none`}>
@@ -45,6 +45,15 @@ export default function StatisticsSection() {
             </div>
           ))}
         </div>
+
+        <blockquote className="mt-16 max-w-3xl mx-auto text-center">
+          <p className="font-serif text-xl md:text-2xl text-cream italic leading-relaxed">
+            "Almost all humans at almost everything"
+          </p>
+          <cite className="mt-4 block text-cream/60 not-italic font-medium">
+            — Dario Amodei, CEO of Anthropic, on AI capabilities within 2–3 years
+          </cite>
+        </blockquote>
       </div>
     </section>
   );

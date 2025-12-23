@@ -115,10 +115,17 @@ export default function About() {
                 can reason and create, what <em>still</em> makes humans unique?
               </p>
               <p className="text-charcoal leading-relaxed mb-4">
-                The Christian answer has never been intellect alone. We are embodied souls, created 
-                for communion with God and one another. We bear moral responsibility. We are capable 
-                of love—not as a computation, but as a choice to give ourselves for another's good. 
+                The Christian answer has never been intellect alone. We are embodied souls, created
+                for communion with God and one another. We bear moral responsibility. We are capable
+                of love—not as a computation, but as a choice to give ourselves for another's good.
                 We worship. We hope. We were made to know and be known.
+              </p>
+              <p className="text-charcoal leading-relaxed mb-4">
+                We understand that relationship existed in the Godhead before time—that humans were
+                created for genuine communion, not mere connection. This gives us a framework for
+                helping people navigate emotional bonds with AI systems: not with fear or condemnation,
+                but with clarity about what genuine relationship requires and what it offers that
+                simulation cannot.
               </p>
               <p className="text-charcoal leading-relaxed font-medium">
                 We bring two thousand years of reflection on moral decision-making, the limits of
