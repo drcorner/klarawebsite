@@ -26,11 +26,11 @@ export default function About() {
           imageSrc={churchImage}
         />
 
-        <section className="py-16 md:py-24">
+        <section className="py-12 md:py-16">
           <div className="max-w-7xl mx-auto px-6 md:px-10">
             <div className="max-w-3xl mx-auto">
               <h2 className="font-serif text-3xl font-semibold text-charcoal mb-6">
-                What Makes Us Different
+                Klara's Contribution
               </h2>
               <p className="text-charcoal leading-relaxed mb-4">
                 Most faith-based technology initiatives focus on policy advocacy or academic research—important
@@ -49,7 +49,7 @@ export default function About() {
           </div>
         </section>
 
-        <section className="bg-cream-dark py-16 md:py-24">
+        <section className="bg-cream-dark py-12 md:py-16">
           <div className="max-w-7xl mx-auto px-6 md:px-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <Card className="p-8 bg-card border-l-4 border-l-primary">
@@ -71,7 +71,7 @@ export default function About() {
           </div>
         </section>
 
-        <section className="py-16 md:py-20">
+        <section className="py-10 md:py-14">
           <div className="max-w-7xl mx-auto px-6 md:px-10">
             <Card className="max-w-2xl mx-auto p-8 bg-primary/5 border-primary/20 text-center">
               <h3 className="font-serif text-2xl font-semibold text-charcoal mb-4">
@@ -99,7 +99,7 @@ export default function About() {
           </div>
         </section>
 
-        <section className="bg-cream-dark py-16 md:py-24">
+        <section className="bg-cream-dark py-12 md:py-16">
           <div className="max-w-7xl mx-auto px-6 md:px-10">
             <div className="max-w-3xl mx-auto">
               <h2 className="font-serif text-3xl font-semibold text-charcoal mb-6">
@@ -129,11 +129,14 @@ export default function About() {
           </div>
         </section>
 
-        <section className="bg-cream-dark py-16 md:py-24">
+        <section className="bg-cream-dark py-12 md:py-16">
           <div className="max-w-7xl mx-auto px-6 md:px-10">
             <h2 className="font-serif text-3xl font-semibold text-charcoal text-center mb-12">
-              Our Measured Approach
+              The Klara Project
             </h2>
+            <p className="text-charcoal text-center mb-10 max-w-2xl mx-auto">
+              Our name comes from the German word for "clear"—reflecting our commitment to bring clarity and thoughtful direction in an age of rapid technological change.
+            </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {approachItems.map((item, index) => (
                 <Card key={index} className="p-6 bg-card border-card-border">
@@ -148,7 +151,7 @@ export default function About() {
           </div>
         </section>
 
-        <section className="py-16 md:py-24">
+        <section className="py-12 md:py-16">
           <div className="max-w-7xl mx-auto px-6 md:px-10">
             <div className="max-w-3xl mx-auto">
               <h2 className="font-serif text-3xl font-semibold text-charcoal mb-6">
@@ -173,7 +176,7 @@ export default function About() {
           </div>
         </section>
 
-        <section className="py-16 md:py-24">
+        <section className="py-12 md:py-16">
           <div className="max-w-7xl mx-auto px-6 md:px-10">
             <div className="max-w-3xl mx-auto">
               <h2 className="font-serif text-3xl font-semibold text-charcoal mb-6">
@@ -202,7 +205,7 @@ export default function About() {
           </div>
         </section>
 
-        <section className="bg-primary py-16 md:py-24">
+        <section className="bg-primary py-12 md:py-16">
           <div className="max-w-7xl mx-auto px-6 md:px-10 text-center">
             <h2 className="font-serif text-2xl font-semibold text-cream mb-6">
               Ready to get involved?

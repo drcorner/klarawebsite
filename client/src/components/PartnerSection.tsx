@@ -2,7 +2,7 @@ import { Rocket } from "lucide-react";
 
 export default function PartnerSection() {
   return (
-    <section className="relative bg-gradient-to-br from-charcoal via-charcoal to-primary/80 py-24 md:py-32 overflow-hidden">
+    <section className="relative bg-gradient-to-br from-charcoal via-charcoal to-primary/80 py-16 md:py-20 overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(20,184,166,0.15),transparent_50%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(249,115,22,0.1),transparent_50%)]" />
 

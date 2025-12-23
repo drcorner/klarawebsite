@@ -39,7 +39,7 @@ const getCardColors = (index: number) => {
 
 export default function ChallengeSection() {
   return (
-    <section id="challenge-section" className="bg-gradient-to-b from-cream to-cream-dark py-20 md:py-28">
+    <section id="challenge-section" className="bg-gradient-to-b from-cream to-cream-dark py-14 md:py-20">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="text-center mb-12">
           <span className="inline-block px-4 py-1.5 rounded-full bg-coral/10 text-coral text-sm font-semibold mb-4">

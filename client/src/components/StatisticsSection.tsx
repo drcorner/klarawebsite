@@ -18,7 +18,7 @@ const stats = [
 
 export default function StatisticsSection() {
   return (
-    <section className="bg-charcoal py-20 md:py-28">
+    <section className="bg-charcoal py-14 md:py-20">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="text-center mb-16">
           <p className="text-cream/60 uppercase tracking-[0.2em] text-sm font-medium mb-4">

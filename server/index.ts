@@ -3,6 +3,7 @@ import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
 import { WebhookHandlers } from "./webhookHandlers";
+import { initializeDatabase } from "./db";
 
 const app = express();
 const httpServer = createServer(app);
@@ -49,6 +50,14 @@ function validateEnvironment() {
 (async () => {
   // Validate environment before starting
   validateEnvironment();
+
+  // Initialize database tables
+  try {
+    await initializeDatabase();
+  } catch (error) {
+    console.error('Failed to initialize database:', error);
+    process.exit(1);
+  }
 
   // Stripe webhook endpoint - must be registered BEFORE express.json() middleware
   // This endpoint handles webhook events from Stripe
