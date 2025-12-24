@@ -5,8 +5,11 @@ import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useSEO, SEO_CONFIG } from "@/hooks/use-seo";
 
 export default function NextGeneration() {
+  useSEO(SEO_CONFIG.nextGeneration);
+
   return (
     <div className="min-h-screen bg-cream">
       <Header />

@@ -5,8 +5,10 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useSEO, SEO_CONFIG } from "@/hooks/use-seo";
 
 export default function DonateThankYou() {
+  useSEO(SEO_CONFIG.donateThankYou);
   const searchString = useSearch();
   const params = new URLSearchParams(searchString);
   const sessionId = params.get('session_id');

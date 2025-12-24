@@ -1,8 +1,11 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
+import { useSEO, SEO_CONFIG } from "@/hooks/use-seo";
 
 export default function PrivacyPolicy() {
+  useSEO(SEO_CONFIG.privacyPolicy);
+
   return (
     <div className="min-h-screen bg-cream">
       <Header />

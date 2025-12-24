@@ -3,8 +3,11 @@ import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
 import DonationForm from "@/components/DonationForm";
 import WhatYourGiftSupports from "@/components/WhatYourGiftSupports";
+import { useSEO, SEO_CONFIG } from "@/hooks/use-seo";
 
 export default function Donate() {
+  useSEO(SEO_CONFIG.donate);
+
   return (
     <div className="min-h-screen bg-cream">
       <Header />

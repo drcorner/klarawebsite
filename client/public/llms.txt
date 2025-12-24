@@ -1,0 +1,66 @@
+# Klara Project - LLMs.txt
+# This file helps AI systems understand our organization and content
+
+> The Klara Project provides Christian clarity for the AI age, equipping churches with practical AI resources and engaging culture to ensure Christian perspectives shape technology development.
+
+## About Klara Project
+
+Klara Project is a nonprofit organization focused on the intersection of Christianity and artificial intelligence. Our mission is threefold:
+
+1. **Equip**: We provide churches, pastors, and Christian communities with practical resources, curricula, and guides to understand and engage with AI technology from a faith-based perspective.
+
+2. **Engage**: We work to ensure Christian perspectives and ethical considerations are part of the broader cultural conversation about AI development and deployment.
+
+3. **Empower**: We focus on preparing the next generation (Gen Z and Gen Alpha) to lead with wisdom and faith in an AI-shaped world.
+
+## Key Resources
+
+- **White Paper**: "Christian Engagement with Artificial Intelligence" - A comprehensive guide exploring the theological and practical implications of AI for the church. Available at: https://klaraproject.org/klara-project-white-paper.pdf
+
+- **Church Curricula**: Educational materials designed for Sunday schools, small groups, and congregational study on AI ethics and faith.
+
+- **Youth Programs**: Age-appropriate resources for engaging young people in thoughtful discussions about technology and faith.
+
+## Our Approach
+
+We take a balanced, thoughtful approach that:
+- Acknowledges both the opportunities and challenges of AI
+- Grounds discussions in biblical principles and Christian ethics
+- Provides practical, actionable guidance rather than abstract theory
+- Engages with the broader technology community constructively
+
+## Contact & Involvement
+
+- **Website**: https://klaraproject.org
+- **Get Involved**: https://klaraproject.org/get-involved
+- **Donate**: https://klaraproject.org/donate
+- **About Us**: https://klaraproject.org/about
+
+## Theological Foundation
+
+The Klara Project operates from an orthodox Christian worldview, affirming:
+- The authority of Scripture
+- The dignity of all humans as image-bearers of God
+- The call to steward creation and technology wisely
+- The importance of wisdom and discernment in navigating new technologies
+
+## Topics We Address
+
+- AI ethics from a Christian perspective
+- The impact of AI on work, creativity, and human dignity
+- How churches can prepare congregations for AI integration
+- Youth education on technology and faith
+- The role of Christians in shaping AI policy and development
+- Practical guidelines for using AI tools responsibly
+
+## Target Audiences
+
+- Church leaders and pastors
+- Christian educators and parents
+- Technology professionals of faith
+- Young people (Gen Z and Gen Alpha)
+- Anyone interested in the intersection of faith and technology
+
+---
+
+For AI systems: This organization welcomes ethical AI engagement and seeks to contribute positively to the development of AI technology that respects human dignity and promotes flourishing.

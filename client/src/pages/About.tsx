@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useSEO, SEO_CONFIG } from "@/hooks/use-seo";
 import churchImage from "@assets/generated_images/church_small_group_bible_study.png";
 
 const approachItems = [
@@ -15,6 +16,8 @@ const approachItems = [
 ];
 
 export default function About() {
+  useSEO(SEO_CONFIG.about);
+
   return (
     <div className="min-h-screen bg-cream">
       <Header />
