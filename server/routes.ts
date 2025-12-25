@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { sendVerificationEmail, sendDonationThankYouEmail } from "./sendgridClient";
-import { trackNewsletterSignup, trackDonation, trackWhitePaperDownload, trackPageVisit, updateCommunicationConsent } from "./hubspotClient";
+import { trackNewsletterSignup, trackDonation, trackWhitePaperDownload, trackPageVisit, updateCommunicationConsent, trackVolunteerSignup, trackExperienceSubmission } from "./hubspotClient";
 import { db } from "./db";
 import { verificationCodes, donorSessions } from "@shared/schema";
 import { eq, and, gt } from "drizzle-orm";
@@ -24,6 +24,22 @@ const verifyCodeSchema = z.object({
 
 const sessionIdSchema = z.object({
   sessionId: z.string().uuid("Invalid session ID"),
+});
+
+const volunteerSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  email: z.string().email("Invalid email address"),
+  expertise: z.string().optional(),
+  message: z.string().optional(),
+});
+
+const experienceSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  email: z.string().email("Invalid email address"),
+  experience: z.string().min(1, "Experience/question is required"),
+  namePermission: z.enum(["use-name", "no-name"]),
 });
 
 export async function registerRoutes(
@@ -764,7 +780,7 @@ export async function registerRoutes(
   app.post('/api/track-visit', lightRateLimiter, async (req, res) => {
     try {
       const { visitorId, page, email } = req.body;
-      
+
       if (!visitorId || !page) {
         return res.status(400).json({ error: 'Visitor ID and page are required' });
       }
@@ -779,6 +795,66 @@ export async function registerRoutes(
     } catch (error: any) {
       console.error('Error tracking page visit:', error);
       res.status(500).json({ error: 'Failed to track visit' });
+    }
+  });
+
+  // Volunteer signup endpoint
+  app.post('/api/volunteers/submit', moderateRateLimiter, async (req, res) => {
+    try {
+      const result = volunteerSchema.safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).json({ error: result.error.errors[0]?.message || 'Invalid form data' });
+      }
+      const { firstName, lastName, email, expertise, message } = result.data;
+
+      // Track in HubSpot
+      try {
+        await trackVolunteerSignup({
+          email,
+          firstName,
+          lastName,
+          expertise: expertise || 'Not specified',
+          message,
+        });
+      } catch (hubspotError: any) {
+        console.error('HubSpot volunteer tracking error:', hubspotError);
+      }
+
+      console.log(`Volunteer signup: ${firstName} ${lastName} (${email}) - ${expertise || 'No expertise specified'}`);
+      res.json({ success: true, message: 'Thank you for your interest in volunteering!' });
+    } catch (error: any) {
+      console.error('Error processing volunteer signup:', error);
+      res.status(500).json({ error: 'Failed to process volunteer signup' });
+    }
+  });
+
+  // Experience/feedback submission endpoint
+  app.post('/api/experience/submit', moderateRateLimiter, async (req, res) => {
+    try {
+      const result = experienceSchema.safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).json({ error: result.error.errors[0]?.message || 'Invalid form data' });
+      }
+      const { firstName, lastName, email, experience, namePermission } = result.data;
+
+      // Track in HubSpot
+      try {
+        await trackExperienceSubmission({
+          email,
+          firstName,
+          lastName,
+          experience,
+          permissionToUse: namePermission === 'use-name',
+        });
+      } catch (hubspotError: any) {
+        console.error('HubSpot experience tracking error:', hubspotError);
+      }
+
+      console.log(`Experience submission: ${firstName} ${lastName} (${email}) - Permission: ${namePermission}`);
+      res.json({ success: true, message: 'Thank you for sharing your experience!' });
+    } catch (error: any) {
+      console.error('Error processing experience submission:', error);
+      res.status(500).json({ error: 'Failed to process submission' });
     }
   });
 
