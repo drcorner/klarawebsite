@@ -105,7 +105,6 @@ export async function trackNewsletterSignup(email: string): Promise<void> {
   try {
     const contactId = await upsertContact({
       email,
-      source: 'Newsletter Signup',
     });
 
     if (contactId) {
@@ -115,7 +114,6 @@ export async function trackNewsletterSignup(email: string): Promise<void> {
       await client.crm.contacts.basicApi.update(contactId, {
         properties: {
           lifecyclestage: 'subscriber',
-          hs_lead_status: 'Newsletter Subscriber',
         },
       });
 
@@ -143,7 +141,6 @@ export async function trackDonation(data: DonationData): Promise<void> {
       email: data.email,
       firstName,
       lastName,
-      source: 'Donation',
     });
 
     if (contactId) {
@@ -158,7 +155,6 @@ export async function trackDonation(data: DonationData): Promise<void> {
       await client.crm.contacts.basicApi.update(contactId, {
         properties: {
           lifecyclestage: 'customer',
-          hs_lead_status: 'Donor',
         },
       });
 
@@ -197,7 +193,6 @@ export async function trackWhitePaperDownload(email: string): Promise<void> {
   try {
     const contactId = await upsertContact({
       email,
-      source: 'White Paper Download',
     });
 
     if (contactId) {
@@ -206,7 +201,6 @@ export async function trackWhitePaperDownload(email: string): Promise<void> {
       await client.crm.contacts.basicApi.update(contactId, {
         properties: {
           lifecyclestage: 'lead',
-          hs_lead_status: 'White Paper Downloaded',
         },
       });
 
@@ -238,7 +232,6 @@ export async function trackPageVisit(data: PageVisitData): Promise<void> {
 
     const contactId = await upsertContact({
       email: data.email,
-      source: 'Website Visitor',
     });
 
     if (contactId) {
@@ -305,39 +298,40 @@ export async function trackVolunteerSignup(data: VolunteerData): Promise<void> {
       email: data.email,
       firstName: data.firstName,
       lastName: data.lastName,
-      source: `Volunteer - ${data.expertise}`,
     });
 
     if (contactId) {
       const client = getHubSpotClient();
 
-      // Update contact with volunteer info
+      // Update contact with volunteer info - use valid hs_lead_status value
       await client.crm.contacts.basicApi.update(contactId, {
         properties: {
           lifecyclestage: 'lead',
-          hs_lead_status: `Volunteer - ${data.expertise}`,
+          hs_lead_status: 'NEW',
         },
       });
 
-      // Add a note with the volunteer's message if provided
-      if (data.message) {
-        try {
-          await client.crm.objects.notes.basicApi.create({
-            properties: {
-              hs_timestamp: new Date().toISOString(),
-              hs_note_body: `Volunteer signup - ${data.expertise}\n\nMessage: ${data.message}`,
-            },
-            associations: [{
-              to: { id: contactId },
-              types: [{
-                associationCategory: 'HUBSPOT_DEFINED',
-                associationTypeId: 202, // Note to Contact
-              }],
+      // Add a note with the volunteer details (expertise and message)
+      const noteBody = data.message
+        ? `Volunteer signup - ${data.expertise}\n\nMessage: ${data.message}`
+        : `Volunteer signup - ${data.expertise}`;
+
+      try {
+        await client.crm.objects.notes.basicApi.create({
+          properties: {
+            hs_timestamp: new Date().toISOString(),
+            hs_note_body: noteBody,
+          },
+          associations: [{
+            to: { id: contactId },
+            types: [{
+              associationCategory: 'HUBSPOT_DEFINED',
+              associationTypeId: 202, // Note to Contact
             }],
-          });
-        } catch (noteError: any) {
-          console.error('HubSpot note creation error:', noteError.message);
-        }
+          }],
+        });
+      } catch (noteError: any) {
+        console.error('HubSpot note creation error:', noteError.message);
       }
 
       console.log(`HubSpot: Tracked volunteer signup for ${data.email} (${data.expertise})`);
@@ -367,17 +361,16 @@ export async function trackExperienceSubmission(data: ExperienceData): Promise<v
       email: data.email,
       firstName: data.firstName,
       lastName: data.lastName,
-      source: 'Experience Shared',
     });
 
     if (contactId) {
       const client = getHubSpotClient();
 
-      // Update contact lifecycle
+      // Update contact lifecycle - use valid hs_lead_status value
       await client.crm.contacts.basicApi.update(contactId, {
         properties: {
           lifecyclestage: 'lead',
-          hs_lead_status: 'Experience Shared',
+          hs_lead_status: 'NEW',
         },
       });
 
