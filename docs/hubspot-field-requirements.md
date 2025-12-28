@@ -156,7 +156,206 @@ The website collects data through 4 main forms plus some tracking endpoints. Bel
 
 ### Pipeline to Create
 
-- **"Donations" Pipeline** with stage: "Completed"
+- **"Donations" Pipeline** (see detailed setup below)
+
+---
+
+## RECOMMENDED HUBSPOT STRUCTURES
+
+### Donations Pipeline Setup
+
+Create a dedicated pipeline for tracking donations:
+
+**Pipeline Name:** `Donations`
+
+| Stage Name | Stage Order | Description |
+|------------|-------------|-------------|
+| `Pending` | 1 | Payment initiated but not yet confirmed |
+| `Completed` | 2 | Payment successfully processed |
+| `Failed` | 3 | Payment failed or declined |
+| `Refunded` | 4 | Donation was refunded |
+| `Recurring Active` | 5 | Monthly donation currently active |
+| `Recurring Cancelled` | 6 | Monthly donation was cancelled |
+
+**Deal Properties to Display on Cards:**
+- Amount
+- Donation Type (one-time/monthly)
+- Donation Duration
+- Close Date
+
+---
+
+### Contact Lists to Create
+
+Create these **Active Lists** for automatic segmentation:
+
+| List Name | Criteria | Purpose |
+|-----------|----------|---------|
+| `All Donors` | Lifecycle Stage = Customer | All people who have donated |
+| `Monthly Donors - Active` | Lifecycle Stage = Customer AND Donation Type = monthly | Recurring donors |
+| `One-Time Donors` | Lifecycle Stage = Customer AND Donation Type = one-time | Single donation contributors |
+| `Newsletter Subscribers` | Lead Status = Newsletter Subscriber | Email list for newsletters |
+| `Volunteers - All` | Lead Status CONTAINS "Volunteer" | All volunteer signups |
+| `Volunteers - AI & Technology` | Lead Status = Volunteer - AI & Technology | Tech volunteers |
+| `Volunteers - Theology` | Lead Status = Volunteer - Theology | Theology volunteers |
+| `Volunteers - Education` | Lead Status = Volunteer - Education | Education volunteers |
+| `Volunteers - Ministry` | Lead Status = Volunteer - Ministry | Ministry volunteers |
+| `Experience Shared - Can Use Name` | Lead Status = Experience Shared AND Name Permission = use-name | Stories available for marketing |
+| `Experience Shared - Anonymous` | Lead Status = Experience Shared AND Name Permission = no-name | Anonymous stories |
+| `White Paper Downloads` | Lead Status = White Paper Downloaded | Engaged prospects |
+| `Lapsed Donors` | Lifecycle Stage = Customer AND Last Donation > 12 months ago | Re-engagement targets |
+| `High-Value Donors` | Lifecycle Stage = Customer AND Total Donations >= $500 | Major donor stewardship |
+
+---
+
+### Recommended Workflows (Automation)
+
+#### 1. New Donor Welcome Series
+**Trigger:** Lifecycle Stage changed to Customer
+**Actions:**
+1. Send thank you email (immediate)
+2. Send impact story email (3 days later)
+3. Send newsletter subscription invitation (7 days later)
+
+#### 2. Monthly Donor Onboarding
+**Trigger:** Deal created with Donation Type = monthly
+**Actions:**
+1. Send recurring donor welcome email
+2. Add to "Monthly Donors" list
+3. Create task for staff follow-up (for donations > $100/month)
+
+#### 3. Volunteer Follow-Up
+**Trigger:** Lead Status changed to any "Volunteer -" value
+**Actions:**
+1. Send volunteer confirmation email (immediate)
+2. Create task for volunteer coordinator to review (1 day delay)
+3. Send "Getting Started" email (3 days later)
+
+#### 4. Newsletter Welcome
+**Trigger:** Lead Status = Newsletter Subscriber
+**Actions:**
+1. Send welcome email with organization overview
+2. Send "What We Do" email (3 days later)
+
+#### 5. Experience Submission Follow-Up
+**Trigger:** Lead Status = Experience Shared
+**Actions:**
+1. Send thank you email for sharing
+2. Create task for communications team to review story
+3. If Name Permission = use-name, add to "Stories for Marketing" list
+
+#### 6. Lapsed Donor Re-engagement
+**Trigger:** Contact in "Lapsed Donors" list
+**Actions:**
+1. Send "We Miss You" email
+2. Wait 7 days
+3. Send impact update email with donation CTA
+
+#### 7. Donation Failed Recovery
+**Trigger:** Deal Stage = Failed
+**Actions:**
+1. Send payment failed notification email
+2. Create task for follow-up call (1 day delay)
+
+---
+
+### Email Templates to Create
+
+| Template Name | Purpose | Trigger |
+|---------------|---------|---------|
+| `Donation Thank You - One Time` | Thank donor for one-time gift | After one-time donation |
+| `Donation Thank You - Monthly` | Welcome recurring donor | After monthly signup |
+| `Volunteer Welcome` | Confirm volunteer signup | After volunteer form |
+| `Newsletter Welcome` | Welcome new subscriber | After newsletter signup |
+| `Experience Thank You` | Thank for sharing story | After experience form |
+| `Monthly Donation Receipt` | Monthly recurring receipt | Monthly (automated) |
+| `Year-End Tax Summary` | Annual giving statement | January each year |
+| `Donation Failed` | Payment issue notification | When payment fails |
+| `Lapsed Donor - We Miss You` | Re-engagement | For lapsed donors |
+
+---
+
+### Property Groups
+
+Organize custom properties into groups for easier management:
+
+| Group Name | Properties to Include |
+|------------|----------------------|
+| `Donation Information` | donation_type, donation_duration, total_lifetime_donations, first_donation_date, last_donation_date |
+| `Volunteer Information` | volunteer_expertise, volunteer_status, volunteer_start_date |
+| `Content & Stories` | name_permission, experience_submitted_date |
+| `Engagement Tracking` | white_paper_downloaded, newsletter_signup_date |
+
+---
+
+### Additional Custom Properties (Recommended)
+
+These additional properties will help with reporting and segmentation:
+
+#### Contact Properties
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `total_lifetime_donations` | Number (Currency) | Sum of all donations (can be calculated via workflow) |
+| `first_donation_date` | Date | Date of first donation |
+| `last_donation_date` | Date | Date of most recent donation |
+| `donation_count` | Number | Total number of donations |
+| `volunteer_status` | Dropdown | Values: Active, Inactive, Pending |
+| `volunteer_start_date` | Date | When they started volunteering |
+| `acquisition_source` | Dropdown | Values: Website, Referral, Event, Social Media, Other |
+| `newsletter_signup_date` | Date | When they subscribed |
+
+#### Deal Properties
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `payment_method` | Dropdown | Values: Credit Card, Bank Transfer, Other |
+| `stripe_payment_id` | Text | Stripe transaction reference |
+| `is_recurring` | Checkbox | Whether this is a recurring donation |
+
+---
+
+### Reporting Dashboards
+
+Create these dashboards for nonprofit management:
+
+#### 1. Fundraising Dashboard
+- Total donations this month/quarter/year
+- Donations by type (one-time vs monthly)
+- New vs returning donors
+- Average donation amount
+- Monthly recurring revenue (MRR)
+- Donor retention rate
+
+#### 2. Engagement Dashboard
+- New contacts by source (Newsletter, Volunteer, Donor, Experience)
+- Newsletter subscriber growth
+- Email open/click rates
+- Website form submissions
+
+#### 3. Volunteer Dashboard
+- Total volunteers by expertise area
+- New volunteer signups this month
+- Volunteer pipeline status
+
+#### 4. Stories & Content Dashboard
+- Experience submissions
+- Stories available for use (with name permission)
+- Anonymous stories count
+
+---
+
+### Lifecycle Stage Mapping
+
+| Contact Type | Lifecycle Stage | When to Set |
+|--------------|-----------------|-------------|
+| Newsletter subscriber only | Subscriber | Newsletter signup |
+| Volunteer signup | Lead | Volunteer form submission |
+| Experience shared | Lead | Experience form submission |
+| White paper download | Lead | After download |
+| One-time donor | Customer | After successful donation |
+| Monthly donor | Customer | After recurring donation setup |
+| Lapsed donor (12+ months) | Customer | Keep as Customer, use list for targeting |
 
 ---
 
