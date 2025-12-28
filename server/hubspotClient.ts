@@ -284,3 +284,126 @@ export async function updateCommunicationConsent(email: string, hasConsent: bool
     console.error('HubSpot updateCommunicationConsent error:', error.message);
   }
 }
+
+interface VolunteerData {
+  email: string;
+  firstName: string;
+  lastName: string;
+  expertise: string;
+  message?: string;
+}
+
+// Track volunteer signup
+export async function trackVolunteerSignup(data: VolunteerData): Promise<void> {
+  if (!isHubSpotConfigured()) {
+    console.log('HubSpot not configured - skipping volunteer signup tracking');
+    return;
+  }
+
+  try {
+    const contactId = await upsertContact({
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      source: `Volunteer - ${data.expertise}`,
+    });
+
+    if (contactId) {
+      const client = getHubSpotClient();
+
+      // Update contact with volunteer info
+      await client.crm.contacts.basicApi.update(contactId, {
+        properties: {
+          lifecyclestage: 'lead',
+          hs_lead_status: `Volunteer - ${data.expertise}`,
+        },
+      });
+
+      // Add a note with the volunteer's message if provided
+      if (data.message) {
+        try {
+          await client.crm.objects.notes.basicApi.create({
+            properties: {
+              hs_timestamp: new Date().toISOString(),
+              hs_note_body: `Volunteer signup - ${data.expertise}\n\nMessage: ${data.message}`,
+            },
+            associations: [{
+              to: { id: contactId },
+              types: [{
+                associationCategory: 'HUBSPOT_DEFINED',
+                associationTypeId: 202, // Note to Contact
+              }],
+            }],
+          });
+        } catch (noteError: any) {
+          console.error('HubSpot note creation error:', noteError.message);
+        }
+      }
+
+      console.log(`HubSpot: Tracked volunteer signup for ${data.email} (${data.expertise})`);
+    }
+  } catch (error: any) {
+    console.error('HubSpot trackVolunteerSignup error:', error.message);
+  }
+}
+
+interface ExperienceData {
+  email: string;
+  firstName: string;
+  lastName: string;
+  experience: string;
+  permissionToUse: boolean;
+}
+
+// Track experience/feedback submission
+export async function trackExperienceSubmission(data: ExperienceData): Promise<void> {
+  if (!isHubSpotConfigured()) {
+    console.log('HubSpot not configured - skipping experience submission tracking');
+    return;
+  }
+
+  try {
+    const contactId = await upsertContact({
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      source: 'Experience Shared',
+    });
+
+    if (contactId) {
+      const client = getHubSpotClient();
+
+      // Update contact lifecycle
+      await client.crm.contacts.basicApi.update(contactId, {
+        properties: {
+          lifecyclestage: 'lead',
+          hs_lead_status: 'Experience Shared',
+        },
+      });
+
+      // Add a note with the experience content
+      const permissionText = data.permissionToUse ? 'Yes, can use with name' : 'Anonymous only';
+      try {
+        await client.crm.objects.notes.basicApi.create({
+          properties: {
+            hs_timestamp: new Date().toISOString(),
+            hs_note_body: `Experience/Question Shared\n\nPermission to use: ${permissionText}\n\n${data.experience}`,
+          },
+          associations: [{
+            to: { id: contactId },
+            types: [{
+              associationCategory: 'HUBSPOT_DEFINED',
+              associationTypeId: 202, // Note to Contact
+            }],
+          }],
+        });
+      } catch (noteError: any) {
+        console.error('HubSpot note creation error:', noteError.message);
+      }
+
+      console.log(`HubSpot: Tracked experience submission for ${data.email}`);
+    }
+  } catch (error: any) {
+    console.error('HubSpot trackExperienceSubmission error:', error.message);
+  }
+}

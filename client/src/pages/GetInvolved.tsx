@@ -23,6 +23,8 @@ export default function GetInvolved() {
     message: "",
   });
   const [volunteerSubmitted, setVolunteerSubmitted] = useState(false);
+  const [volunteerSubmitting, setVolunteerSubmitting] = useState(false);
+  const [volunteerError, setVolunteerError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [experienceForm, setExperienceForm] = useState({
     firstName: "",
@@ -32,11 +34,33 @@ export default function GetInvolved() {
     namePermission: "use-name",
   });
   const [experienceSubmitted, setExperienceSubmitted] = useState(false);
+  const [experienceSubmitting, setExperienceSubmitting] = useState(false);
+  const [experienceError, setExperienceError] = useState<string | null>(null);
 
-  const handleVolunteerSubmit = (e: React.FormEvent) => {
+  const handleVolunteerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Volunteer form submitted:", volunteerForm);
-    setVolunteerSubmitted(true);
+    setVolunteerSubmitting(true);
+    setVolunteerError(null);
+
+    try {
+      const response = await fetch('/api/volunteers/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(volunteerForm),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to submit form');
+      }
+
+      setVolunteerSubmitted(true);
+    } catch (error: any) {
+      setVolunteerError(error.message || 'Something went wrong. Please try again.');
+    } finally {
+      setVolunteerSubmitting(false);
+    }
   };
 
   const handleCopyLink = () => {
@@ -45,10 +69,30 @@ export default function GetInvolved() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleExperienceSubmit = (e: React.FormEvent) => {
+  const handleExperienceSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Experience form submitted:", experienceForm);
-    setExperienceSubmitted(true);
+    setExperienceSubmitting(true);
+    setExperienceError(null);
+
+    try {
+      const response = await fetch('/api/experience/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(experienceForm),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to submit form');
+      }
+
+      setExperienceSubmitted(true);
+    } catch (error: any) {
+      setExperienceError(error.message || 'Something went wrong. Please try again.');
+    } finally {
+      setExperienceSubmitting(false);
+    }
   };
 
   const shareUrl = encodeURIComponent("https://klaraproject.org");
@@ -177,8 +221,16 @@ export default function GetInvolved() {
                         data-testid="textarea-volunteer-message"
                       />
                     </div>
-                    <Button type="submit" className="w-full bg-primary text-cream font-semibold" data-testid="button-volunteer-submit">
-                      Express Interest
+                    {volunteerError && (
+                      <p className="text-red-600 text-sm">{volunteerError}</p>
+                    )}
+                    <Button
+                      type="submit"
+                      className="w-full bg-primary text-cream font-semibold"
+                      data-testid="button-volunteer-submit"
+                      disabled={volunteerSubmitting}
+                    >
+                      {volunteerSubmitting ? 'Submitting...' : 'Express Interest'}
                     </Button>
                   </form>
                 </Card>
@@ -378,8 +430,16 @@ export default function GetInvolved() {
                         </div>
                       </RadioGroup>
                     </div>
-                    <Button type="submit" className="w-full bg-primary text-cream font-semibold" data-testid="button-experience-submit">
-                      Submit
+                    {experienceError && (
+                      <p className="text-red-600 text-sm">{experienceError}</p>
+                    )}
+                    <Button
+                      type="submit"
+                      className="w-full bg-primary text-cream font-semibold"
+                      data-testid="button-experience-submit"
+                      disabled={experienceSubmitting}
+                    >
+                      {experienceSubmitting ? 'Submitting...' : 'Submit'}
                     </Button>
                   </form>
                 ) : (
