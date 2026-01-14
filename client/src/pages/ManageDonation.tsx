@@ -369,7 +369,7 @@ export default function ManageDonation() {
             <span class="detail-value amount">${formatAmount(data.amount)}</span>
           </div>
           <div class="tax-notice">
-            <strong>Tax Information:</strong> The Klara Project has applied for 501(c)(3) tax-exempt status. Upon approval, donations will be tax-deductible retroactive to our date of incorporation. Please retain this receipt for your records.
+            <strong>Tax Information:</strong> The Klara Project is a 501(c)(3) tax-exempt organization. Your donation is tax-deductible to the extent allowed by law. Please retain this receipt for your tax records.
           </div>
           <div class="footer">
             <p>Thank you for your generous support!</p>
@@ -460,7 +460,7 @@ export default function ManageDonation() {
             </tbody>
           </table>
           <div class="tax-notice">
-            <strong>Tax Information:</strong> The Klara Project has applied for 501(c)(3) tax-exempt status. Upon approval, donations will be tax-deductible retroactive to our date of incorporation. Please retain this statement for your records.
+            <strong>Tax Information:</strong> The Klara Project is a 501(c)(3) tax-exempt organization. Your donation is tax-deductible to the extent allowed by law. Please retain this statement for your tax records.
           </div>
           <div class="footer">
             <p>Thank you for your generous support!</p>

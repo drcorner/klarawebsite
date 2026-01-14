@@ -64,8 +64,8 @@ export default function TermsOfService() {
                 , and we will work with you to address your situation.
               </p>
               <p className="text-charcoal leading-relaxed mb-6">
-                Klara Project has applied for 501(c)(3) tax-exempt status. Upon approval, 
-                donations will be tax-deductible retroactive to our date of incorporation.
+                The Klara Project is a 501(c)(3) tax-exempt organization. Donations are
+                tax-deductible to the extent allowed by law.
               </p>
 
               <h2 className="font-serif text-2xl font-semibold text-charcoal mt-8 mb-4">
