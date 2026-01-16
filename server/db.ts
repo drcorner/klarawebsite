@@ -2,7 +2,14 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import pkg from "pg";
 const { Pool } = pkg;
 import * as schema from "@shared/schema";
+import dotenv from "dotenv";
+dotenv.config();
 
+console.log("🚀 ~ process.env.DATABASE_URL:", process.env.DATABASE_URL);
+console.log(
+  "🚀 ~ process.env.HUBSPOT_ACCESS_TOKEN:",
+  process.env.HUBSPOT_ACCESS_TOKEN
+);
 if (!process.env.DATABASE_URL) {
   throw new Error("DATABASE_URL is required");
 }
@@ -46,9 +53,9 @@ export async function initializeDatabase() {
       )
     `);
 
-    console.log('Database tables initialized successfully');
+    console.log("Database tables initialized successfully");
   } catch (error) {
-    console.error('Error initializing database tables:', error);
+    console.error("Error initializing database tables:", error);
     throw error;
   } finally {
     client.release();

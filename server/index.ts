@@ -24,27 +24,40 @@ export function log(message: string, source = "express") {
 
   console.log(`${formattedTime} [${source}] ${message}`);
 }
-
 // Validate required environment variables at startup
 function validateEnvironment() {
-  const required = ['STRIPE_SECRET_KEY', 'STRIPE_PUBLISHABLE_KEY', 'DATABASE_URL'];
-  const missing = required.filter(key => !process.env[key]);
+  const required = [
+    "STRIPE_SECRET_KEY",
+    "STRIPE_PUBLISHABLE_KEY",
+    "DATABASE_URL",
+  ];
+  const missing = required.filter((key) => !process.env[key]);
 
   if (missing.length > 0) {
-    console.error('Missing required environment variables:', missing.join(', '));
-    console.error('Please check your .env file or environment configuration.');
+    console.error(
+      "Missing required environment variables:",
+      missing.join(", ")
+    );
+    console.error("Please check your .env file or environment configuration.");
     process.exit(1);
   }
 
   // Warn about optional but recommended variables
-  const optional = ['STRIPE_WEBHOOK_SECRET', 'SENDGRID_API_KEY', 'SENDGRID_SENDER_EMAIL'];
-  const missingOptional = optional.filter(key => !process.env[key]);
+  const optional = [
+    "STRIPE_WEBHOOK_SECRET",
+    "SENDGRID_API_KEY",
+    "SENDGRID_SENDER_EMAIL",
+  ];
+  const missingOptional = optional.filter((key) => !process.env[key]);
   if (missingOptional.length > 0) {
-    console.warn('Optional environment variables not set:', missingOptional.join(', '));
-    console.warn('Some features may be disabled.');
+    console.warn(
+      "Optional environment variables not set:",
+      missingOptional.join(", ")
+    );
+    console.warn("Some features may be disabled.");
   }
 
-  console.log('Environment validation passed');
+  console.log("Environment validation passed");
 }
 
 (async () => {
@@ -55,7 +68,7 @@ function validateEnvironment() {
   try {
     await initializeDatabase();
   } catch (error) {
-    console.error('Failed to initialize database:', error);
+    console.error("Failed to initialize database:", error);
     process.exit(1);
   }
 
@@ -63,35 +76,39 @@ function validateEnvironment() {
   // This endpoint handles webhook events from Stripe
   // Set up the webhook URL in Stripe Dashboard: https://yourdomain.com/api/stripe/webhook
   app.post(
-    '/api/stripe/webhook',
-    express.raw({ type: 'application/json' }),
+    "/api/stripe/webhook",
+    express.raw({ type: "application/json" }),
     async (req, res) => {
-      const signature = req.headers['stripe-signature'];
+      const signature = req.headers["stripe-signature"];
 
       if (!signature) {
-        return res.status(400).json({ error: 'Missing stripe-signature' });
+        return res.status(400).json({ error: "Missing stripe-signature" });
       }
 
       // Check if webhook secret is configured
       if (!process.env.STRIPE_WEBHOOK_SECRET) {
-        console.warn('STRIPE_WEBHOOK_SECRET not configured - webhook signature verification skipped');
-        return res.status(200).json({ received: true, warning: 'Signature not verified' });
+        console.warn(
+          "STRIPE_WEBHOOK_SECRET not configured - webhook signature verification skipped"
+        );
+        return res
+          .status(200)
+          .json({ received: true, warning: "Signature not verified" });
       }
 
       try {
         const sig = Array.isArray(signature) ? signature[0] : signature;
 
         if (!Buffer.isBuffer(req.body)) {
-          console.error('STRIPE WEBHOOK ERROR: req.body is not a Buffer');
-          return res.status(500).json({ error: 'Webhook processing error' });
+          console.error("STRIPE WEBHOOK ERROR: req.body is not a Buffer");
+          return res.status(500).json({ error: "Webhook processing error" });
         }
 
         await WebhookHandlers.processWebhook(req.body as Buffer, sig);
 
         res.status(200).json({ received: true });
       } catch (error: any) {
-        console.error('Webhook error:', error.message);
-        res.status(400).json({ error: 'Webhook processing error' });
+        console.error("Webhook error:", error.message);
+        res.status(400).json({ error: "Webhook processing error" });
       }
     }
   );
@@ -101,7 +118,7 @@ function validateEnvironment() {
       verify: (req, _res, buf) => {
         req.rawBody = buf;
       },
-    }),
+    })
   );
 
   app.use(express.urlencoded({ extended: false }));
@@ -138,7 +155,7 @@ function validateEnvironment() {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
 
-    console.error('Unhandled error:', err);
+    console.error("Unhandled error:", err);
     res.status(status).json({ message });
   });
 
@@ -150,14 +167,33 @@ function validateEnvironment() {
   }
 
   const port = parseInt(process.env.PORT || "5000", 10);
-  httpServer.listen(
-    {
-      port,
-      host: "0.0.0.0",
-      reusePort: true,
-    },
-    () => {
-      log(`serving on port ${port}`);
-    },
-  );
+  // httpServer.listen(
+  //   {
+  //     port,
+  //     host: "0.0.0.0",
+  //     reusePort: true,
+  //   },
+  //   () => {
+  //     log(`serving on port ${port}`);
+  //   },
+  // );
+  // const port = parseInt(process.env.PORT || "5000", 10);
+  const isProd = process.env.NODE_ENV === "production";
+
+  if (isProd) {
+    httpServer.listen(
+      {
+        port,
+        host: "0.0.0.0",
+        reusePort: true,
+      },
+      () => {
+        log(`serving on port ${port} (production)`);
+      }
+    );
+  } else {
+    httpServer.listen(port, () => {
+      log(`serving on http://localhost:${port} (development)`);
+    });
+  }
 })();

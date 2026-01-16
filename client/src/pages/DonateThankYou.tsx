@@ -11,7 +11,7 @@ export default function DonateThankYou() {
   const params = new URLSearchParams(searchString);
   const sessionId = params.get('session_id');
   const emailSentRef = useRef(false);
-
+  // var x = 0;
   useEffect(() => {
     if (sessionId && !emailSentRef.current) {
       emailSentRef.current = true;

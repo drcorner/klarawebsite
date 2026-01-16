@@ -36,7 +36,7 @@ export default function GetInvolved() {
   const [experienceSubmitted, setExperienceSubmitted] = useState(false);
   const [experienceSubmitting, setExperienceSubmitting] = useState(false);
   const [experienceError, setExperienceError] = useState<string | null>(null);
-
+  // console.log("🚀 ~ GetInvolved ~ experienceForm:", window.x);
   const handleVolunteerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setVolunteerSubmitting(true);
