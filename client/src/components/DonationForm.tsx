@@ -32,7 +32,9 @@ const durationOptions: { value: Duration; label: string }[] = [
   { value: "12", label: "12 months" },
 ];
 
-export default function DonationForm({ showFoundingGifts = true }: DonationFormProps) {
+export default function DonationForm({
+  showFoundingGifts = true,
+}: DonationFormProps) {
   const [frequency, setFrequency] = useState<"monthly" | "one-time">("monthly");
   const [duration, setDuration] = useState<Duration>("ongoing");
   const [selectedAmount, setSelectedAmount] = useState<number | null>(50);
@@ -49,69 +51,94 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
   const amounts = frequency === "monthly" ? monthlyAmounts : oneTimeAmounts;
   const currentAmount = customAmount ? parseInt(customAmount) : selectedAmount;
 
-  const handleDonate = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!currentAmount || !email || !firstName || !lastName) {
-      toast({
-        title: "Missing information",
-        description: "Please fill in all required fields.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (!executeRecaptcha) {
-      toast({
-        title: "Security check loading",
-        description: "Please wait a moment and try again.",
-        variant: "destructive",
-      });
-      return;
-    }
-    
-    setIsProcessing(true);
-    
-    try {
-      // Execute reCAPTCHA v3 verification
-      const recaptchaToken = await executeRecaptcha('donation');
-      
-      const response = await fetch('/api/create-checkout-session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          amount: currentAmount,
-          frequency,
-          email,
-          firstName,
-          lastName,
-          phone: phone || undefined,
-          duration: frequency === "monthly" ? duration : undefined,
-          communicationConsent,
-          recaptchaToken,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to create checkout session');
+  const handleDonate = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      if (!currentAmount || !email || !firstName || !lastName) {
+        toast({
+          title: "Missing information",
+          description: "Please fill in all required fields.",
+          variant: "destructive",
+        });
+        return;
       }
 
-      if (data.url) {
-        window.location.href = data.url;
+      const isProd = process.env.NODE_ENV === "production";
+
+      let recaptchaToken: string | null = null;
+
+      if (isProd) {
+        if (!executeRecaptcha) {
+          toast({
+            title: "Security check loading",
+            description: "Please wait a moment and try again.",
+            variant: "destructive",
+          });
+          setIsProcessing(false);
+          return;
+        }
+
+        recaptchaToken = await executeRecaptcha("donation");
       }
-    } catch (error: any) {
-      console.error('Donation error:', error);
-      toast({
-        title: "Error",
-        description: error.message || "Something went wrong. Please try again.",
-        variant: "destructive",
-      });
-      setIsProcessing(false);
-    }
-  }, [currentAmount, email, firstName, lastName, phone, frequency, duration, communicationConsent, executeRecaptcha, toast]);
+
+      setIsProcessing(true);
+
+      try {
+        // Execute reCAPTCHA v3 verification
+        // const recaptchaToken = await executeRecaptcha("donation");
+        console.log("🚀 ~ DonationForm ~ recaptchaToken:", recaptchaToken);
+
+        const response = await fetch("/api/create-checkout-session", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            amount: currentAmount,
+            frequency,
+            email,
+            firstName,
+            lastName,
+            phone: phone || undefined,
+            duration: frequency === "monthly" ? duration : undefined,
+            communicationConsent,
+            recaptchaToken,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to create checkout session");
+        }
+
+        if (data.url) {
+          window.location.href = data.url;
+        }
+      } catch (error: any) {
+        console.error("Donation error:", error);
+        toast({
+          title: "Error",
+          description:
+            error.message || "Something went wrong. Please try again.",
+          variant: "destructive",
+        });
+        setIsProcessing(false);
+      }
+    },
+    [
+      currentAmount,
+      email,
+      firstName,
+      lastName,
+      phone,
+      frequency,
+      duration,
+      communicationConsent,
+      executeRecaptcha,
+      toast,
+    ]
+  );
 
   return (
     <div className="space-y-8">
@@ -121,8 +148,8 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
             <button
               type="button"
               className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
-                frequency === "monthly" 
-                  ? "bg-primary text-cream" 
+                frequency === "monthly"
+                  ? "bg-primary text-cream"
                   : "text-charcoal"
               }`}
               onClick={() => setFrequency("monthly")}
@@ -134,8 +161,8 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
             <button
               type="button"
               className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
-                frequency === "one-time" 
-                  ? "bg-primary text-cream" 
+                frequency === "one-time"
+                  ? "bg-primary text-cream"
                   : "text-charcoal"
               }`}
               onClick={() => setFrequency("one-time")}
@@ -146,7 +173,9 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
           </div>
 
           <div>
-            <Label className="text-charcoal-muted mb-3 block">Select Amount</Label>
+            <Label className="text-charcoal-muted mb-3 block">
+              Select Amount
+            </Label>
             <div className="grid grid-cols-3 md:grid-cols-5 gap-2">
               {amounts.map((amount) => (
                 <button
@@ -154,7 +183,7 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
                   type="button"
                   className={`py-3 px-4 rounded-md font-semibold border-2 transition-colors ${
                     selectedAmount === amount && !customAmount
-                      ? "bg-primary text-cream border-primary" 
+                      ? "bg-primary text-cream border-primary"
                       : "bg-cream border-border text-charcoal"
                   }`}
                   onClick={() => {
@@ -167,7 +196,9 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
                 </button>
               ))}
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-charcoal-muted">$</span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-charcoal-muted">
+                  $
+                </span>
                 <Input
                   type="number"
                   placeholder="Other"
@@ -185,7 +216,9 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
 
           {frequency === "monthly" && (
             <div>
-              <Label className="text-charcoal-muted mb-3 block">Donation Duration</Label>
+              <Label className="text-charcoal-muted mb-3 block">
+                Donation Duration
+              </Label>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                 {durationOptions.map((option) => (
                   <button
@@ -211,13 +244,16 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
             </div>
           )}
 
-          {frequency === "monthly" && currentAmount && impactStatements[currentAmount] && (
-            <div className="bg-gold/10 border border-gold/30 rounded-lg p-4">
-              <p className="text-charcoal text-sm">
-                <strong className="text-gold">${currentAmount}/month</strong> {impactStatements[currentAmount]}
-              </p>
-            </div>
-          )}
+          {frequency === "monthly" &&
+            currentAmount &&
+            impactStatements[currentAmount] && (
+              <div className="bg-gold/10 border border-gold/30 rounded-lg p-4">
+                <p className="text-charcoal text-sm">
+                  <strong className="text-gold">${currentAmount}/month</strong>{" "}
+                  {impactStatements[currentAmount]}
+                </p>
+              </div>
+            )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -275,21 +311,23 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
             <Checkbox
               id="communication-consent"
               checked={communicationConsent}
-              onCheckedChange={(checked) => setCommunicationConsent(checked === true)}
+              onCheckedChange={(checked) =>
+                setCommunicationConsent(checked === true)
+              }
               className="mt-0.5"
               data-testid="checkbox-communication-consent"
             />
-            <Label 
-              htmlFor="communication-consent" 
+            <Label
+              htmlFor="communication-consent"
               className="text-sm text-charcoal-muted leading-relaxed cursor-pointer"
             >
-              I agree to receive occasional updates about Klara Project's work and impact. 
-              You can unsubscribe at any time.
+              I agree to receive occasional updates about Klara Project's work
+              and impact. You can unsubscribe at any time.
             </Label>
           </div>
 
-          <Button 
-            type="submit" 
+          <Button
+            type="submit"
             size="lg"
             className="w-full bg-primary text-cream font-semibold text-lg"
             disabled={!currentAmount || isProcessing}
@@ -314,9 +352,9 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
 
       <div className="bg-cream-dark border border-border rounded-lg p-4 text-center">
         <p className="text-charcoal-muted text-sm">
-          Klara Project has applied for 501(c)(3) tax-exempt status. Upon approval, 
-          donations will be tax-deductible retroactive to our date of incorporation. 
-          We will notify donors when approval is received.
+          Klara Project has applied for 501(c)(3) tax-exempt status. Upon
+          approval, donations will be tax-deductible retroactive to our date of
+          incorporation. We will notify donors when approval is received.
         </p>
       </div>
 
@@ -326,11 +364,12 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
             Founding Gifts
           </h3>
           <p className="text-charcoal-muted mb-6">
-            Founding gifts of $1,000 or more provide the stable foundation this mission requires. 
-            These contributions fund curriculum development, educational grants, and the 
-            infrastructure that enables sustainable growth.
+            Founding gifts of $1,000 or more provide the stable foundation this
+            mission requires. These contributions fund curriculum development,
+            educational grants, and the infrastructure that enables sustainable
+            growth.
           </p>
-          
+
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
             {foundingAmounts.map((amount) => (
               <Button
@@ -354,12 +393,12 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
       {showFoundingGifts && (
         <div className="text-center p-6 rounded-lg border border-charcoal/10 bg-cream">
           <p className="text-charcoal mb-4">
-            Want to learn more before giving? We'd welcome the chance to share our plans 
-            and answer your questions.
+            Want to learn more before giving? We'd welcome the chance to share
+            our plans and answer your questions.
           </p>
-          
-          <Button 
-            variant="outline" 
+
+          <Button
+            variant="outline"
             className="border-primary text-primary"
             data-testid="button-schedule-conversation"
           >
