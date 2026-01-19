@@ -22,6 +22,30 @@ function getRequiredEnv(name: string): string {
   }
   return value;
 }
+function mapExpertiseLabel(value: string): string {
+  switch (value) {
+    case "ai-technology":
+      return "AI & Technology";
+    case "theology":
+      return "Theology";
+    case "education":
+      return "Education";
+    case "ministry":
+      return "Ministry";
+    case "social-enterprise":
+      return "Social Enterprise";
+    default:
+      return "Other";
+  }
+}
+const VOLUNTEER_LEAD_STATUS_MAP: Record<string, string> = {
+  "ai-technology": "Volunteer – AI & Technology",
+  theology: "Volunteer – Theology",
+  education: "Volunteer – Education",
+  ministry: "Volunteer – Ministry",
+  "social-enterprise": "Volunteer – Social Enterprise",
+  other: "Volunteer – Other",
+};
 
 // Check if HubSpot is configured (optional integration)
 function isHubSpotConfigured(): boolean {
@@ -108,7 +132,7 @@ export async function upsertContact(data: ContactData): Promise<string | null> {
         properties,
       });
       console.log(
-        `HubSpot: Created contact ${data.email} (ID: ${createResponse.id})`
+        `HubSpot: Created contact ${data.email} (ID: ${createResponse.id})`,
       );
       return createResponse.id;
     }
@@ -119,6 +143,34 @@ export async function upsertContact(data: ContactData): Promise<string | null> {
 }
 
 // Track newsletter subscription
+// export async function trackNewsletterSignup(email: string): Promise<void> {
+//   if (!isHubSpotConfigured()) {
+//     console.log("HubSpot not configured - skipping newsletter signup tracking");
+//     return;
+//   }
+
+//   try {
+//     const contactId = await upsertContact({
+//       email,
+//     });
+
+//     if (contactId) {
+//       const client = getHubSpotClient();
+
+//       // Update contact with newsletter subscription info
+//       await client.crm.contacts.basicApi.update(contactId, {
+//         properties: {
+//           lifecyclestage: "subscriber",
+//         },
+//       });
+
+//       console.log(`HubSpot: Tracked newsletter signup for ${email}`);
+//     }
+//   } catch (error: any) {
+//     console.error("HubSpot trackNewsletterSignup error:", error.message);
+//   }
+// }
+
 export async function trackNewsletterSignup(email: string): Promise<void> {
   if (!isHubSpotConfigured()) {
     console.log("HubSpot not configured - skipping newsletter signup tracking");
@@ -126,24 +178,23 @@ export async function trackNewsletterSignup(email: string): Promise<void> {
   }
 
   try {
-    const contactId = await upsertContact({
-      email,
-    });
+    const contactId = await upsertContact({ email });
+    if (!contactId) return;
 
-    if (contactId) {
-      const client = getHubSpotClient();
+    const client = getHubSpotClient();
 
-      // Update contact with newsletter subscription info
-      await client.crm.contacts.basicApi.update(contactId, {
-        properties: {
-          lifecyclestage: "subscriber",
-        },
-      });
+    const properties = {
+      lifecyclestage: "subscriber",
+      hs_lead_status: "Newsletter Subscriber",
+    };
 
-      console.log(`HubSpot: Tracked newsletter signup for ${email}`);
-    }
+    console.log("📤 Updating newsletter contact with:", properties);
+
+    await client.crm.contacts.basicApi.update(contactId, { properties });
+
+    console.log(`HubSpot: Newsletter subscriber tracked for ${email}`);
   } catch (error: any) {
-    console.error("HubSpot trackNewsletterSignup error:", error.message);
+    console.error("HubSpot trackNewsletterSignup error:", error);
   }
 }
 
@@ -220,9 +271,9 @@ export async function trackDonation({
   duration?: string;
   phone?: string;
 }) {
-  console.log("🚀 ~ trackDonation ~ donorName:", donorName)
-  console.log("🚀 ~ trackDonation ~ email:", email)
-  console.log("🚀 ~ trackDonation ~ phone:", phone)
+  console.log("🚀 ~ trackDonation ~ donorName:", donorName);
+  console.log("🚀 ~ trackDonation ~ email:", email);
+  console.log("🚀 ~ trackDonation ~ phone:", phone);
   if (!isHubSpotConfigured()) return;
 
   const client = getHubSpotClient();
@@ -292,7 +343,7 @@ export async function trackDonation({
         associationCategory:
           AssociationSpecAssociationCategoryEnum.HubspotDefined,
       },
-    ]
+    ],
   );
 
   console.log(`HubSpot: Donation deal created for ${email}`);
@@ -302,7 +353,7 @@ export async function trackDonation({
 export async function trackWhitePaperDownload(email: string): Promise<void> {
   if (!isHubSpotConfigured()) {
     console.log(
-      "HubSpot not configured - skipping white paper download tracking"
+      "HubSpot not configured - skipping white paper download tracking",
     );
     return;
   }
@@ -338,7 +389,7 @@ interface PageVisitData {
 export async function trackPageVisit(data: PageVisitData): Promise<void> {
   if (!isHubSpotConfigured()) {
     console.log(
-      `Page visit tracked locally: ${data.visitorId} visited ${data.page}`
+      `Page visit tracked locally: ${data.visitorId} visited ${data.page}`,
     );
     return;
   }
@@ -346,7 +397,7 @@ export async function trackPageVisit(data: PageVisitData): Promise<void> {
   try {
     if (!data.email) {
       console.log(
-        `Page visit tracked locally: ${data.visitorId} visited ${data.page}`
+        `Page visit tracked locally: ${data.visitorId} visited ${data.page}`,
       );
       return;
     }
@@ -365,7 +416,7 @@ export async function trackPageVisit(data: PageVisitData): Promise<void> {
       });
 
       console.log(
-        `HubSpot: Tracked page visit for ${data.email} on ${data.page}`
+        `HubSpot: Tracked page visit for ${data.email} on ${data.page}`,
       );
     }
   } catch (error: any) {
@@ -376,11 +427,11 @@ export async function trackPageVisit(data: PageVisitData): Promise<void> {
 // Update contact communication consent
 export async function updateCommunicationConsent(
   email: string,
-  hasConsent: boolean
+  hasConsent: boolean,
 ): Promise<void> {
   if (!isHubSpotConfigured()) {
     console.log(
-      "HubSpot not configured - skipping communication consent update"
+      "HubSpot not configured - skipping communication consent update",
     );
     return;
   }
@@ -400,7 +451,7 @@ export async function updateCommunicationConsent(
       // });
 
       console.log(
-        `HubSpot: Updated communication consent for ${email}: ${hasConsent}`
+        `HubSpot: Updated communication consent for ${email}: ${hasConsent}`,
       );
     }
   } catch (error: any) {
@@ -417,6 +468,72 @@ interface VolunteerData {
 }
 
 // Track volunteer signup
+// export async function trackVolunteerSignup(data: VolunteerData): Promise<void> {
+//   if (!isHubSpotConfigured()) {
+//     console.log("HubSpot not configured - skipping volunteer signup tracking");
+//     return;
+//   }
+
+//   try {
+//     // 1️⃣ Upsert contact
+//     const contactId = await upsertContact({
+//       email: data.email,
+//       firstName: data.firstName,
+//       lastName: data.lastName,
+//     });
+
+//     if (!contactId) return;
+
+//     const client = getHubSpotClient();
+
+//     // 2️⃣ Normalize expertise value (must match dropdown internal values)
+//     const expertise = data.expertise || "other";
+
+//     const leadStatus = `Volunteer - ${mapExpertiseLabel(expertise)}`;
+
+//     // 3️⃣ Update contact with volunteer-specific fields
+//     await client.crm.contacts.basicApi.update(contactId, {
+//       properties: {
+//         lifecyclestage: "lead",
+//         hs_lead_status: leadStatus, // Custom value
+//         volunteer_expertise: expertise, // Dropdown internal value
+//       },
+//     });
+
+//     // 4️⃣ Create note with volunteer details
+//     const noteBody = data.message
+//       ? `Volunteer signup\n\nExpertise: ${mapExpertiseLabel(
+//           expertise,
+//         )}\n\nMessage:\n${data.message}`
+//       : `Volunteer signup\n\nExpertise: ${mapExpertiseLabel(expertise)}`;
+
+//     await client.crm.objects.notes.basicApi.create({
+//       properties: {
+//         hs_timestamp: new Date().toISOString(),
+//         hs_note_body: noteBody,
+//       },
+//       associations: [
+//         {
+//           to: { id: contactId },
+//           types: [
+//             {
+//               associationCategory:
+//                 AssociationSpecAssociationCategoryEnum.HubspotDefined,
+//               associationTypeId: 202, // Note → Contact
+//             },
+//           ],
+//         },
+//       ],
+//     });
+
+//     console.log(`HubSpot: Volunteer tracked for ${data.email} (${expertise})`);
+//   } catch (error: any) {
+//     console.error(
+//       "HubSpot trackVolunteerSignup error:",
+//       error?.message || error,
+//     );
+//   }
+// }
 export async function trackVolunteerSignup(data: VolunteerData): Promise<void> {
   if (!isHubSpotConfigured()) {
     console.log("HubSpot not configured - skipping volunteer signup tracking");
@@ -430,51 +547,48 @@ export async function trackVolunteerSignup(data: VolunteerData): Promise<void> {
       lastName: data.lastName,
     });
 
-    if (contactId) {
-      const client = getHubSpotClient();
+    if (!contactId) return;
 
-      // Update contact with volunteer info - use valid hs_lead_status value
-      await client.crm.contacts.basicApi.update(contactId, {
-        properties: {
-          lifecyclestage: "lead",
-          hs_lead_status: "NEW",
-        },
-      });
+    const client = getHubSpotClient();
 
-      // Add a note with the volunteer details (expertise and message)
-      const noteBody = data.message
-        ? `Volunteer signup - ${data.expertise}\n\nMessage: ${data.message}`
-        : `Volunteer signup - ${data.expertise}`;
+    const expertiseKey = data.expertise || "other";
+    const leadStatus =
+      VOLUNTEER_LEAD_STATUS_MAP[expertiseKey] || "Volunteer – Other";
 
-      try {
-        await client.crm.objects.notes.basicApi.create({
-          properties: {
-            hs_timestamp: new Date().toISOString(),
-            hs_note_body: noteBody,
-          },
-          associations: [
+    await client.crm.contacts.basicApi.update(contactId, {
+      properties: {
+        lifecyclestage: "lead",
+        hs_lead_status: leadStatus, // ✅ EXACT match
+        volunteer_expertise: expertiseKey,
+      },
+    });
+
+    const noteBody = data.message
+      ? `Volunteer signup\n\nExpertise: ${leadStatus}\n\nMessage:\n${data.message}`
+      : `Volunteer signup\n\nExpertise: ${leadStatus}`;
+
+    await client.crm.objects.notes.basicApi.create({
+      properties: {
+        hs_timestamp: new Date().toISOString(),
+        hs_note_body: noteBody,
+      },
+      associations: [
+        {
+          to: { id: contactId },
+          types: [
             {
-              to: { id: contactId },
-              types: [
-                {
-                  associationCategory:
-                    AssociationSpecAssociationCategoryEnum.HubspotDefined,
-                  associationTypeId: 202, // Note to Contact
-                },
-              ],
+              associationCategory:
+                AssociationSpecAssociationCategoryEnum.HubspotDefined,
+              associationTypeId: 202,
             },
           ],
-        });
-      } catch (noteError: any) {
-        console.error("HubSpot note creation error:", noteError.message);
-      }
+        },
+      ],
+    });
 
-      console.log(
-        `HubSpot: Tracked volunteer signup for ${data.email} (${data.expertise})`
-      );
-    }
+    console.log(`HubSpot: Volunteer tracked for ${data.email} (${leadStatus})`);
   } catch (error: any) {
-    console.error("HubSpot trackVolunteerSignup error:", error.message);
+    console.error("HubSpot trackVolunteerSignup error:", error);
   }
 }
 
@@ -488,11 +602,11 @@ interface ExperienceData {
 
 // Track experience/feedback submission
 export async function trackExperienceSubmission(
-  data: ExperienceData
+  data: ExperienceData,
 ): Promise<void> {
   if (!isHubSpotConfigured()) {
     console.log(
-      "HubSpot not configured - skipping experience submission tracking"
+      "HubSpot not configured - skipping experience submission tracking",
     );
     return;
   }

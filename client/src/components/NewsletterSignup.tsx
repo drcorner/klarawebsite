@@ -8,7 +8,10 @@ interface NewsletterSignupProps {
   className?: string;
 }
 
-export default function NewsletterSignup({ variant = "inline", className = "" }: NewsletterSignupProps) {
+export default function NewsletterSignup({
+  variant = "inline",
+  className = "",
+}: NewsletterSignupProps) {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
@@ -29,12 +32,15 @@ export default function NewsletterSignup({ variant = "inline", className = "" }:
 
   if (variant === "card") {
     return (
-      <div className={`bg-cream-dark border border-border rounded-lg p-6 ${className}`}>
+      <div
+        className={`bg-cream-dark border border-border rounded-lg p-6 ${className}`}
+      >
         <h3 className="font-serif text-xl font-semibold text-charcoal mb-2">
           Stay Informed
         </h3>
         <p className="text-charcoal-muted mb-4">
-          Join our mailing list for updates on resources, research, and opportunities to engage.
+          Join our mailing list for updates on resources, research, and
+          opportunities to engage.
         </p>
         <form onSubmit={handleSubmit} className="flex gap-2">
           <Input
@@ -46,7 +52,11 @@ export default function NewsletterSignup({ variant = "inline", className = "" }:
             className="flex-1"
             data-testid="input-newsletter-email"
           />
-          <Button type="submit" className="bg-primary text-cream" data-testid="button-newsletter-subscribe">
+          <Button
+            type="submit"
+            className="bg-primary text-cream"
+            data-testid="button-newsletter-subscribe"
+          >
             Subscribe
           </Button>
         </form>
@@ -65,7 +75,11 @@ export default function NewsletterSignup({ variant = "inline", className = "" }:
         className="flex-1"
         data-testid="input-newsletter-email-inline"
       />
-      <Button type="submit" className="bg-primary text-cream shrink-0" data-testid="button-newsletter-subscribe-inline">
+      <Button
+        type="submit"
+        className="bg-primary text-cream shrink-0"
+        data-testid="button-newsletter-subscribe-inline"
+      >
         <Mail className="w-4 h-4 md:mr-2" />
         <span className="hidden md:inline">Subscribe</span>
       </Button>
