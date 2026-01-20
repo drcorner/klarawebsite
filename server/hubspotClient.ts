@@ -67,6 +67,16 @@ function getHubSpotClient(): Client {
 export async function getUncachableHubSpotClient() {
   return getHubSpotClient();
 }
+function logHubSpotUpdate(
+  label: string,
+  contactId: string,
+  properties: Record<string, string>,
+) {
+  console.log(`📌 HubSpot Update [${label}]`, {
+    contactId,
+    properties,
+  });
+}
 
 interface ContactData {
   email: string;
@@ -350,6 +360,34 @@ export async function trackDonation({
 }
 
 // Track white paper download
+// export async function trackWhitePaperDownload(email: string): Promise<void> {
+//   if (!isHubSpotConfigured()) {
+//     console.log(
+//       "HubSpot not configured - skipping white paper download tracking",
+//     );
+//     return;
+//   }
+
+//   try {
+//     const contactId = await upsertContact({
+//       email,
+//     });
+
+//     if (contactId) {
+//       const client = getHubSpotClient();
+
+//       await client.crm.contacts.basicApi.update(contactId, {
+//         properties: {
+//           lifecyclestage: "lead",
+//         },
+//       });
+
+//       console.log(`HubSpot: Tracked white paper download for ${email}`);
+//     }
+//   } catch (error: any) {
+//     console.error("HubSpot trackWhitePaperDownload error:", error.message);
+//   }
+// }
 export async function trackWhitePaperDownload(email: string): Promise<void> {
   if (!isHubSpotConfigured()) {
     console.log(
@@ -359,23 +397,28 @@ export async function trackWhitePaperDownload(email: string): Promise<void> {
   }
 
   try {
-    const contactId = await upsertContact({
-      email,
-    });
+    // 1️⃣ Upsert contact (email only, per spec)
+    const contactId = await upsertContact({ email });
+    if (!contactId) return;
 
-    if (contactId) {
-      const client = getHubSpotClient();
+    const client = getHubSpotClient();
 
-      await client.crm.contacts.basicApi.update(contactId, {
-        properties: {
-          lifecyclestage: "lead",
-        },
-      });
+    // 2️⃣ Update contact exactly per spec
+    const properties = {
+      lifecyclestage: "lead",
+      hs_lead_status: "White Paper Downloaded", // ✅ MUST EXACTLY MATCH CRM VALUE
+    };
 
-      console.log(`HubSpot: Tracked white paper download for ${email}`);
-    }
+    console.log("📤 Whitepaper → Updating contact with:", properties);
+    logHubSpotUpdate("WhitePaper", contactId, properties);
+    await client.crm.contacts.basicApi.update(contactId, { properties });
+
+    console.log(`HubSpot: White paper download tracked for ${email}`);
   } catch (error: any) {
-    console.error("HubSpot trackWhitePaperDownload error:", error.message);
+    console.error(
+      "HubSpot trackWhitePaperDownload error:",
+      error?.body || error,
+    );
   }
 }
 
@@ -601,6 +644,69 @@ interface ExperienceData {
 }
 
 // Track experience/feedback submission
+// export async function trackExperienceSubmission(
+//   data: ExperienceData,
+// ): Promise<void> {
+//   if (!isHubSpotConfigured()) {
+//     console.log(
+//       "HubSpot not configured - skipping experience submission tracking",
+//     );
+//     return;
+//   }
+
+//   try {
+//     const contactId = await upsertContact({
+//       email: data.email,
+//       firstName: data.firstName,
+//       lastName: data.lastName,
+//     });
+
+//     if (contactId) {
+//       const client = getHubSpotClient();
+
+//       // Update contact lifecycle - use valid hs_lead_status value
+//       await client.crm.contacts.basicApi.update(contactId, {
+//         properties: {
+//           lifecyclestage: "lead",
+//           hs_lead_status: "NEW",
+//         },
+//       });
+
+//       // Add a note with the experience content
+//       const permissionText = data.permissionToUse
+//         ? "Yes, can use with name"
+//         : "Anonymous only";
+//       let noteBody = `Experience/Question Shared\n\nPermission to use: ${permissionText}\n\n${data.experience}`;
+//       try {
+//         await client.crm.objects.notes.basicApi.create({
+//           properties: {
+//             hs_timestamp: new Date().toISOString(),
+//             hs_note_body: noteBody,
+//           },
+//           associations: [
+//             {
+//               to: { id: contactId },
+//               types: [
+//                 {
+//                   associationCategory:
+//                     AssociationSpecAssociationCategoryEnum.HubspotDefined,
+//                   associationTypeId: 202, // Note → Contact
+//                 },
+//               ],
+//             },
+//           ],
+//         });
+//       } catch (noteError: any) {
+//         console.error("HubSpot note creation error:", noteError.message);
+//       }
+
+//       console.log(`HubSpot: Tracked experience submission for ${data.email}`);
+//     }
+//   } catch (error: any) {
+//     console.error("HubSpot trackExperienceSubmission error:", error.message);
+//   }
+// }
+
 export async function trackExperienceSubmission(
   data: ExperienceData,
 ): Promise<void> {
@@ -612,54 +718,66 @@ export async function trackExperienceSubmission(
   }
 
   try {
+    // 1️⃣ Upsert contact (required fields only)
     const contactId = await upsertContact({
       email: data.email,
       firstName: data.firstName,
       lastName: data.lastName,
     });
 
-    if (contactId) {
-      const client = getHubSpotClient();
+    if (!contactId) return;
 
-      // Update contact lifecycle - use valid hs_lead_status value
-      await client.crm.contacts.basicApi.update(contactId, {
-        properties: {
-          lifecyclestage: "lead",
-          hs_lead_status: "NEW",
-        },
-      });
+    const client = getHubSpotClient();
 
-      // Add a note with the experience content
-      const permissionText = data.permissionToUse
-        ? "Yes, can use with name"
-        : "Anonymous only";
-      let noteBody = `Experience/Question Shared\n\nPermission to use: ${permissionText}\n\n${data.experience}`;
-      try {
-        await client.crm.objects.notes.basicApi.create({
-          properties: {
-            hs_timestamp: new Date().toISOString(),
-            hs_note_body: noteBody,
-          },
-          associations: [
+    // 2️⃣ Map permission to dropdown internal values
+    const namePermissionValue = data.permissionToUse ? "use-name" : "no-name";
+
+    const properties = {
+      lifecyclestage: "lead",
+      hs_lead_status: "Experience Shared", // ✅ EXACT CRM VALUE
+      name_permission: namePermissionValue, // ✅ Custom dropdown
+    };
+
+    console.log("📤 Experience → Updating contact with:", properties);
+
+    await client.crm.contacts.basicApi.update(contactId, { properties });
+
+    // 3️⃣ Create note with experience content
+    const permissionText = data.permissionToUse
+      ? "Permission to use name"
+      : "Do not use name";
+
+    const noteBody = `Experience / Question Shared
+
+Name permission: ${permissionText}
+
+Message:
+${data.experience}`;
+
+    await client.crm.objects.notes.basicApi.create({
+      properties: {
+        hs_timestamp: new Date().toISOString(),
+        hs_note_body: noteBody,
+      },
+      associations: [
+        {
+          to: { id: contactId },
+          types: [
             {
-              to: { id: contactId },
-              types: [
-                {
-                  associationCategory:
-                    AssociationSpecAssociationCategoryEnum.HubspotDefined,
-                  associationTypeId: 202, // Note → Contact
-                },
-              ],
+              associationCategory:
+                AssociationSpecAssociationCategoryEnum.HubspotDefined,
+              associationTypeId: 202, // Note → Contact
             },
           ],
-        });
-      } catch (noteError: any) {
-        console.error("HubSpot note creation error:", noteError.message);
-      }
+        },
+      ],
+    });
 
-      console.log(`HubSpot: Tracked experience submission for ${data.email}`);
-    }
+    console.log(`HubSpot: Experience submission tracked for ${data.email}`);
   } catch (error: any) {
-    console.error("HubSpot trackExperienceSubmission error:", error.message);
+    console.error(
+      "HubSpot trackExperienceSubmission error:",
+      error?.body || error,
+    );
   }
 }
