@@ -108,7 +108,7 @@ export async function sendDonationThankYouEmail(details: DonationDetails): Promi
 
 Thank you for your generous ${donationType.toLowerCase()} donation of ${formattedAmount} to The Klara Project!
 
-Your support helps us equip Christians with practical resources for engaging thoughtfully with AI and technology.
+Your support helps us equip churches with practical resources for the AI age. Your donation will fund curriculum development, educational grants for students exploring faith and technology, and the infrastructure we need to serve you and our churches well.
 
 DONATION DETAILS - KEEP FOR YOUR RECORDS
 -----------------------------------------
@@ -120,7 +120,7 @@ Email: ${details.donorEmail}
 
 TAX INFORMATION
 -----------------------------------------
-The Klara Project has applied for 501(c)(3) tax-exempt status. Upon approval, donations will be tax-deductible retroactive to our date of incorporation. We will notify you when approval is received. Please retain this email for your records.
+Klara Project, Inc. is a 501(c)(3) tax-exempt organization (EIN: 41-2660092). Your donation is tax-deductible to the full extent allowed by law. No goods or services were provided in exchange for this contribution. Please retain this email as your official donation receipt.
 
 MANAGE YOUR DONATION
 -----------------------------------------
@@ -149,7 +149,7 @@ The Klara Project Team
           </p>
 
           <p style="color: #2D2A27; font-size: 16px; margin-bottom: 30px;">
-            Your support helps us equip Christians with practical resources for engaging thoughtfully with AI and technology.
+            Your support helps us equip churches with practical resources for the AI age. Your donation will fund curriculum development, educational grants for students exploring faith and technology, and the infrastructure we need to serve you and our churches well.
           </p>
 
           <div style="background-color: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
@@ -183,7 +183,7 @@ The Klara Project Team
           <div style="background-color: #C9A962; background-color: rgba(201, 169, 98, 0.15); border-left: 4px solid #C9A962; padding: 15px; margin-bottom: 20px; border-radius: 0 8px 8px 0;">
             <h3 style="color: #2D2A27; font-size: 14px; margin: 0 0 10px 0;">Tax Information</h3>
             <p style="color: #666; font-size: 13px; margin: 0;">
-              The Klara Project has applied for 501(c)(3) tax-exempt status. Upon approval, donations will be tax-deductible retroactive to our date of incorporation. We will notify you when approval is received. Please retain this email for your records.
+              Klara Project, Inc. is a 501(c)(3) tax-exempt organization (EIN: 41-2660092). Your donation is tax-deductible to the full extent allowed by law. No goods or services were provided in exchange for this contribution. Please retain this email as your official donation receipt.
             </p>
           </div>
 
