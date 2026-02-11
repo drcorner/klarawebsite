@@ -137,7 +137,7 @@ export default function DonationForm({
       communicationConsent,
       executeRecaptcha,
       toast,
-    ]
+    ],
   );
 
   return (
@@ -359,13 +359,17 @@ export default function DonationForm({
       </div>
 
       <div className="bg-cream-dark border border-border rounded-lg p-4 text-center">
-        <p className="text-charcoal font-semibold text-sm mb-1">Prefer to donate by check?</p>
+        <p className="text-charcoal font-semibold text-sm mb-1">
+          Prefer to donate by check?
+        </p>
         <p className="text-charcoal-muted text-sm">
           Checks can be made payable to Klara Project, Inc. and mailed to:
         </p>
         <p className="text-charcoal text-sm mt-1">
-          Klara Project, Inc.<br />
-          3300 Monroe Ave, Suite 323<br />
+          Klara Project, Inc.
+          <br />
+          3300 Monroe Ave, Suite 323
+          <br />
           Rochester, New York 14618
         </p>
       </div>
