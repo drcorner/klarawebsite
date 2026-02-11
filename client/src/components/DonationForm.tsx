@@ -314,9 +314,21 @@ export default function DonationForm({ showFoundingGifts = true }: DonationFormP
 
       <div className="bg-cream-dark border border-border rounded-lg p-4 text-center">
         <p className="text-charcoal-muted text-sm">
-          Klara Project has applied for 501(c)(3) tax-exempt status. Upon approval, 
-          donations will be tax-deductible retroactive to our date of incorporation. 
+          Klara Project has applied for 501(c)(3) tax-exempt status. Upon approval,
+          donations will be tax-deductible retroactive to our date of incorporation.
           We will notify donors when approval is received.
+        </p>
+      </div>
+
+      <div className="bg-cream-dark border border-border rounded-lg p-4 text-center">
+        <p className="text-charcoal font-semibold text-sm mb-1">Prefer to donate by check?</p>
+        <p className="text-charcoal-muted text-sm">
+          Checks can be made payable to Klara Project, Inc. and mailed to:
+        </p>
+        <p className="text-charcoal text-sm mt-1">
+          Klara Project, Inc.<br />
+          3300 Monroe Ave, Suite 323<br />
+          Rochester, New York 14618
         </p>
       </div>
 
