@@ -122,16 +122,21 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-cream/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-cream/40 text-sm text-center md:text-left">
-            © 2025 Klara Project. All rights reserved.
-            <span className="hidden md:inline"> · </span>
-            <br className="md:hidden" />
-            Operating Christians for Responsible AI and Robotics.
-          </p>
+          <div className="text-center md:text-left">
+            <p className="text-cream/40 text-sm">
+              © 2025 Klara Project, Inc. All rights reserved.
+              <span className="hidden md:inline"> · </span>
+              <br className="md:hidden" />
+              Operating Christians for Responsible AI and Robotics.
+            </p>
+            <p className="text-cream/40 text-sm mt-1">
+              Klara Project, Inc. · 3300 Monroe Ave, Suite 323, Rochester, New York 14618
+            </p>
+          </div>
           <nav className="flex gap-4">
             {legalLinks.map((link) => (
               <Link key={link.href} href={link.href}>
-                <span 
+                <span
                   className="text-cream/40 hover:text-cream transition-colors text-sm"
                   data-testid={`footer-legal-${link.label.toLowerCase().replace(/\s+/g, '-')}`}
                 >
