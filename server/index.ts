@@ -36,7 +36,7 @@ function validateEnvironment() {
   if (missing.length > 0) {
     console.error(
       "Missing required environment variables:",
-      missing.join(", ")
+      missing.join(", "),
     );
     console.error("Please check your .env file or environment configuration.");
     process.exit(1);
@@ -52,7 +52,7 @@ function validateEnvironment() {
   if (missingOptional.length > 0) {
     console.warn(
       "Optional environment variables not set:",
-      missingOptional.join(", ")
+      missingOptional.join(", "),
     );
     console.warn("Some features may be disabled.");
   }
@@ -88,7 +88,7 @@ function validateEnvironment() {
       // Check if webhook secret is configured
       if (!process.env.STRIPE_WEBHOOK_SECRET) {
         console.warn(
-          "STRIPE_WEBHOOK_SECRET not configured - webhook signature verification skipped"
+          "STRIPE_WEBHOOK_SECRET not configured - webhook signature verification skipped",
         );
         return res
           .status(200)
@@ -110,7 +110,7 @@ function validateEnvironment() {
         console.error("Webhook error:", error.message);
         res.status(400).json({ error: "Webhook processing error" });
       }
-    }
+    },
   );
 
   app.use(
@@ -118,7 +118,7 @@ function validateEnvironment() {
       verify: (req, _res, buf) => {
         req.rawBody = buf;
       },
-    })
+    }),
   );
 
   app.use(express.urlencoded({ extended: false }));
@@ -189,7 +189,7 @@ function validateEnvironment() {
       },
       () => {
         log(`serving on port ${port} (production)`);
-      }
+      },
     );
   } else {
     httpServer.listen(port, () => {

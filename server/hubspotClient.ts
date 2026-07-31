@@ -3,109 +3,170 @@ import { Client } from "@hubspot/api-client";
 import { FilterOperatorEnum } from "@hubspot/api-client/lib/codegen/crm/contacts/models/Filter";
 import { AssociationSpecAssociationCategoryEnum } from "@hubspot/api-client/lib/codegen/crm/objects/notes/models/AssociationSpec";
 export const HUBSPOT_IDS = {
-  PIPELINE_DONATIONS: "default",
+  PIPELINE_DONATIONS: "2172758749",
+  STAGE_DONATIONS_PENDING: "3463253736",
+  STAGE_DONATIONS_COMPLETED: "3463253737",
+  STAGE_RECURRING_ACTIVE: "3463253738",
+  STAGE_RECURRING_RENEWED: "3463253739",
+  STAGE_RECURRING_CANCELLED: "3463253740",
+  STAGE_PAYMENT_FAILED: "3463253741",
 
-  STAGE_PROSPECT: "2845838016",
-  STAGE_QUALIFIED: "2845838017",
-  STAGE_CULTIVATION: "2845838018",
-  STAGE_SOLICITATION: "2845838019",
-  STAGE_PLEDGE: "2845838020",
-  STAGE_GIFT_RECEIVED: "2845838021",
-  STAGE_STEWARDSHIP: "2845838022",
+  PIPELINE_ENGAGEMENT: "default",
+  STAGE_NEW_INQUIRY: "2845838016",
+  STAGE_IN_PROGRESS: "2845838017",
+  STAGE_RESPONDED: "2845838018",
+  STAGE_CLOSED: "2845838019",
 };
 
-// Environment variable validation
+const LIFECYCLE_ORDER: Record<string, number> = {
+  subscriber: 1,
+  lead: 2,
+  marketingqualifiedlead: 3,
+  salesqualifiedlead: 4,
+  opportunity: 5,
+  customer: 6,
+  evangelist: 7,
+  other: 0,
+};
+
+// function isLifecycleProgression(current: string, next: string): boolean {
+//   return (LIFECYCLE_ORDER[next] ?? 0) > (LIFECYCLE_ORDER[current] ?? 0);
+// }
+
+// // Environment variable validation
+// function getRequiredEnv(name: string): string {
+//   const value = process.env[name];
+//   if (!value) {
+//     throw new Error(`Missing required environment variable: ${name}`);
+//   }
+//   return value;
+// }
+// function mapExpertiseLabel(value: string): string {
+//   switch (value) {
+//     case "ai-technology":
+//       return "AI & Technology";
+//     case "theology":
+//       return "Theology";
+//     case "education":
+//       return "Education";
+//     case "ministry":
+//       return "Ministry";
+//     case "social-enterprise":
+//       return "Social Enterprise";
+//     default:
+//       return "Other";
+//   }
+// }
+
+function isLifecycleProgression(current: string, next: string): boolean {
+  return (LIFECYCLE_ORDER[next] ?? 0) > (LIFECYCLE_ORDER[current] ?? 0);
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
 function getRequiredEnv(name: string): string {
   const value = process.env[name];
-  if (!value) {
-    throw new Error(`Missing required environment variable: ${name}`);
-  }
+  if (!value) throw new Error(`Missing required environment variable: ${name}`);
   return value;
 }
-function mapExpertiseLabel(value: string): string {
-  switch (value) {
-    case "ai-technology":
-      return "AI & Technology";
-    case "theology":
-      return "Theology";
-    case "education":
-      return "Education";
-    case "ministry":
-      return "Ministry";
-    case "social-enterprise":
-      return "Social Enterprise";
-    default:
-      return "Other";
-  }
-}
-const VOLUNTEER_LEAD_STATUS_MAP: Record<string, string> = {
-  "ai-technology": "Volunteer – AI & Technology",
-  theology: "Volunteer – Theology",
-  education: "Volunteer – Education",
-  ministry: "Volunteer – Ministry",
-  "social-enterprise": "Volunteer – Social Enterprise",
-  other: "Volunteer – Other",
-};
 
-// Check if HubSpot is configured (optional integration)
 function isHubSpotConfigured(): boolean {
   return !!process.env.HUBSPOT_ACCESS_TOKEN;
 }
 
-// Cached HubSpot client
 let hubspotClient: Client | null = null;
-
 function getHubSpotClient(): Client {
   if (!hubspotClient) {
-    const accessToken = getRequiredEnv("HUBSPOT_ACCESS_TOKEN");
-    hubspotClient = new Client({ accessToken });
+    hubspotClient = new Client({
+      accessToken: getRequiredEnv("HUBSPOT_ACCESS_TOKEN"),
+    });
   }
   return hubspotClient;
 }
 
-// For backwards compatibility with existing async code
 export async function getUncachableHubSpotClient() {
   return getHubSpotClient();
 }
-function logHubSpotUpdate(
-  label: string,
-  contactId: string,
-  properties: Record<string, string>,
-) {
-  console.log(`📌 HubSpot Update [${label}]`, {
-    contactId,
-    properties,
-  });
-}
 
+// ─── Interfaces ──────────────────────────────────────────────────────────────
 interface ContactData {
   email: string;
   firstName?: string;
   lastName?: string;
-  lifecycleStage?: "lead" | "subscriber" | "customer";
+  lifecycleStage?: string;
   leadStatus?: string;
   phone?: string;
 }
 
-interface DonationData {
+export interface DonationData {
   email: string;
   donorName: string;
-  amount: number;
+  amount: number; // cents
   donationType: "one-time" | "monthly";
   duration?: string;
+  phone?: string;
+  stripeSessionId?: string;
+  stripeSubscriptionId?: string;
+  stripeCustomerId?: string;
 }
 
-// Create or update a contact in HubSpot
-export async function upsertContact(data: ContactData): Promise<string | null> {
-  if (!isHubSpotConfigured()) {
-    console.log("HubSpot not configured - skipping contact upsert");
-    return null;
+interface VolunteerData {
+  email: string;
+  firstName: string;
+  lastName: string;
+  expertise: string;
+  message?: string;
+}
+
+interface ExperienceData {
+  email: string;
+  firstName: string;
+  lastName: string;
+  experience: string;
+  permissionToUse: boolean;
+}
+
+interface InquiryData {
+  email: string;
+  firstName: string;
+  lastName: string;
+  message: string;
+  churchName?: string;
+}
+
+// ─── Engagement source helper ─────────────────────────────────────────────────
+// engagement_source is a multi-checkbox — we must read current value and append.
+async function appendEngagementSource(
+  client: Client,
+  contactId: string,
+  source: string,
+): Promise<void> {
+  try {
+    const contact = await client.crm.contacts.basicApi.getById(contactId, [
+      "engagement_source",
+    ]);
+    const current: string = contact.properties.engagement_source || "";
+    const existing = current ? current.split(";").map((s) => s.trim()) : [];
+    if (!existing.includes(source)) {
+      existing.push(source);
+      await client.crm.contacts.basicApi.update(contactId, {
+        properties: { engagement_source: existing.join(";") },
+      });
+    }
+  } catch {
+    // If property doesn't exist yet, just set it
+    await client.crm.contacts.basicApi.update(contactId, {
+      properties: { engagement_source: source },
+    });
   }
+}
+
+// ─── upsertContact ────────────────────────────────────────────────────────────
+export async function upsertContact(data: ContactData): Promise<string | null> {
+  if (!isHubSpotConfigured()) return null;
 
   try {
     const client = getHubSpotClient();
 
-    // Search for existing contact by email
     const searchResponse = await client.crm.contacts.searchApi.doSearch({
       filterGroups: [
         {
@@ -118,33 +179,34 @@ export async function upsertContact(data: ContactData): Promise<string | null> {
           ],
         },
       ],
-      properties: ["email", "firstname", "lastname"],
+      properties: ["email", "firstname", "lastname", "lifecyclestage"],
       limit: 1,
     });
 
-    const properties: Record<string, string> = {
-      email: data.email,
-    };
-
+    const properties: Record<string, string> = { email: data.email };
     if (data.firstName) properties.firstname = data.firstName;
     if (data.lastName) properties.lastname = data.lastName;
-    // if (data.source) properties.hs_lead_status = data.source;
+    if (data.phone) properties.phone = data.phone;
 
     if (searchResponse.results.length > 0) {
-      // Update existing contact
-      const contactId = searchResponse.results[0].id;
+      const existing = searchResponse.results[0];
+      const contactId = existing.id;
+      const currentStage = existing.properties.lifecyclestage || "";
+
+      // Only set lifecycle stage if it's a progression
+      if (
+        data.lifecycleStage &&
+        isLifecycleProgression(currentStage, data.lifecycleStage)
+      ) {
+        properties.lifecyclestage = data.lifecycleStage;
+      }
+
       await client.crm.contacts.basicApi.update(contactId, { properties });
-      console.log(`HubSpot: Updated contact ${data.email} (ID: ${contactId})`);
       return contactId;
     } else {
-      // Create new contact
-      const createResponse = await client.crm.contacts.basicApi.create({
-        properties,
-      });
-      console.log(
-        `HubSpot: Created contact ${data.email} (ID: ${createResponse.id})`,
-      );
-      return createResponse.id;
+      if (data.lifecycleStage) properties.lifecyclestage = data.lifecycleStage;
+      const created = await client.crm.contacts.basicApi.create({ properties });
+      return created.id;
     }
   } catch (error: any) {
     console.error("HubSpot upsertContact error:", error.message);
@@ -152,55 +214,116 @@ export async function upsertContact(data: ContactData): Promise<string | null> {
   }
 }
 
-// Track newsletter subscription
-// export async function trackNewsletterSignup(email: string): Promise<void> {
-//   if (!isHubSpotConfigured()) {
-//     console.log("HubSpot not configured - skipping newsletter signup tracking");
-//     return;
-//   }
-
-//   try {
-//     const contactId = await upsertContact({
-//       email,
-//     });
-
-//     if (contactId) {
-//       const client = getHubSpotClient();
-
-//       // Update contact with newsletter subscription info
-//       await client.crm.contacts.basicApi.update(contactId, {
-//         properties: {
-//           lifecyclestage: "subscriber",
-//         },
-//       });
-
-//       console.log(`HubSpot: Tracked newsletter signup for ${email}`);
-//     }
-//   } catch (error: any) {
-//     console.error("HubSpot trackNewsletterSignup error:", error.message);
-//   }
-// }
-
-export async function trackNewsletterSignup(email: string): Promise<void> {
-  if (!isHubSpotConfigured()) {
-    console.log("HubSpot not configured - skipping newsletter signup tracking");
-    return;
-  }
+// ─── trackDonation ────────────────────────────────────────────────────────────
+export async function trackDonation(data: DonationData): Promise<void> {
+  console.log(
+    "HubSpot trackDonation called with data:",
+    JSON.stringify(data, null, 2),
+  );
+  if (!isHubSpotConfigured()) return;
 
   try {
-    const contactId = await upsertContact({ email });
+    const client = getHubSpotClient();
+    const [firstname, ...rest] = data.donorName.split(" ");
+    const lastname = rest.join(" ") || "Donor";
+
+    const contactId = await upsertContact({
+      email: data.email,
+      firstName: firstname,
+      lastName: lastname,
+      phone: data.phone,
+      lifecycleStage: "customer",
+    });
+    console.log("🚀 ~ trackDonation ~ contactId:", contactId);
+    if (!contactId) return;
+
+    // Update contact-level donation fields
+    const contactUpdate: Record<string, string> = {
+      hs_lead_status: "Donor",
+      donation_frequency: data.donationType,
+    };
+    if (data.stripeCustomerId) {
+      contactUpdate.stripe_customer_id = data.stripeCustomerId;
+    }
+    console.log(
+      "👤 Contact properties being sent to HubSpot:",
+      JSON.stringify(contactUpdate, null, 2),
+    );
+    await client.crm.contacts.basicApi.update(contactId, {
+      properties: contactUpdate,
+    });
+
+    await appendEngagementSource(client, contactId, "donation");
+
+    // Determine pipeline stage
+    const stage =
+      data.donationType === "monthly"
+        ? HUBSPOT_IDS.STAGE_RECURRING_ACTIVE
+        : HUBSPOT_IDS.STAGE_DONATIONS_COMPLETED;
+
+    const dealProperties: Record<string, string> = {
+      dealname: `${data.donorName} - $${data.amount / 100}`,
+      amount: (data.amount / 100).toString(),
+      pipeline: HUBSPOT_IDS.PIPELINE_DONATIONS,
+      dealstage: stage,
+      donation_type: data.donationType,
+      closedate: new Date().toISOString(),
+    };
+    if (data.donationType === "monthly" && data.duration) {
+      dealProperties.donation_duration = data.duration;
+    }
+    if (data.stripeSessionId) {
+      dealProperties.stripe_session_id = data.stripeSessionId;
+    }
+    if (data.stripeSubscriptionId) {
+      dealProperties.stripe_subscription_id = data.stripeSubscriptionId;
+      dealProperties.subscription_status = "active";
+    }
+    console.log(
+      "🏦 Deal properties being sent to HubSpot:",
+      JSON.stringify(dealProperties, null, 2),
+    );
+    const deal = await client.crm.deals.basicApi.create({
+      properties: dealProperties,
+    });
+
+    await client.crm.associations.v4.basicApi.create(
+      "deals",
+      deal.id,
+      "contacts",
+      contactId,
+      [
+        {
+          associationTypeId: 3,
+          associationCategory:
+            AssociationSpecAssociationCategoryEnum.HubspotDefined,
+        },
+      ],
+    );
+
+    console.log(`HubSpot: Donation deal created for ${data.email}`);
+  } catch (error: any) {
+    console.error("HubSpot trackDonation error:", error?.message || error);
+    throw error;
+  }
+}
+
+// ─── trackNewsletterSignup ────────────────────────────────────────────────────
+export async function trackNewsletterSignup(email: string): Promise<void> {
+  if (!isHubSpotConfigured()) return;
+
+  try {
+    const contactId = await upsertContact({
+      email,
+      lifecycleStage: "subscriber",
+    });
     if (!contactId) return;
 
     const client = getHubSpotClient();
-
-    const properties = {
-      lifecyclestage: "subscriber",
-      hs_lead_status: "Newsletter Subscriber",
-    };
-
-    console.log("📤 Updating newsletter contact with:", properties);
-
-    await client.crm.contacts.basicApi.update(contactId, { properties });
+    await client.crm.contacts.basicApi.update(contactId, {
+      properties: { hs_lead_status: "Newsletter Subscriber" },
+    });
+    await appendEngagementSource(client, contactId, "newsletter");
 
     console.log(`HubSpot: Newsletter subscriber tracked for ${email}`);
   } catch (error: any) {
@@ -208,210 +331,19 @@ export async function trackNewsletterSignup(email: string): Promise<void> {
   }
 }
 
-// Track donation and update contact
-// export async function trackDonation(data: DonationData): Promise<void> {
-//   if (!isHubSpotConfigured()) {
-//     console.log('HubSpot not configured - skipping donation tracking');
-//     return;
-//   }
-
-//   try {
-//     // Parse name into first and last
-//     const nameParts = data.donorName.trim().split(' ');
-//     const firstName = nameParts[0] || '';
-//     const lastName = nameParts.slice(1).join(' ') || '';
-
-//     const contactId = await upsertContact({
-//       email: data.email,
-//       firstName,
-//       lastName,
-//     });
-
-//     if (contactId) {
-//       const client = getHubSpotClient();
-
-//       const donationAmount = (data.amount / 100).toFixed(2);
-//       const donationInfo = data.donationType === 'monthly'
-//         ? `Monthly: $${donationAmount}${data.duration && data.duration !== 'ongoing' ? ` (${data.duration} months)` : ' (ongoing)'}`
-//         : `One-time: $${donationAmount}`;
-
-//       // Update contact with donor information
-//       await client.crm.contacts.basicApi.update(contactId, {
-//         properties: {
-//           lifecyclestage: 'customer',
-//         },
-//       });
-
-//       // Create a deal to track the donation
-//       await client.crm.deals.basicApi.create({
-//         properties: {
-//           dealname: `Donation - ${data.donorName} - ${donationInfo}`,
-//           amount: donationAmount,
-//           dealstage: 'closedwon',
-//           pipeline: 'default',
-//           closedate: new Date().toISOString(),
-//         },
-//         associations: [{
-//           to: { id: contactId },
-//           types: [{
-//             associationCategory: 'HUBSPOT_DEFINED',
-//             associationTypeId: 3, // Deal to Contact
-//           }],
-//         }],
-//       });
-
-//       console.log(`HubSpot: Tracked donation of $${donationAmount} from ${data.email}`);
-//     }
-//   } catch (error: any) {
-//     console.error('HubSpot trackDonation error:', error.message);
-//   }
-// }
-export async function trackDonation({
-  email,
-  donorName,
-  amount,
-  donationType,
-  duration,
-  phone,
-}: {
-  email: string;
-  donorName: string;
-  amount: number; // cents
-  donationType: "monthly" | "one-time";
-  duration?: string;
-  phone?: string;
-}) {
-  console.log("🚀 ~ trackDonation ~ donorName:", donorName);
-  console.log("🚀 ~ trackDonation ~ email:", email);
-  console.log("🚀 ~ trackDonation ~ phone:", phone);
+// ─── trackWhitePaperDownload ──────────────────────────────────────────────────
+export async function trackWhitePaperDownload(email: string): Promise<void> {
   if (!isHubSpotConfigured()) return;
 
-  const client = getHubSpotClient();
-
-  const [firstname, ...rest] = donorName.split(" ");
-  const lastname = rest.join(" ") || "Donor";
-
-  // 1️⃣ Upsert Contact
-  const contactId = await upsertContact({
-    email,
-    firstName: firstname,
-    lastName: lastname,
-    phone: phone || "",
-  });
-
-  if (!contactId) return;
-
-  // 2️⃣ Update Contact properties (per spec)
-  await client.crm.contacts.basicApi.update(contactId, {
-    properties: {
-      lifecyclestage: "customer",
-      hs_lead_status: "Donor",
-      // hs_email_optout: "false",
-    },
-  });
-
-  // 3️⃣ Create Donation Deal
-  const dealProperties: Record<string, string> = {
-    dealname: `${donorName} - $${amount / 100}`,
-    amount: (amount / 100).toString(),
-    pipeline: "default",
-    dealstage: "2845838021",
-    donation_type: donationType,
-    closedate: new Date().toISOString(),
-  };
-
-  if (donationType === "monthly") {
-    dealProperties.donation_duration = duration || "ongoing";
-  }
-  console.log("🚨 DEAL PAYLOAD ABOUT TO BE SENT TO HUBSPOT:", {
-    properties: dealProperties,
-  });
-  if ((dealProperties as any).dealstage === "gift_received_completed") {
-    throw new Error("🚨 INVALID DEALSTAGE DETECTED — legacy path still active");
-  }
-  let deal;
   try {
-    deal = await client.crm.deals.basicApi.create({
-      properties: dealProperties,
-    });
-  } catch (err: any) {
-    console.error("❌ HUBSPOT DEAL CREATION FAILED");
-    console.error("❌ dealProperties:", dealProperties);
-    console.error("❌ STACK TRACE:", err?.stack);
-    throw err;
-  }
-
-  // 4️⃣ Associate Deal ↔ Contact
-  await client.crm.associations.v4.basicApi.create(
-    "deals",
-    deal.id,
-    "contacts",
-    contactId,
-    [
-      {
-        associationTypeId: 3, // Deal ↔ Contact
-        associationCategory:
-          AssociationSpecAssociationCategoryEnum.HubspotDefined,
-      },
-    ],
-  );
-
-  console.log(`HubSpot: Donation deal created for ${email}`);
-}
-
-// Track white paper download
-// export async function trackWhitePaperDownload(email: string): Promise<void> {
-//   if (!isHubSpotConfigured()) {
-//     console.log(
-//       "HubSpot not configured - skipping white paper download tracking",
-//     );
-//     return;
-//   }
-
-//   try {
-//     const contactId = await upsertContact({
-//       email,
-//     });
-
-//     if (contactId) {
-//       const client = getHubSpotClient();
-
-//       await client.crm.contacts.basicApi.update(contactId, {
-//         properties: {
-//           lifecyclestage: "lead",
-//         },
-//       });
-
-//       console.log(`HubSpot: Tracked white paper download for ${email}`);
-//     }
-//   } catch (error: any) {
-//     console.error("HubSpot trackWhitePaperDownload error:", error.message);
-//   }
-// }
-export async function trackWhitePaperDownload(email: string): Promise<void> {
-  if (!isHubSpotConfigured()) {
-    console.log(
-      "HubSpot not configured - skipping white paper download tracking",
-    );
-    return;
-  }
-
-  try {
-    // 1️⃣ Upsert contact (email only, per spec)
-    const contactId = await upsertContact({ email });
+    const contactId = await upsertContact({ email, lifecycleStage: "lead" });
     if (!contactId) return;
 
     const client = getHubSpotClient();
-
-    // 2️⃣ Update contact exactly per spec
-    const properties = {
-      lifecyclestage: "lead",
-      hs_lead_status: "White Paper Downloaded", // ✅ MUST EXACTLY MATCH CRM VALUE
-    };
-
-    console.log("📤 Whitepaper → Updating contact with:", properties);
-    logHubSpotUpdate("WhitePaper", contactId, properties);
-    await client.crm.contacts.basicApi.update(contactId, { properties });
+    await client.crm.contacts.basicApi.update(contactId, {
+      properties: { hs_lead_status: "White Paper Downloaded" },
+    });
+    await appendEngagementSource(client, contactId, "whitepaper");
 
     console.log(`HubSpot: White paper download tracked for ${email}`);
   } catch (error: any) {
@@ -422,198 +354,214 @@ export async function trackWhitePaperDownload(email: string): Promise<void> {
   }
 }
 
-interface PageVisitData {
-  visitorId: string;
-  page: string;
-  email?: string;
-}
+// ─── trackVolunteerSignup ─────────────────────────────────────────────────────
+const VOLUNTEER_LEAD_STATUS_MAP: Record<string, string> = {
+  "ai-technology": "Volunteer – AI & Technology",
+  theology: "Volunteer – Theology",
+  education: "Volunteer – Education",
+  ministry: "Volunteer – Ministry",
+  "social-enterprise": "Volunteer – Social Enterprise",
+  other: "Volunteer – Other",
+};
 
-// Track page visit for returning visitors
-export async function trackPageVisit(data: PageVisitData): Promise<void> {
-  if (!isHubSpotConfigured()) {
-    console.log(
-      `Page visit tracked locally: ${data.visitorId} visited ${data.page}`,
-    );
-    return;
-  }
-
-  try {
-    if (!data.email) {
-      console.log(
-        `Page visit tracked locally: ${data.visitorId} visited ${data.page}`,
-      );
-      return;
-    }
-
-    const contactId = await upsertContact({
-      email: data.email,
-    });
-
-    if (contactId) {
-      const client = getHubSpotClient();
-
-      await client.crm.contacts.basicApi.update(contactId, {
-        properties: {
-          notes_last_updated: new Date().toISOString(),
-        },
-      });
-
-      console.log(
-        `HubSpot: Tracked page visit for ${data.email} on ${data.page}`,
-      );
-    }
-  } catch (error: any) {
-    console.error("HubSpot trackPageVisit error:", error.message);
-  }
-}
-
-// Update contact communication consent
-export async function updateCommunicationConsent(
-  email: string,
-  hasConsent: boolean,
-): Promise<void> {
-  if (!isHubSpotConfigured()) {
-    console.log(
-      "HubSpot not configured - skipping communication consent update",
-    );
-    return;
-  }
-
-  try {
-    const contactId = await upsertContact({
-      email,
-    });
-
-    if (contactId) {
-      const client = getHubSpotClient();
-
-      // await client.crm.contacts.basicApi.update(contactId, {
-      //   properties: {
-      //     communication_consent: communicationConsent ? "true" : "false",
-      //   },
-      // });
-
-      console.log(
-        `HubSpot: Updated communication consent for ${email}: ${hasConsent}`,
-      );
-    }
-  } catch (error: any) {
-    console.error("HubSpot updateCommunicationConsent error:", error.message);
-  }
-}
-
-interface VolunteerData {
-  email: string;
-  firstName: string;
-  lastName: string;
-  expertise: string;
-  message?: string;
-}
-
-// Track volunteer signup
-// export async function trackVolunteerSignup(data: VolunteerData): Promise<void> {
-//   if (!isHubSpotConfigured()) {
-//     console.log("HubSpot not configured - skipping volunteer signup tracking");
-//     return;
-//   }
-
-//   try {
-//     // 1️⃣ Upsert contact
-//     const contactId = await upsertContact({
-//       email: data.email,
-//       firstName: data.firstName,
-//       lastName: data.lastName,
-//     });
-
-//     if (!contactId) return;
-
-//     const client = getHubSpotClient();
-
-//     // 2️⃣ Normalize expertise value (must match dropdown internal values)
-//     const expertise = data.expertise || "other";
-
-//     const leadStatus = `Volunteer - ${mapExpertiseLabel(expertise)}`;
-
-//     // 3️⃣ Update contact with volunteer-specific fields
-//     await client.crm.contacts.basicApi.update(contactId, {
-//       properties: {
-//         lifecyclestage: "lead",
-//         hs_lead_status: leadStatus, // Custom value
-//         volunteer_expertise: expertise, // Dropdown internal value
-//       },
-//     });
-
-//     // 4️⃣ Create note with volunteer details
-//     const noteBody = data.message
-//       ? `Volunteer signup\n\nExpertise: ${mapExpertiseLabel(
-//           expertise,
-//         )}\n\nMessage:\n${data.message}`
-//       : `Volunteer signup\n\nExpertise: ${mapExpertiseLabel(expertise)}`;
-
-//     await client.crm.objects.notes.basicApi.create({
-//       properties: {
-//         hs_timestamp: new Date().toISOString(),
-//         hs_note_body: noteBody,
-//       },
-//       associations: [
-//         {
-//           to: { id: contactId },
-//           types: [
-//             {
-//               associationCategory:
-//                 AssociationSpecAssociationCategoryEnum.HubspotDefined,
-//               associationTypeId: 202, // Note → Contact
-//             },
-//           ],
-//         },
-//       ],
-//     });
-
-//     console.log(`HubSpot: Volunteer tracked for ${data.email} (${expertise})`);
-//   } catch (error: any) {
-//     console.error(
-//       "HubSpot trackVolunteerSignup error:",
-//       error?.message || error,
-//     );
-//   }
-// }
 export async function trackVolunteerSignup(data: VolunteerData): Promise<void> {
-  if (!isHubSpotConfigured()) {
-    console.log("HubSpot not configured - skipping volunteer signup tracking");
-    return;
-  }
+  if (!isHubSpotConfigured()) return;
 
   try {
     const contactId = await upsertContact({
       email: data.email,
       firstName: data.firstName,
       lastName: data.lastName,
+      lifecycleStage: "lead",
     });
-
     if (!contactId) return;
 
     const client = getHubSpotClient();
-
     const expertiseKey = data.expertise || "other";
     const leadStatus =
       VOLUNTEER_LEAD_STATUS_MAP[expertiseKey] || "Volunteer – Other";
 
     await client.crm.contacts.basicApi.update(contactId, {
       properties: {
-        lifecyclestage: "lead",
-        hs_lead_status: leadStatus, // ✅ EXACT match
+        hs_lead_status: leadStatus,
         volunteer_expertise: expertiseKey,
       },
     });
+    await appendEngagementSource(client, contactId, "volunteer");
 
-    const noteBody = data.message
-      ? `Volunteer signup\n\nExpertise: ${leadStatus}\n\nMessage:\n${data.message}`
-      : `Volunteer signup\n\nExpertise: ${leadStatus}`;
+    // Create deal in Engagement pipeline
+    const deal = await client.crm.deals.basicApi.create({
+      properties: {
+        dealname: `Volunteer – ${data.firstName} ${data.lastName} (${leadStatus})`,
+        pipeline: HUBSPOT_IDS.PIPELINE_ENGAGEMENT,
+        dealstage: HUBSPOT_IDS.STAGE_NEW_INQUIRY,
+        closedate: new Date().toISOString(),
+      },
+    });
 
-    await client.crm.objects.notes.basicApi.create({
+    await client.crm.associations.v4.basicApi.create(
+      "deals",
+      deal.id,
+      "contacts",
+      contactId,
+      [
+        {
+          associationTypeId: 3,
+          associationCategory:
+            AssociationSpecAssociationCategoryEnum.HubspotDefined,
+        },
+      ],
+    );
+
+    // Keep note for message content
+    if (data.message) {
+      const note = await client.crm.objects.notes.basicApi.create({
+        properties: {
+          hs_timestamp: new Date().toISOString(),
+          hs_note_body: `Volunteer signup\n\nExpertise: ${leadStatus}\n\nMessage:\n${data.message}`,
+        },
+        associations: [
+          {
+            to: { id: contactId },
+            types: [
+              {
+                associationCategory:
+                  AssociationSpecAssociationCategoryEnum.HubspotDefined,
+                associationTypeId: 202,
+              },
+            ],
+          },
+        ],
+      });
+      if (deal?.id) {
+        try {
+          await client.crm.associations.v4.basicApi.create(
+            "notes",
+            note.id,
+            "deals",
+            deal.id,
+            [
+              {
+                associationTypeId: 214,
+                associationCategory:
+                  AssociationSpecAssociationCategoryEnum.HubspotDefined,
+              },
+            ],
+          );
+        } catch (e: any) {
+          console.error(
+            "trackVolunteerSignup: failed to associate note with deal:",
+            e?.message,
+          );
+        }
+      }
+      // const note = await client.crm.objects.notes.basicApi.create({
+      //   properties: {
+      //     hs_timestamp: new Date().toISOString(),
+      //     hs_note_body: noteBody,
+      //   },
+      //   associations: [
+      //     {
+      //       to: { id: contactId },
+      //       types: [
+      //         {
+      //           associationCategory:
+      //             AssociationSpecAssociationCategoryEnum.HubspotDefined,
+      //           associationTypeId: 202,
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // });
+
+      // Associate note with deal too
+      if (deal?.id) {
+        try {
+          await client.crm.associations.v4.basicApi.create(
+            "notes",
+            note.id,
+            "deals",
+            deal.id,
+            [
+              {
+                associationTypeId: 214,
+                associationCategory:
+                  AssociationSpecAssociationCategoryEnum.HubspotDefined,
+              },
+            ],
+          );
+        } catch (e: any) {
+          console.error(
+            "trackVolunteerSignup: failed to associate note with deal:",
+            e?.message,
+          );
+        }
+      }
+    }
+
+    console.log(`HubSpot: Volunteer tracked for ${data.email}`);
+  } catch (error: any) {
+    console.error("HubSpot trackVolunteerSignup error:", error);
+  }
+}
+
+// ─── trackExperienceSubmission ────────────────────────────────────────────────
+export async function trackExperienceSubmission(
+  data: ExperienceData,
+): Promise<void> {
+  if (!isHubSpotConfigured()) return;
+
+  try {
+    const contactId = await upsertContact({
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      lifecycleStage: "lead",
+    });
+    if (!contactId) return;
+
+    const client = getHubSpotClient();
+
+    await client.crm.contacts.basicApi.update(contactId, {
+      properties: {
+        hs_lead_status: "Experience Shared",
+        name_permission: data.permissionToUse ? "use-name" : "no-name",
+      },
+    });
+    await appendEngagementSource(client, contactId, "experience");
+
+    // Create deal in Engagement pipeline
+    const deal = await client.crm.deals.basicApi.create({
+      properties: {
+        dealname: `Experience – ${data.firstName} ${data.lastName}`,
+        pipeline: HUBSPOT_IDS.PIPELINE_ENGAGEMENT,
+        dealstage: HUBSPOT_IDS.STAGE_NEW_INQUIRY,
+        closedate: new Date().toISOString(),
+      },
+    });
+
+    await client.crm.associations.v4.basicApi.create(
+      "deals",
+      deal.id,
+      "contacts",
+      contactId,
+      [
+        {
+          associationTypeId: 3,
+          associationCategory:
+            AssociationSpecAssociationCategoryEnum.HubspotDefined,
+        },
+      ],
+    );
+
+    // Note with experience content
+    const permissionText = data.permissionToUse
+      ? "Permission to use name"
+      : "Do not use name";
+    const notes = await client.crm.objects.notes.basicApi.create({
       properties: {
         hs_timestamp: new Date().toISOString(),
-        hs_note_body: noteBody,
+        hs_note_body: `Experience / Question Shared\n\nName permission: ${permissionText}\n\nMessage:\n${data.experience}`,
       },
       associations: [
         {
@@ -628,156 +576,302 @@ export async function trackVolunteerSignup(data: VolunteerData): Promise<void> {
         },
       ],
     });
-
-    console.log(`HubSpot: Volunteer tracked for ${data.email} (${leadStatus})`);
-  } catch (error: any) {
-    console.error("HubSpot trackVolunteerSignup error:", error);
-  }
-}
-
-interface ExperienceData {
-  email: string;
-  firstName: string;
-  lastName: string;
-  experience: string;
-  permissionToUse: boolean;
-}
-
-// Track experience/feedback submission
-// export async function trackExperienceSubmission(
-//   data: ExperienceData,
-// ): Promise<void> {
-//   if (!isHubSpotConfigured()) {
-//     console.log(
-//       "HubSpot not configured - skipping experience submission tracking",
-//     );
-//     return;
-//   }
-
-//   try {
-//     const contactId = await upsertContact({
-//       email: data.email,
-//       firstName: data.firstName,
-//       lastName: data.lastName,
-//     });
-
-//     if (contactId) {
-//       const client = getHubSpotClient();
-
-//       // Update contact lifecycle - use valid hs_lead_status value
-//       await client.crm.contacts.basicApi.update(contactId, {
-//         properties: {
-//           lifecyclestage: "lead",
-//           hs_lead_status: "NEW",
-//         },
-//       });
-
-//       // Add a note with the experience content
-//       const permissionText = data.permissionToUse
-//         ? "Yes, can use with name"
-//         : "Anonymous only";
-//       let noteBody = `Experience/Question Shared\n\nPermission to use: ${permissionText}\n\n${data.experience}`;
-//       try {
-//         await client.crm.objects.notes.basicApi.create({
-//           properties: {
-//             hs_timestamp: new Date().toISOString(),
-//             hs_note_body: noteBody,
-//           },
-//           associations: [
-//             {
-//               to: { id: contactId },
-//               types: [
-//                 {
-//                   associationCategory:
-//                     AssociationSpecAssociationCategoryEnum.HubspotDefined,
-//                   associationTypeId: 202, // Note → Contact
-//                 },
-//               ],
-//             },
-//           ],
-//         });
-//       } catch (noteError: any) {
-//         console.error("HubSpot note creation error:", noteError.message);
-//       }
-
-//       console.log(`HubSpot: Tracked experience submission for ${data.email}`);
-//     }
-//   } catch (error: any) {
-//     console.error("HubSpot trackExperienceSubmission error:", error.message);
-//   }
-// }
-
-export async function trackExperienceSubmission(
-  data: ExperienceData,
-): Promise<void> {
-  if (!isHubSpotConfigured()) {
-    console.log(
-      "HubSpot not configured - skipping experience submission tracking",
-    );
-    return;
-  }
-
-  try {
-    // 1️⃣ Upsert contact (required fields only)
-    const contactId = await upsertContact({
-      email: data.email,
-      firstName: data.firstName,
-      lastName: data.lastName,
-    });
-
-    if (!contactId) return;
-
-    const client = getHubSpotClient();
-
-    // 2️⃣ Map permission to dropdown internal values
-    const namePermissionValue = data.permissionToUse ? "use-name" : "no-name";
-
-    const properties = {
-      lifecyclestage: "lead",
-      hs_lead_status: "Experience Shared", // ✅ EXACT CRM VALUE
-      name_permission: namePermissionValue, // ✅ Custom dropdown
-    };
-
-    console.log("📤 Experience → Updating contact with:", properties);
-
-    await client.crm.contacts.basicApi.update(contactId, { properties });
-
-    // 3️⃣ Create note with experience content
-    const permissionText = data.permissionToUse
-      ? "Permission to use name"
-      : "Do not use name";
-
-    const noteBody = `Experience / Question Shared
-
-Name permission: ${permissionText}
-
-Message:
-${data.experience}`;
-
-    await client.crm.objects.notes.basicApi.create({
-      properties: {
-        hs_timestamp: new Date().toISOString(),
-        hs_note_body: noteBody,
-      },
-      associations: [
-        {
-          to: { id: contactId },
-          types: [
+    if (deal?.id) {
+      try {
+        await client.crm.associations.v4.basicApi.create(
+          "notes",
+          notes.id,
+          "deals",
+          deal.id,
+          [
             {
+              associationTypeId: 214,
               associationCategory:
                 AssociationSpecAssociationCategoryEnum.HubspotDefined,
-              associationTypeId: 202, // Note → Contact
             },
           ],
-        },
-      ],
-    });
-
+        );
+      } catch (e: any) {
+        console.error(
+          "trackExperienceSubmission: failed to associate note with deal:",
+          e?.message,
+        );
+      }
+    }
     console.log(`HubSpot: Experience submission tracked for ${data.email}`);
   } catch (error: any) {
     console.error(
       "HubSpot trackExperienceSubmission error:",
       error?.body || error,
     );
+  }
+}
+
+// ─── trackInquiry (new — church/workshop) ────────────────────────────────────
+export async function trackInquiry(data: InquiryData): Promise<void> {
+  if (!isHubSpotConfigured()) return;
+
+  try {
+    const contactId = await upsertContact({
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      lifecycleStage: "lead",
+    });
+    if (!contactId) return;
+
+    const client = getHubSpotClient();
+
+    // Step 1 — Update lead status (isolated so failure doesn't block note)
+    try {
+      await client.crm.contacts.basicApi.update(contactId, {
+        properties: { hs_lead_status: "Church Inquiry" },
+      });
+    } catch (e: any) {
+      console.error("trackInquiry: failed to set hs_lead_status:", e?.message);
+    }
+
+    // Step 2 — Append engagement source (isolated)
+    try {
+      await appendEngagementSource(client, contactId, "church_inquiry");
+    } catch (e: any) {
+      console.error(
+        "trackInquiry: failed to append engagement source:",
+        e?.message,
+      );
+    }
+
+    // Step 3 — Create deal in Engagement pipeline (isolated)
+    let deal: any = null;
+    try {
+      const dealName = data.churchName
+        ? `Church Inquiry – ${data.churchName} (${data.firstName} ${data.lastName})`
+        : `Church Inquiry – ${data.firstName} ${data.lastName}`;
+
+      deal = await client.crm.deals.basicApi.create({
+        properties: {
+          dealname: dealName,
+          pipeline: HUBSPOT_IDS.PIPELINE_ENGAGEMENT,
+          dealstage: HUBSPOT_IDS.STAGE_NEW_INQUIRY,
+          closedate: new Date().toISOString(),
+        },
+      });
+
+      await client.crm.associations.v4.basicApi.create(
+        "deals",
+        deal.id,
+        "contacts",
+        contactId,
+        [
+          {
+            associationTypeId: 3,
+            associationCategory:
+              AssociationSpecAssociationCategoryEnum.HubspotDefined,
+          },
+        ],
+      );
+      console.log(`trackInquiry: deal created ${deal.id}`);
+    } catch (e: any) {
+      console.error("trackInquiry: failed to create deal:", e?.message);
+    }
+
+    // Step 4 — Create note with message (isolated — always runs)
+    // Step 4 — Create note associated with both contact AND deal
+    try {
+      const noteBody = [
+        "Church/Workshop Inquiry",
+        data.churchName ? `Church: ${data.churchName}` : null,
+        `Email: ${data.email}`,
+        "",
+        "Message:",
+        data.message,
+      ]
+        .filter((line) => line !== null)
+        .join("\n");
+
+      const note = await client.crm.objects.notes.basicApi.create({
+        properties: {
+          hs_timestamp: new Date().toISOString(),
+          hs_note_body: noteBody,
+        },
+        associations: [
+          // Associate with contact
+          {
+            to: { id: contactId },
+            types: [
+              {
+                associationCategory:
+                  AssociationSpecAssociationCategoryEnum.HubspotDefined,
+                associationTypeId: 202, // Note → Contact
+              },
+            ],
+          },
+        ],
+      });
+
+      // Associate note with deal separately (if deal was created)
+      if (deal?.id) {
+        try {
+          await client.crm.associations.v4.basicApi.create(
+            "notes",
+            note.id,
+            "deals",
+            deal.id,
+            [
+              {
+                associationTypeId: 214, // Note → Deal
+                associationCategory:
+                  AssociationSpecAssociationCategoryEnum.HubspotDefined,
+              },
+            ],
+          );
+          console.log(
+            `trackInquiry: note ${note.id} associated with deal ${deal.id}`,
+          );
+        } catch (e: any) {
+          console.error(
+            "trackInquiry: failed to associate note with deal:",
+            e?.message,
+          );
+        }
+      }
+
+      console.log(`trackInquiry: note created for ${data.email}`);
+    } catch (e: any) {
+      console.error("trackInquiry: failed to create note:", e?.message);
+    }
+
+    console.log(`HubSpot: Church inquiry tracked for ${data.email}`);
+  } catch (error: any) {
+    console.error("HubSpot trackInquiry error:", error?.body || error);
+  }
+}
+
+// ─── updateCommunicationConsent ───────────────────────────────────────────────
+export async function updateCommunicationConsent(
+  email: string,
+  hasConsent: boolean,
+): Promise<void> {
+  if (!isHubSpotConfigured()) return;
+
+  try {
+    const contactId = await upsertContact({ email });
+    if (!contactId) return;
+
+    const client = getHubSpotClient();
+    await client.crm.contacts.basicApi.update(contactId, {
+      properties: {
+        communication_consent: hasConsent ? "true" : "false",
+      },
+    });
+  } catch (error: any) {
+    console.error("HubSpot updateCommunicationConsent error:", error.message);
+  }
+}
+
+// ─── findDealBySubscriptionId (used by webhooks) ──────────────────────────────
+export async function findDealBySubscriptionId(
+  subscriptionId: string,
+): Promise<string | null> {
+  if (!isHubSpotConfigured()) return null;
+
+  try {
+    const client = getHubSpotClient();
+    const results = await client.crm.deals.searchApi.doSearch({
+      filterGroups: [
+        {
+          filters: [
+            {
+              propertyName: "stripe_subscription_id",
+              operator: FilterOperatorEnum.Eq,
+              value: subscriptionId,
+            },
+          ],
+        },
+      ],
+      properties: ["dealname"],
+      limit: 1,
+    });
+    return results.results[0]?.id ?? null;
+  } catch {
+    return null;
+  }
+}
+
+// ─── updateDealStage ──────────────────────────────────────────────────────────
+export async function updateDealStage(
+  dealId: string,
+  stage: string,
+  extraProperties?: Record<string, string>,
+): Promise<void> {
+  if (!isHubSpotConfigured()) return;
+
+  try {
+    const client = getHubSpotClient();
+    await client.crm.deals.basicApi.update(dealId, {
+      properties: { dealstage: stage, ...(extraProperties ?? {}) },
+    });
+  } catch (error: any) {
+    console.error("HubSpot updateDealStage error:", error.message);
+  }
+}
+
+// ─── incrementLifetimeDonations ───────────────────────────────────────────────
+export async function incrementLifetimeDonations(
+  email: string,
+  amountCents: number,
+): Promise<void> {
+  if (!isHubSpotConfigured()) return;
+
+  try {
+    const client = getHubSpotClient();
+    const searchResponse = await client.crm.contacts.searchApi.doSearch({
+      filterGroups: [
+        {
+          filters: [
+            {
+              propertyName: "email",
+              operator: FilterOperatorEnum.Eq,
+              value: email,
+            },
+          ],
+        },
+      ],
+      properties: ["total_lifetime_donations"],
+      limit: 1,
+    });
+
+    if (!searchResponse.results.length) return;
+
+    const contact = searchResponse.results[0];
+    const current = parseFloat(
+      contact.properties.total_lifetime_donations || "0",
+    );
+    const updated = (current + amountCents / 100).toFixed(2);
+
+    await client.crm.contacts.basicApi.update(contact.id, {
+      properties: { total_lifetime_donations: updated },
+    });
+  } catch (error: any) {
+    console.error("HubSpot incrementLifetimeDonations error:", error.message);
+  }
+}
+
+// ─── trackPageVisit (unchanged) ───────────────────────────────────────────────
+export async function trackPageVisit(data: {
+  visitorId: string;
+  page: string;
+  email?: string;
+}): Promise<void> {
+  if (!isHubSpotConfigured() || !data.email) return;
+  try {
+    const contactId = await upsertContact({ email: data.email });
+    if (!contactId) return;
+    const client = getHubSpotClient();
+    await client.crm.contacts.basicApi.update(contactId, {
+      properties: { notes_last_updated: new Date().toISOString() },
+    });
+  } catch (error: any) {
+    console.error("HubSpot trackPageVisit error:", error.message);
   }
 }

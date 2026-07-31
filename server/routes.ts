@@ -7,15 +7,18 @@ import {
 import {
   sendVerificationEmail,
   sendDonationThankYouEmail,
+  sendOwnerNotificationEmail,
+  sendUserConfirmationEmail,
 } from "./sendgridClient";
 import {
   trackNewsletterSignup,
-  trackDonation,
+  // trackDonation,
   trackWhitePaperDownload,
   trackPageVisit,
   updateCommunicationConsent,
   trackVolunteerSignup,
   trackExperienceSubmission,
+  trackInquiry,
 } from "./hubspotClient";
 import { db } from "./db";
 import { verificationCodes, donorSessions } from "@shared/schema";
@@ -26,7 +29,8 @@ import {
   lightRateLimiter,
   eventFriendlyRateLimiter,
 } from "./rateLimiter";
-
+// import { c } from "node_modules/vite/dist/node/types.d-aGj9QkWt";
+// import { sendOwnerNotificationEmail } from "./sendgridClient";
 function generateCode(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
@@ -62,7 +66,7 @@ const experienceSchema = z.object({
 
 export async function registerRoutes(
   httpServer: Server,
-  app: Express
+  app: Express,
 ): Promise<Server> {
   app.post(
     "/api/donor/send-code",
@@ -97,7 +101,7 @@ export async function registerRoutes(
         console.error("Error sending verification code:", error);
         res.status(500).json({ error: "Failed to send verification code" });
       }
-    }
+    },
   );
 
   app.post(
@@ -127,7 +131,7 @@ export async function registerRoutes(
             expiresAt: c.expiresAt,
             now: new Date(),
             isExpired: c.expiresAt <= new Date(),
-          }))
+          })),
         );
 
         const [verification] = await db
@@ -137,8 +141,8 @@ export async function registerRoutes(
             and(
               eq(verificationCodes.email, email),
               eq(verificationCodes.code, code),
-              gt(verificationCodes.expiresAt, new Date())
-            )
+              gt(verificationCodes.expiresAt, new Date()),
+            ),
           );
 
         if (!verification) {
@@ -169,7 +173,7 @@ export async function registerRoutes(
         console.error("Error verifying code:", error);
         res.status(500).json({ error: "Failed to verify code" });
       }
-    }
+    },
   );
 
   app.get("/api/donor/session/:sessionId", async (req, res) => {
@@ -182,8 +186,8 @@ export async function registerRoutes(
         .where(
           and(
             eq(donorSessions.id, sessionId),
-            gt(donorSessions.expiresAt, new Date())
-          )
+            gt(donorSessions.expiresAt, new Date()),
+          ),
         );
 
       if (!session) {
@@ -210,8 +214,8 @@ export async function registerRoutes(
         .where(
           and(
             eq(donorSessions.id, sessionId),
-            gt(donorSessions.expiresAt, new Date())
-          )
+            gt(donorSessions.expiresAt, new Date()),
+          ),
         );
 
       if (!session) {
@@ -272,8 +276,8 @@ export async function registerRoutes(
         .where(
           and(
             eq(donorSessions.id, sessionId),
-            gt(donorSessions.expiresAt, new Date())
-          )
+            gt(donorSessions.expiresAt, new Date()),
+          ),
         );
 
       if (!session || !session.stripeCustomerId) {
@@ -349,21 +353,21 @@ export async function registerRoutes(
             try {
               console.log(
                 "🚀 ~ registerRoutes ~ process.env.RECAPTCHA_SECRET_KEY:",
-                process.env.RECAPTCHA_SECRET_KEY
+                process.env.RECAPTCHA_SECRET_KEY,
               );
               const recaptchaResponse = await fetch(
                 `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`,
-                { method: "POST" }
+                { method: "POST" },
               );
               const recaptchaData = await recaptchaResponse.json();
               console.log(
                 "🚀 ~ registerRoutes ~ recaptchaData:",
-                recaptchaData
+                recaptchaData,
               );
 
               if (!recaptchaData.success || recaptchaData.score < 0.5) {
                 console.log(
-                  `reCAPTCHA failed: success=${recaptchaData.success}, score=${recaptchaData.score}`
+                  `reCAPTCHA failed: success=${recaptchaData.success}, score=${recaptchaData.score}`,
                 );
                 return res.status(400).json({
                   error: "Security verification failed. Please try again.",
@@ -392,7 +396,7 @@ export async function registerRoutes(
         if (existingCustomers.data.length > 0) {
           customerId = existingCustomers.data[0].id;
           console.log(
-            `Reusing existing Stripe customer ${customerId} for ${email}`
+            `Reusing existing Stripe customer ${customerId} for ${email}`,
           );
         } else {
           // Create new customer
@@ -456,7 +460,7 @@ export async function registerRoutes(
             success_url:
               successUrl ||
               `${req.protocol}://${req.get(
-                "host"
+                "host",
               )}/donate/thank-you?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url:
               cancelUrl || `${req.protocol}://${req.get("host")}/donate`,
@@ -495,7 +499,7 @@ export async function registerRoutes(
             success_url:
               successUrl ||
               `${req.protocol}://${req.get(
-                "host"
+                "host",
               )}/donate/thank-you?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url:
               cancelUrl || `${req.protocol}://${req.get("host")}/donate`,
@@ -509,7 +513,7 @@ export async function registerRoutes(
           error: error.message || "Failed to create checkout session",
         });
       }
-    }
+    },
   );
 
   app.get("/api/checkout-session/:sessionId", async (req, res) => {
@@ -541,8 +545,8 @@ export async function registerRoutes(
         .where(
           and(
             eq(donorSessions.id, sessionId),
-            gt(donorSessions.expiresAt, new Date())
-          )
+            gt(donorSessions.expiresAt, new Date()),
+          ),
         );
 
       if (!session || !session.stripeCustomerId) {
@@ -588,8 +592,8 @@ export async function registerRoutes(
         .where(
           and(
             eq(donorSessions.id, sessionId),
-            gt(donorSessions.expiresAt, new Date())
-          )
+            gt(donorSessions.expiresAt, new Date()),
+          ),
         );
 
       if (!session || !session.stripeCustomerId) {
@@ -609,11 +613,11 @@ export async function registerRoutes(
       });
 
       const successfulCharges = charges.data.filter(
-        (c) => c.status === "succeeded"
+        (c) => c.status === "succeeded",
       );
       const totalAmount = successfulCharges.reduce(
         (sum, c) => sum + c.amount,
-        0
+        0,
       );
 
       const statementData = {
@@ -669,8 +673,8 @@ export async function registerRoutes(
           .where(
             and(
               eq(donorSessions.id, sessionId),
-              gt(donorSessions.expiresAt, new Date())
-            )
+              gt(donorSessions.expiresAt, new Date()),
+            ),
           );
 
         if (!session || !session.stripeCustomerId) {
@@ -680,9 +684,8 @@ export async function registerRoutes(
         const stripe = await getUncachableStripeClient();
 
         // Verify this subscription belongs to the customer
-        const subscription = await stripe.subscriptions.retrieve(
-          subscriptionId
-        );
+        const subscription =
+          await stripe.subscriptions.retrieve(subscriptionId);
         if (subscription.customer !== session.stripeCustomerId) {
           return res.status(403).json({ error: "Unauthorized" });
         }
@@ -719,7 +722,7 @@ export async function registerRoutes(
         });
 
         console.log(
-          `Subscription ${subscriptionId} updated to $${newAmount}/month`
+          `Subscription ${subscriptionId} updated to $${newAmount}/month`,
         );
         res.json({ success: true, newAmount });
       } catch (error: any) {
@@ -728,7 +731,7 @@ export async function registerRoutes(
           .status(500)
           .json({ error: error.message || "Failed to update donation amount" });
       }
-    }
+    },
   );
 
   // Cancel recurring donation
@@ -756,8 +759,8 @@ export async function registerRoutes(
           .where(
             and(
               eq(donorSessions.id, sessionId),
-              gt(donorSessions.expiresAt, new Date())
-            )
+              gt(donorSessions.expiresAt, new Date()),
+            ),
           );
 
         if (!session || !session.stripeCustomerId) {
@@ -767,9 +770,8 @@ export async function registerRoutes(
         const stripe = await getUncachableStripeClient();
 
         // Verify this subscription belongs to the customer
-        const subscription = await stripe.subscriptions.retrieve(
-          subscriptionId
-        );
+        const subscription =
+          await stripe.subscriptions.retrieve(subscriptionId);
         if (subscription.customer !== session.stripeCustomerId) {
           return res.status(403).json({ error: "Unauthorized" });
         }
@@ -780,7 +782,7 @@ export async function registerRoutes(
         });
 
         console.log(
-          `Subscription ${subscriptionId} set to cancel at period end`
+          `Subscription ${subscriptionId} set to cancel at period end`,
         );
         res.json({ success: true, cancelAtPeriodEnd: true });
       } catch (error: any) {
@@ -789,7 +791,7 @@ export async function registerRoutes(
           .status(500)
           .json({ error: error.message || "Failed to cancel donation" });
       }
-    }
+    },
   );
 
   app.post("/api/send-donation-thank-you", async (req, res) => {
@@ -822,16 +824,16 @@ export async function registerRoutes(
 
       const baseUrl = `${req.protocol}://${req.get("host")}`;
 
-      await sendDonationThankYouEmail({
-        donorName,
-        donorEmail,
-        amount: session.amount_total || 0,
-        isRecurring: donationType === "monthly",
-        duration,
-        date: new Date(),
-        manageUrl: `${baseUrl}/manage-donation`,
-        // phone
-      });
+      // await sendDonationThankYouEmail({
+      //   donorName,
+      //   donorEmail,
+      //   amount: session.amount_total || 0,
+      //   isRecurring: donationType === "monthly",
+      //   duration,
+      //   date: new Date(),
+      //   manageUrl: `${baseUrl}/manage-donation`,
+      //   // phone
+      // });
 
       // Set cancel_at for fixed-term subscriptions
       if (
@@ -858,7 +860,7 @@ export async function registerRoutes(
             const cancelDate = new Date(
               targetYear,
               normalizedMonth,
-              originalDay
+              originalDay,
             );
 
             // Handle month overflow (e.g., Jan 31 + 1 month should be Feb 28)
@@ -871,12 +873,12 @@ export async function registerRoutes(
               cancel_at: Math.floor(cancelDate.getTime() / 1000),
             });
             console.log(
-              `Set subscription ${subscriptionId} to cancel at ${cancelDate.toISOString()}`
+              `Set subscription ${subscriptionId} to cancel at ${cancelDate.toISOString()}`,
             );
           } catch (cancelError: any) {
             console.error(
               "Error setting fixed-term cancellation:",
-              cancelError
+              cancelError,
             );
           }
         }
@@ -884,25 +886,55 @@ export async function registerRoutes(
 
       // Track donation in HubSpot
       console.log("📞 Calling trackDonation from send-donation-thank-you");
-
       try {
-        console.log("🔥 trackDonation FINGERPRINT A — hubspotClient.ts");
-        await trackDonation({
-          email: donorEmail,
-          donorName,
-          amount: session.amount_total || 0,
-          donationType: donationType === "monthly" ? "monthly" : "one-time",
-          duration,
-          phone,
-        });
-
-        // Update communication consent in HubSpot only if explicitly set in metadata
+        // Communication consent update only — deal creation is now webhook-driven
         if (metadata.communication_consent !== undefined) {
           await updateCommunicationConsent(donorEmail, communicationConsent);
         }
-      } catch (hubspotError: any) {
-        console.error("HubSpot tracking error:", hubspotError);
+
+        // Immediate owner notification
+        // try {
+        //   await sendOwnerNotificationEmail({
+        //     eventType: "donation",
+        //     contactName: donorName,
+        //     contactEmail: donorEmail,
+        //     details: {
+        //       Donor: donorName,
+        //       Email: donorEmail,
+        //       Amount: `$${((session.amount_total || 0) / 100).toFixed(2)}`,
+        //       Type:
+        //         donationType === "monthly"
+        //           ? `Monthly (${duration || "ongoing"})`
+        //           : "One-time",
+        //     },
+        //   });
+        // } catch (e: any) {
+        //   console.error(
+        //     "Failed to send donation owner notification:",
+        //     e.message,
+        //   );
+        // }
+      } catch (notifError: any) {
+        console.error("Post-donation notification error:", notifError);
       }
+      // try {
+      //   console.log("🔥 trackDonation FINGERPRINT A — hubspotClient.ts");
+      //   await trackDonation({
+      //     email: donorEmail,
+      //     donorName,
+      //     amount: session.amount_total || 0,
+      //     donationType: donationType === "monthly" ? "monthly" : "one-time",
+      //     duration,
+      //     phone,
+      //   });
+
+      //   // Update communication consent in HubSpot only if explicitly set in metadata
+      //   if (metadata.communication_consent !== undefined) {
+      //     await updateCommunicationConsent(donorEmail, communicationConsent);
+      //   }
+      // } catch (hubspotError: any) {
+      //   console.error("HubSpot tracking error:", hubspotError);
+      // }
 
       console.log(`Thank you email sent to ${donorEmail}`);
       res.json({ success: true });
@@ -931,6 +963,27 @@ export async function registerRoutes(
           console.error("HubSpot newsletter tracking error:", hubspotError);
         }
 
+        try {
+          await sendOwnerNotificationEmail({
+            eventType: "newsletter",
+            contactEmail: email,
+            details: { Email: email },
+          });
+        } catch (e: any) {
+          console.error(
+            "Failed to send newsletter signup owner notification:",
+            e.message,
+          );
+        }
+        try {
+          await sendUserConfirmationEmail({
+            toEmail: email,
+            toName: "Friend",
+            eventType: "newsletter",
+          });
+        } catch (e: any) {
+          console.error("Failed to send newsletter confirmation:", e.message);
+        }
         console.log(`Newsletter subscription: ${email}`);
         res.json({
           success: true,
@@ -940,7 +993,7 @@ export async function registerRoutes(
         console.error("Error subscribing to newsletter:", error);
         res.status(500).json({ error: "Failed to subscribe to newsletter" });
       }
-    }
+    },
   );
 
   // White paper download tracking endpoint
@@ -961,14 +1014,34 @@ export async function registerRoutes(
         } catch (hubspotError: any) {
           console.error("HubSpot white paper tracking error:", hubspotError);
         }
-
+        try {
+          await sendOwnerNotificationEmail({
+            eventType: "whitepaper",
+            contactEmail: email,
+            details: { Email: email },
+          });
+        } catch (e: any) {
+          console.error(
+            "Failed to send white paper download owner notification:",
+            e.message,
+          );
+        }
+        try {
+          await sendUserConfirmationEmail({
+            toEmail: email,
+            toName: "Friend",
+            eventType: "whitepaper",
+          });
+        } catch (e: any) {
+          console.error("Failed to send whitepaper confirmation:", e.message);
+        }
         console.log(`White paper download: ${email}`);
         res.json({ success: true });
       } catch (error: any) {
         console.error("Error tracking white paper download:", error);
         res.status(500).json({ error: "Failed to process request" });
       }
-    }
+    },
   );
 
   // Track page visits for returning visitors
@@ -1018,11 +1091,38 @@ export async function registerRoutes(
       } catch (hubspotError: any) {
         console.error("HubSpot volunteer tracking error:", hubspotError);
       }
-
+      try {
+        await sendOwnerNotificationEmail({
+          eventType: "volunteer",
+          contactName: `${firstName} ${lastName}`,
+          contactEmail: email,
+          details: {
+            Name: `${firstName} ${lastName}`,
+            Email: email,
+            Expertise: expertise || "Not specified",
+            Message: message || "—",
+          },
+        });
+      } catch (e: any) {
+        console.error(
+          "Failed to send volunteer signup owner notification:",
+          e.message,
+        );
+      }
+      try {
+        await sendUserConfirmationEmail({
+          toEmail: email,
+          toName: `${firstName} ${lastName}`,
+          eventType: "volunteer",
+          extraDetails: { Expertise: expertise || "Not specified" },
+        });
+      } catch (e: any) {
+        console.error("Failed to send volunteer confirmation:", e.message);
+      }
       console.log(
         `Volunteer signup: ${firstName} ${lastName} (${email}) - ${
           expertise || "No expertise specified"
-        }`
+        }`,
       );
       res.json({
         success: true,
@@ -1058,9 +1158,38 @@ export async function registerRoutes(
       } catch (hubspotError: any) {
         console.error("HubSpot experience tracking error:", hubspotError);
       }
-
+      try {
+        await sendOwnerNotificationEmail({
+          eventType: "experience",
+          contactName: `${firstName} ${lastName}`,
+          contactEmail: email,
+          details: {
+            Name: `${firstName} ${lastName}`,
+            Email: email,
+            Permission:
+              namePermission === "use-name" ? "Use name" : "Anonymous only",
+            Preview:
+              experience.substring(0, 120) +
+              (experience.length > 120 ? "…" : ""),
+          },
+        });
+      } catch (e: any) {
+        console.error(
+          "Failed to send experience submission notification:",
+          e.message,
+        );
+      }
+      try {
+        await sendUserConfirmationEmail({
+          toEmail: email,
+          toName: `${firstName} ${lastName}`,
+          eventType: "experience",
+        });
+      } catch (e: any) {
+        console.error("Failed to send experience confirmation:", e.message);
+      }
       console.log(
-        `Experience submission: ${firstName} ${lastName} (${email}) - Permission: ${namePermission}`
+        `Experience submission: ${firstName} ${lastName} (${email}) - Permission: ${namePermission}`,
       );
       res.json({
         success: true,
@@ -1072,5 +1201,66 @@ export async function registerRoutes(
     }
   });
 
+  // Church/workshop inquiry endpoint
+  app.post("/api/inquiry/submit", moderateRateLimiter, async (req, res) => {
+    try {
+      const inquirySchema = z.object({
+        firstName: z.string().min(1, "First name is required"),
+        lastName: z.string().min(1, "Last name is required"),
+        email: z.string().email("Invalid email address"),
+        churchName: z.string().optional(),
+        message: z.string().min(1, "Message is required"),
+      });
+
+      const result = inquirySchema.safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).json({
+          error: result.error.errors[0]?.message || "Invalid form data",
+        });
+      }
+      const { firstName, lastName, email, churchName, message } = result.data;
+
+      try {
+        await trackInquiry({ email, firstName, lastName, churchName, message });
+      } catch (hubspotError: any) {
+        console.error("HubSpot inquiry tracking error:", hubspotError);
+      }
+
+      try {
+        await sendOwnerNotificationEmail({
+          eventType: "inquiry",
+          contactName: `${firstName} ${lastName}`,
+          contactEmail: email,
+          details: {
+            Name: `${firstName} ${lastName}`,
+            Email: email,
+            Church: churchName || "—",
+            Message:
+              message.substring(0, 200) + (message.length > 200 ? "…" : ""),
+          },
+        });
+      } catch (e: any) {
+        console.error("Inquiry notification error:", e);
+      }
+      try {
+        await sendUserConfirmationEmail({
+          toEmail: email,
+          toName: `${firstName} ${lastName}`,
+          eventType: "inquiry",
+          extraDetails: { Church: churchName || "—" },
+        });
+      } catch (e: any) {
+        console.error("Failed to send inquiry confirmation:", e.message);
+      }
+
+      res.json({
+        success: true,
+        message: "Thank you! We'll be in touch soon.",
+      });
+    } catch (error: any) {
+      console.error("Error processing inquiry:", error);
+      res.status(500).json({ error: "Failed to process inquiry" });
+    }
+  });
   return httpServer;
 }

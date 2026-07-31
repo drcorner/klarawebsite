@@ -1,3 +1,4 @@
+// src/components/NewsletterSignup.tsx
 import { useState } from "react";
 import { Mail, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,12 +15,32 @@ export default function NewsletterSignup({
 }: NewsletterSignupProps) {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Newsletter signup:", email);
-    setSubmitted(true);
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Subscription failed");
+      setSubmitted(true);
+    } catch (err: any) {
+      setError(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   console.log("Newsletter signup:", email);
+  //   setSubmitted(true);
+  // };
 
   if (submitted) {
     return (
@@ -52,12 +73,14 @@ export default function NewsletterSignup({
             className="flex-1"
             data-testid="input-newsletter-email"
           />
+          {error && <p className="text-red-600 text-sm mt-1">{error}</p>}
           <Button
             type="submit"
+            disabled={loading}
             className="bg-primary text-cream"
             data-testid="button-newsletter-subscribe"
           >
-            Subscribe
+            {loading ? "Subscribing…" : "Subscribe"}
           </Button>
         </form>
       </div>
@@ -75,13 +98,17 @@ export default function NewsletterSignup({
         className="flex-1"
         data-testid="input-newsletter-email-inline"
       />
+      {error && <p className="text-red-600 text-sm mt-1">{error}</p>}
       <Button
         type="submit"
+        disabled={loading}
         className="bg-primary text-cream shrink-0"
         data-testid="button-newsletter-subscribe-inline"
       >
         <Mail className="w-4 h-4 md:mr-2" />
-        <span className="hidden md:inline">Subscribe</span>
+        <span className="hidden md:inline">
+          {loading ? "Subscribing…" : "Subscribe"}
+        </span>
       </Button>
     </form>
   );
