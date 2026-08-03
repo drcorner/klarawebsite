@@ -1,20 +1,65 @@
+// "use client";
 import { Link } from "wouter";
-import { Building2, Users, BookOpen, TrendingUp, Download, ArrowRight } from "lucide-react";
+import {
+  Building2,
+  Users,
+  BookOpen,
+  TrendingUp,
+  Download,
+  ArrowRight,
+} from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import churchImage from "@assets/generated_images/church_small_group_bible_study.png";
+import { useState } from "react";
+import EmailGateModal from "@/components/EmailGateModal";
 
 const approachItems = [
-  { icon: Building2, title: "Infrastructure first", description: "Build the foundation first—legal structure, digital presence, and sustainable funding—before launching programs." },
-  { icon: Users, title: "Intergenerational leadership", description: "Assemble leadership that bridges generational divides, combining seasoned wisdom with emerging voices." },
-  { icon: BookOpen, title: "Exceptional content", description: "Produce video curricula with professional polish and theological depth." },
-  { icon: TrendingUp, title: "Phased complexity", description: "Pursue advanced initiatives only after earning credibility through proven results." },
+  {
+    icon: Building2,
+    title: "Infrastructure first",
+    description:
+      "Build the foundation first—legal structure, digital presence, and sustainable funding—before launching programs.",
+  },
+  {
+    icon: Users,
+    title: "Intergenerational leadership",
+    description:
+      "Assemble leadership that bridges generational divides, combining seasoned wisdom with emerging voices.",
+  },
+  {
+    icon: BookOpen,
+    title: "Exceptional content",
+    description:
+      "Produce video curricula with professional polish and theological depth.",
+  },
+  {
+    icon: TrendingUp,
+    title: "Phased complexity",
+    description:
+      "Pursue advanced initiatives only after earning credibility through proven results.",
+  },
 ];
 
 export default function About() {
+  const [showEmailGate, setShowEmailGate] = useState(false);
+
+  const handleWhitepaperEmailSubmit = async (email: string) => {
+    const res = await fetch("/api/whitepaper/download", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Tracking failed");
+    }
+
+    window.open("/klara-project-white-paper.pdf", "_blank");
+  };
   return (
     <div className="min-h-screen bg-cream">
       <Header />
@@ -33,17 +78,21 @@ export default function About() {
                 Klara's Contribution
               </h2>
               <p className="text-charcoal leading-relaxed mb-4">
-                Most faith-based technology initiatives focus on policy advocacy or academic research—important
-                work, but far from the average church member's Sunday morning.
+                Most faith-based technology initiatives focus on policy advocacy
+                or academic research—important work, but far from the average
+                church member's Sunday morning.
               </p>
               <p className="text-charcoal leading-relaxed mb-4">
-                Klara Project starts where churches actually live. We create the Sunday school curricula,
-                pastoral frameworks, and conversation guides that ordinary congregations need <em>right now</em>—then
+                Klara Project starts where churches actually live. We create the
+                Sunday school curricula, pastoral frameworks, and conversation
+                guides that ordinary congregations need <em>right now</em>—then
                 build toward credible engagement with the technology industry.
               </p>
               <p className="text-charcoal leading-relaxed">
-                We position Christians as constructive partners, not just critics. Influence must be earned
-                through demonstrated expertise and genuine service. That's why we equip first and engage second.
+                We position Christians as constructive partners, not just
+                critics. Influence must be earned through demonstrated expertise
+                and genuine service. That's why we equip first and engage
+                second.
               </p>
             </div>
           </div>
@@ -53,18 +102,32 @@ export default function About() {
           <div className="max-w-7xl mx-auto px-6 md:px-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <Card className="p-8 bg-card border-l-4 border-l-primary">
-                <h3 className="font-serif text-2xl font-semibold text-charcoal mb-4">Our Mission</h3>
+                <h3 className="font-serif text-2xl font-semibold text-charcoal mb-4">
+                  Our Mission
+                </h3>
                 <ul className="space-y-3 text-charcoal">
-                  <li><strong>Equip</strong> churches with practical resources for the AI age.</li>
-                  <li><strong>Engage</strong> culture to ensure Christian perspectives shape technology.</li>
-                  <li><strong>Empower</strong> the next generation to lead with wisdom and faith.</li>
+                  <li>
+                    <strong>Equip</strong> churches with practical resources for
+                    the AI age.
+                  </li>
+                  <li>
+                    <strong>Engage</strong> culture to ensure Christian
+                    perspectives shape technology.
+                  </li>
+                  <li>
+                    <strong>Empower</strong> the next generation to lead with
+                    wisdom and faith.
+                  </li>
                 </ul>
               </Card>
               <Card className="p-8 bg-card border-l-4 border-l-gold">
-                <h3 className="font-serif text-2xl font-semibold text-charcoal mb-4">Our Vision</h3>
+                <h3 className="font-serif text-2xl font-semibold text-charcoal mb-4">
+                  Our Vision
+                </h3>
                 <p className="text-charcoal leading-relaxed">
-                  A future where Christians have both a voice and real choices in AI and robotics
-                  development—technologies shaping not just our children's world, but ours today.
+                  A future where Christians have both a voice and real choices
+                  in AI and robotics development—technologies shaping not just
+                  our children's world, but ours today.
                 </p>
               </Card>
             </div>
@@ -78,23 +141,25 @@ export default function About() {
                 Want to go deeper?
               </h3>
               <p className="text-charcoal-muted mb-6">
-                Our founding white paper offers a fuller analysis of the challenges Christians
-                face in AI development—and a detailed roadmap for meaningful engagement.
+                Our founding white paper offers a fuller analysis of the
+                challenges Christians face in AI development—and a detailed
+                roadmap for meaningful engagement.
               </p>
-              <a
+              {/* <a
                 href="/klara-project-white-paper.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 download
+              > */}
+              <Button
+                className="bg-primary text-cream"
+                onClick={() => setShowEmailGate(true)}
+                data-testid="button-download-whitepaper"
               >
-                <Button
-                  className="bg-primary text-cream"
-                  data-testid="button-download-whitepaper"
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  Download White Paper (PDF)
-                </Button>
-              </a>
+                <Download className="w-4 h-4 mr-2" />
+                Download White Paper (PDF)
+              </Button>
+              {/* </a> */}
             </Card>
           </div>
         </section>
@@ -106,31 +171,36 @@ export default function About() {
                 What Christians Bring
               </h2>
               <p className="text-charcoal leading-relaxed mb-4">
-                Why should technology companies and policymakers listen to Christians? Because the 
-                Christian tradition offers intellectual resources that secular AI ethics lacks.
+                Why should technology companies and policymakers listen to
+                Christians? Because the Christian tradition offers intellectual
+                resources that secular AI ethics lacks.
               </p>
               <p className="text-charcoal leading-relaxed mb-4">
-                The doctrine of <em>imago Dei</em>—that humans are made in God's image—grounds human
-                dignity in something transcendent, not merely cognitive capability. But if machines
-                can reason and create, what <em>still</em> makes humans unique?
+                The doctrine of <em>imago Dei</em>—that humans are made in God's
+                image—grounds human dignity in something transcendent, not
+                merely cognitive capability. But if machines can reason and
+                create, what <em>still</em> makes humans unique?
               </p>
               <p className="text-charcoal leading-relaxed mb-4">
-                The Christian answer has never been intellect alone. We are embodied souls, created
-                for communion with God and one another. We bear moral responsibility. We are capable
-                of love—not as a computation, but as a choice to give ourselves for another's good.
-                We worship. We hope. We were made to know and be known.
+                The Christian answer has never been intellect alone. We are
+                embodied souls, created for communion with God and one another.
+                We bear moral responsibility. We are capable of love—not as a
+                computation, but as a choice to give ourselves for another's
+                good. We worship. We hope. We were made to know and be known.
               </p>
               <p className="text-charcoal leading-relaxed mb-4">
-                We understand that relationship existed in the Godhead before time—that humans were
-                created for genuine communion, not mere connection. This gives us a framework for
-                helping people navigate emotional bonds with AI systems: not with fear or condemnation,
-                but with clarity about what genuine relationship requires and what it offers that
-                simulation cannot.
+                We understand that relationship existed in the Godhead before
+                time—that humans were created for genuine communion, not mere
+                connection. This gives us a framework for helping people
+                navigate emotional bonds with AI systems: not with fear or
+                condemnation, but with clarity about what genuine relationship
+                requires and what it offers that simulation cannot.
               </p>
               <p className="text-charcoal leading-relaxed font-medium">
-                We bring two thousand years of reflection on moral decision-making, the limits of
-                human power, and the nature of genuine relationship. These insights don't just
-                deserve a seat at the table—they're essential to getting AI right.
+                We bring two thousand years of reflection on moral
+                decision-making, the limits of human power, and the nature of
+                genuine relationship. These insights don't just deserve a seat
+                at the table—they're essential to getting AI right.
               </p>
             </div>
           </div>
@@ -142,7 +212,9 @@ export default function About() {
               The Klara Project
             </h2>
             <p className="text-charcoal text-center mb-10 max-w-2xl mx-auto">
-              Our name comes from the German word for "clear"—reflecting our commitment to bring clarity and thoughtful direction in an age of rapid technological change.
+              Our name comes from the German word for "clear"—reflecting our
+              commitment to bring clarity and thoughtful direction in an age of
+              rapid technological change.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {approachItems.map((item, index) => (
@@ -150,8 +222,12 @@ export default function About() {
                   <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
                     <item.icon className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="font-semibold text-charcoal mb-2">{item.title}</h3>
-                  <p className="text-charcoal-muted text-sm">{item.description}</p>
+                  <h3 className="font-semibold text-charcoal mb-2">
+                    {item.title}
+                  </h3>
+                  <p className="text-charcoal-muted text-sm">
+                    {item.description}
+                  </p>
                 </Card>
               ))}
             </div>
@@ -165,13 +241,15 @@ export default function About() {
                 Investing in the Next Generation
               </h2>
               <p className="text-charcoal leading-relaxed mb-4">
-                Investing in the next generation isn't just part of our mission—it's how we operate.
-                Gen Z and Gen Alpha will be most shaped by AI and robotics. We create resources to
-                serve them and their parents, and we develop young leaders from within our own organization.
+                Investing in the next generation isn't just part of our
+                mission—it's how we operate. Gen Z and Gen Alpha will be most
+                shaped by AI and robotics. We create resources to serve them and
+                their parents, and we develop young leaders from within our own
+                organization.
               </p>
               <Link href="/next-generation">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="rounded-full group font-semibold"
                   data-testid="button-learn-next-gen"
                 >
@@ -191,21 +269,25 @@ export default function About() {
               </h2>
               <div className="space-y-4 text-charcoal leading-relaxed">
                 <p>
-                  We affirm the historic Christian faith as expressed in the Nicene Creed—belief in
-                  one God, Father, Son, and Holy Spirit; in Jesus Christ as Lord and Savior; in the
-                  Holy Spirit who gives life to the Church; and in the hope of resurrection.
+                  We affirm the historic Christian faith as expressed in the
+                  Nicene Creed—belief in one God, Father, Son, and Holy Spirit;
+                  in Jesus Christ as Lord and Savior; in the Holy Spirit who
+                  gives life to the Church; and in the hope of resurrection.
                 </p>
                 <p>
-                  We believe that all people are created in the image of God (<em>imago Dei</em>),
-                  possessing inherent dignity and worth that no technology can replicate or replace.
+                  We believe that all people are created in the image of God (
+                  <em>imago Dei</em>), possessing inherent dignity and worth
+                  that no technology can replicate or replace.
                 </p>
                 <p>
-                  We believe the Scriptures call Christians to be salt and light in the world—engaging
-                  culture, including technology, with wisdom, discernment, and love.
+                  We believe the Scriptures call Christians to be salt and light
+                  in the world—engaging culture, including technology, with
+                  wisdom, discernment, and love.
                 </p>
                 <p className="font-medium">
-                  Whether you're Catholic, Orthodox, Protestant, or simply exploring—if you share
-                  these convictions and this mission, you're welcome here.
+                  Whether you're Catholic, Orthodox, Protestant, or simply
+                  exploring—if you share these convictions and this mission,
+                  you're welcome here.
                 </p>
               </div>
             </div>
@@ -239,6 +321,11 @@ export default function About() {
             </div>
           </div>
         </section>
+        <EmailGateModal
+          isOpen={showEmailGate}
+          onClose={() => setShowEmailGate(false)}
+          onSubmit={handleWhitepaperEmailSubmit}
+        />
       </main>
       <Footer />
     </div>

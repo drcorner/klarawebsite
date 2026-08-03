@@ -15,14 +15,14 @@ The freelancer will configure HubSpot (custom properties, pipelines, workflows, 
 
 ## Area 1: Real-Time Owner Notifications
 
-### Current State
+### Current State 3hrs (Test and implement)
 - The only emails sent are donation thank-you emails **to the donor** via SendGrid (`server/sendgridClient.ts`)
 - The site owner receives **zero alerts** when any website action occurs
 - No HubSpot workflows are configured
 
 ### Requirements
 
-**1.1 — HubSpot Workflow Notifications**
+**1.1 — HubSpot Workflow Notifications** ()
 Configure HubSpot workflows to send the site owner an email notification when:
 - A new donation deal is created
 - A new volunteer signup contact is created/updated

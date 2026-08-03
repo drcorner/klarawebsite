@@ -15,11 +15,14 @@ import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsOfService from "@/pages/TermsOfService";
 import NextGeneration from "@/pages/NextGeneration";
 import NotFound from "@/pages/not-found";
-import CookieConsent, { trackPageVisit, hasConsent } from "@/components/CookieConsent";
+import CookieConsent, {
+  trackPageVisit,
+  hasConsent,
+} from "@/components/CookieConsent";
 
 function useScrollToTop() {
   const [location] = useLocation();
-  
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, [location]);
@@ -27,7 +30,7 @@ function useScrollToTop() {
 
 function usePageTracking() {
   const [location] = useLocation();
-  
+
   useEffect(() => {
     if (hasConsent()) {
       trackPageVisit(location);
@@ -55,7 +58,7 @@ function Router() {
 function AppContent() {
   useScrollToTop();
   usePageTracking();
-  
+
   return (
     <>
       <Router />
@@ -66,7 +69,7 @@ function AppContent() {
 
 function App() {
   const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
-  
+
   return (
     <QueryClientProvider client={queryClient}>
       <GoogleReCaptchaProvider reCaptchaKey={recaptchaSiteKey || ""}>

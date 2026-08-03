@@ -1,3 +1,4 @@
+// src/components/NewsletterSignup.tsx
 import { useState } from "react";
 import { Mail, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,15 +9,38 @@ interface NewsletterSignupProps {
   className?: string;
 }
 
-export default function NewsletterSignup({ variant = "inline", className = "" }: NewsletterSignupProps) {
+export default function NewsletterSignup({
+  variant = "inline",
+  className = "",
+}: NewsletterSignupProps) {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Newsletter signup:", email);
-    setSubmitted(true);
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Subscription failed");
+      setSubmitted(true);
+    } catch (err: any) {
+      setError(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   console.log("Newsletter signup:", email);
+  //   setSubmitted(true);
+  // };
 
   if (submitted) {
     return (
@@ -29,12 +53,15 @@ export default function NewsletterSignup({ variant = "inline", className = "" }:
 
   if (variant === "card") {
     return (
-      <div className={`bg-cream-dark border border-border rounded-lg p-6 ${className}`}>
+      <div
+        className={`bg-cream-dark border border-border rounded-lg p-6 ${className}`}
+      >
         <h3 className="font-serif text-xl font-semibold text-charcoal mb-2">
           Stay Informed
         </h3>
         <p className="text-charcoal-muted mb-4">
-          Join our mailing list for updates on resources, research, and opportunities to engage.
+          Join our mailing list for updates on resources, research, and
+          opportunities to engage.
         </p>
         <form onSubmit={handleSubmit} className="flex gap-2">
           <Input
@@ -46,8 +73,14 @@ export default function NewsletterSignup({ variant = "inline", className = "" }:
             className="flex-1"
             data-testid="input-newsletter-email"
           />
-          <Button type="submit" className="bg-primary text-cream" data-testid="button-newsletter-subscribe">
-            Subscribe
+          {error && <p className="text-red-600 text-sm mt-1">{error}</p>}
+          <Button
+            type="submit"
+            disabled={loading}
+            className="bg-primary text-cream"
+            data-testid="button-newsletter-subscribe"
+          >
+            {loading ? "Subscribing…" : "Subscribe"}
           </Button>
         </form>
       </div>
@@ -65,9 +98,17 @@ export default function NewsletterSignup({ variant = "inline", className = "" }:
         className="flex-1"
         data-testid="input-newsletter-email-inline"
       />
-      <Button type="submit" className="bg-primary text-cream shrink-0" data-testid="button-newsletter-subscribe-inline">
+      {error && <p className="text-red-600 text-sm mt-1">{error}</p>}
+      <Button
+        type="submit"
+        disabled={loading}
+        className="bg-primary text-cream shrink-0"
+        data-testid="button-newsletter-subscribe-inline"
+      >
         <Mail className="w-4 h-4 md:mr-2" />
-        <span className="hidden md:inline">Subscribe</span>
+        <span className="hidden md:inline">
+          {loading ? "Subscribing…" : "Subscribe"}
+        </span>
       </Button>
     </form>
   );

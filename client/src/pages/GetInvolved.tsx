@@ -1,6 +1,21 @@
+//client/src/pages/GetInvolved.tsx
+
 import { useState } from "react";
 import { Link } from "wouter";
-import { HandHeart, Mail, Users, Share2, Church, Facebook, Twitter, Linkedin, Copy, Check, MessageSquare, ArrowRight } from "lucide-react";
+import {
+  HandHeart,
+  Mail,
+  Users,
+  Share2,
+  Church,
+  Facebook,
+  Twitter,
+  Linkedin,
+  Copy,
+  Check,
+  MessageSquare,
+  ArrowRight,
+} from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
@@ -11,8 +26,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import familyImage from "@assets/generated_images/christian_family_dinner_conversation.png";
+// import { sendUserConfirmationEmail } from "server/sendgridClient";
 
 export default function GetInvolved() {
   const [volunteerForm, setVolunteerForm] = useState({
@@ -36,30 +58,62 @@ export default function GetInvolved() {
   const [experienceSubmitted, setExperienceSubmitted] = useState(false);
   const [experienceSubmitting, setExperienceSubmitting] = useState(false);
   const [experienceError, setExperienceError] = useState<string | null>(null);
-
+  const [inquiryForm, setInquiryForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    churchName: "",
+    message: "",
+  });
+  const [inquirySubmitted, setInquirySubmitted] = useState(false);
+  const [inquirySubmitting, setInquirySubmitting] = useState(false);
+  const [inquiryError, setInquiryError] = useState<string | null>(null);
+  // console.log("🚀 ~ GetInvolved ~ experienceForm:", window.x);
   const handleVolunteerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setVolunteerSubmitting(true);
     setVolunteerError(null);
 
     try {
-      const response = await fetch('/api/volunteers/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/volunteers/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(volunteerForm),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to submit form');
+        throw new Error(data.error || "Failed to submit form");
       }
 
       setVolunteerSubmitted(true);
     } catch (error: any) {
-      setVolunteerError(error.message || 'Something went wrong. Please try again.');
+      setVolunteerError(
+        error.message || "Something went wrong. Please try again.",
+      );
     } finally {
       setVolunteerSubmitting(false);
+    }
+  };
+
+  const handleInquirySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setInquirySubmitting(true);
+    setInquiryError(null);
+    try {
+      const res = await fetch("/api/inquiry/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(inquiryForm),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to submit");
+      setInquirySubmitted(true);
+    } catch (err: any) {
+      setInquiryError(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setInquirySubmitting(false);
     }
   };
 
@@ -75,41 +129,46 @@ export default function GetInvolved() {
     setExperienceError(null);
 
     try {
-      const response = await fetch('/api/experience/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/experience/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(experienceForm),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to submit form');
+        throw new Error(data.error || "Failed to submit form");
       }
 
       setExperienceSubmitted(true);
     } catch (error: any) {
-      setExperienceError(error.message || 'Something went wrong. Please try again.');
+      setExperienceError(
+        error.message || "Something went wrong. Please try again.",
+      );
     } finally {
       setExperienceSubmitting(false);
     }
   };
 
   const shareUrl = encodeURIComponent("https://klaraproject.org");
-  const shareText = encodeURIComponent("Check out Klara Project - equipping churches for the AI age.");
+  const shareText = encodeURIComponent(
+    "Check out Klara Project - equipping churches for the AI age.",
+  );
 
   return (
     <div className="min-h-screen bg-cream">
       <Header />
       <main>
-        <PageHero 
-          title="Get Involved" 
+        <PageHero
+          title="Get Involved"
           subtitle="Join us in equipping churches and engaging the culture"
           variant="image"
           imageSrc={familyImage}
         />
 
         {/* Bring Us to Your Church - Prominent Section */}
+
         <section className="bg-primary py-16 md:py-24">
           <div className="max-w-7xl mx-auto px-6 md:px-10">
             <div className="max-w-3xl mx-auto text-center">
@@ -120,19 +179,163 @@ export default function GetInvolved() {
                 Bring Us to Your Church
               </h2>
               <p className="text-cream/80 leading-relaxed text-lg mb-8">
-                Interested in hosting a workshop, speaker, or pilot program? We're looking for 
-                church partners to help us develop and test our resources in real congregational 
-                settings.
+                Interested in hosting a workshop, speaker, or pilot program?
+                We're looking for church partners to help us develop and test
+                our resources in real congregational settings.
+              </p>
+
+              {!inquirySubmitted ? (
+                <form
+                  onSubmit={handleInquirySubmit}
+                  className="space-y-4 text-left max-w-xl mx-auto"
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="inq-first" className="text-cream/80">
+                        First Name *
+                      </Label>
+                      <Input
+                        id="inq-first"
+                        value={inquiryForm.firstName}
+                        required
+                        onChange={(e) =>
+                          setInquiryForm({
+                            ...inquiryForm,
+                            firstName: e.target.value,
+                          })
+                        }
+                        className="bg-cream/10 border-cream/20 text-cream placeholder:text-cream/40"
+                        placeholder="First name"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="inq-last" className="text-cream/80">
+                        Last Name *
+                      </Label>
+                      <Input
+                        id="inq-last"
+                        value={inquiryForm.lastName}
+                        required
+                        onChange={(e) =>
+                          setInquiryForm({
+                            ...inquiryForm,
+                            lastName: e.target.value,
+                          })
+                        }
+                        className="bg-cream/10 border-cream/20 text-cream placeholder:text-cream/40"
+                        placeholder="Last name"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <Label htmlFor="inq-email" className="text-cream/80">
+                      Email *
+                    </Label>
+                    <Input
+                      id="inq-email"
+                      type="email"
+                      value={inquiryForm.email}
+                      required
+                      onChange={(e) =>
+                        setInquiryForm({
+                          ...inquiryForm,
+                          email: e.target.value,
+                        })
+                      }
+                      className="bg-cream/10 border-cream/20 text-cream placeholder:text-cream/40"
+                      placeholder="you@example.com"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="inq-church" className="text-cream/80">
+                      Church or Organization
+                    </Label>
+                    <Input
+                      id="inq-church"
+                      value={inquiryForm.churchName}
+                      onChange={(e) =>
+                        setInquiryForm({
+                          ...inquiryForm,
+                          churchName: e.target.value,
+                        })
+                      }
+                      className="bg-cream/10 border-cream/20 text-cream placeholder:text-cream/40"
+                      placeholder="Your church name (optional)"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="inq-message" className="text-cream/80">
+                      Message *
+                    </Label>
+                    <Textarea
+                      id="inq-message"
+                      value={inquiryForm.message}
+                      required
+                      rows={3}
+                      onChange={(e) =>
+                        setInquiryForm({
+                          ...inquiryForm,
+                          message: e.target.value,
+                        })
+                      }
+                      className="bg-cream/10 border-cream/20 text-cream placeholder:text-cream/40"
+                      placeholder="Tell us what you're looking for..."
+                    />
+                  </div>
+                  {inquiryError && (
+                    <p className="text-red-300 text-sm">{inquiryError}</p>
+                  )}
+                  <div className="flex justify-center">
+                    <Button
+                      type="submit"
+                      disabled={inquirySubmitting}
+                      className="bg-cream text-primary font-semibold rounded-full group px-8"
+                      data-testid="button-inquiry-submit"
+                    >
+                      {inquirySubmitting ? "Sending…" : "Send Inquiry"}
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </Button>
+                  </div>
+                </form>
+              ) : (
+                <div className="mt-4">
+                  <div className="w-16 h-16 rounded-full bg-cream/10 flex items-center justify-center mx-auto mb-4">
+                    <Check className="h-8 w-8 text-cream" />
+                  </div>
+                  <p className="text-cream text-lg font-semibold">
+                    Thank you! We'll be in touch soon.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+        {/* <section className="bg-primary py-16 md:py-24">
+          <div className="max-w-7xl mx-auto px-6 md:px-10">
+            <div className="max-w-3xl mx-auto text-center">
+              <div className="w-20 h-20 rounded-full bg-cream/10 flex items-center justify-center mx-auto mb-8">
+                <Church className="h-10 w-10 text-cream" />
+              </div>
+              <h2 className="font-serif text-3xl md:text-4xl font-semibold text-cream mb-6">
+                Bring Us to Your Church
+              </h2>
+              <p className="text-cream/80 leading-relaxed text-lg mb-8">
+                Interested in hosting a workshop, speaker, or pilot program?
+                We're looking for church partners to help us develop and test
+                our resources in real congregational settings.
               </p>
               <a href="mailto:info@klaraproject.org">
-                <Button className="bg-cream text-primary font-semibold rounded-full group" data-testid="button-contact-church">
+                <Button
+                  className="bg-cream text-primary font-semibold rounded-full group"
+                  data-testid="button-contact-church"
+                >
                   Contact Us
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
               </a>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* Volunteer Your Expertise */}
         <section className="py-16 md:py-24">
@@ -146,12 +349,13 @@ export default function GetInvolved() {
                   Volunteer Your Expertise
                 </h2>
                 <p className="text-charcoal leading-relaxed mb-6">
-                  We're seeking professionals with backgrounds in AI, technology, education, theology, 
-                  social enterprise, and ministry to contribute to specific projects or serve in 
+                  We're seeking professionals with backgrounds in AI,
+                  technology, education, theology, social enterprise, and
+                  ministry to contribute to specific projects or serve in
                   advisory roles.
                 </p>
               </div>
-              
+
               {!volunteerSubmitted ? (
                 <Card className="p-8 bg-card border-card-border">
                   <form onSubmit={handleVolunteerSubmit} className="space-y-4">
@@ -161,7 +365,12 @@ export default function GetInvolved() {
                         <Input
                           id="vol-first-name"
                           value={volunteerForm.firstName}
-                          onChange={(e) => setVolunteerForm({ ...volunteerForm, firstName: e.target.value })}
+                          onChange={(e) =>
+                            setVolunteerForm({
+                              ...volunteerForm,
+                              firstName: e.target.value,
+                            })
+                          }
                           required
                           placeholder="First name"
                           data-testid="input-volunteer-first-name"
@@ -172,7 +381,12 @@ export default function GetInvolved() {
                         <Input
                           id="vol-last-name"
                           value={volunteerForm.lastName}
-                          onChange={(e) => setVolunteerForm({ ...volunteerForm, lastName: e.target.value })}
+                          onChange={(e) =>
+                            setVolunteerForm({
+                              ...volunteerForm,
+                              lastName: e.target.value,
+                            })
+                          }
                           required
                           placeholder="Last name"
                           data-testid="input-volunteer-last-name"
@@ -185,7 +399,12 @@ export default function GetInvolved() {
                         id="vol-email"
                         type="email"
                         value={volunteerForm.email}
-                        onChange={(e) => setVolunteerForm({ ...volunteerForm, email: e.target.value })}
+                        onChange={(e) =>
+                          setVolunteerForm({
+                            ...volunteerForm,
+                            email: e.target.value,
+                          })
+                        }
                         required
                         placeholder="you@example.com"
                         data-testid="input-volunteer-email"
@@ -193,19 +412,28 @@ export default function GetInvolved() {
                     </div>
                     <div>
                       <Label htmlFor="vol-expertise">Area of Expertise</Label>
-                      <Select 
-                        value={volunteerForm.expertise} 
-                        onValueChange={(value) => setVolunteerForm({ ...volunteerForm, expertise: value })}
+                      <Select
+                        value={volunteerForm.expertise}
+                        onValueChange={(value) =>
+                          setVolunteerForm({
+                            ...volunteerForm,
+                            expertise: value,
+                          })
+                        }
                       >
                         <SelectTrigger data-testid="select-expertise">
                           <SelectValue placeholder="Select your expertise" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="ai-technology">AI/Technology</SelectItem>
+                          <SelectItem value="ai-technology">
+                            AI/Technology
+                          </SelectItem>
                           <SelectItem value="theology">Theology</SelectItem>
                           <SelectItem value="education">Education</SelectItem>
                           <SelectItem value="ministry">Ministry</SelectItem>
-                          <SelectItem value="social-enterprise">Social Enterprise</SelectItem>
+                          <SelectItem value="social-enterprise">
+                            Social Enterprise
+                          </SelectItem>
                           <SelectItem value="other">Other</SelectItem>
                         </SelectContent>
                       </Select>
@@ -215,7 +443,12 @@ export default function GetInvolved() {
                       <Textarea
                         id="vol-message"
                         value={volunteerForm.message}
-                        onChange={(e) => setVolunteerForm({ ...volunteerForm, message: e.target.value })}
+                        onChange={(e) =>
+                          setVolunteerForm({
+                            ...volunteerForm,
+                            message: e.target.value,
+                          })
+                        }
                         placeholder="Tell us about your background and how you'd like to help..."
                         rows={4}
                         data-testid="textarea-volunteer-message"
@@ -230,7 +463,9 @@ export default function GetInvolved() {
                       data-testid="button-volunteer-submit"
                       disabled={volunteerSubmitting}
                     >
-                      {volunteerSubmitting ? 'Submitting...' : 'Express Interest'}
+                      {volunteerSubmitting
+                        ? "Submitting..."
+                        : "Express Interest"}
                     </Button>
                   </form>
                 </Card>
@@ -265,9 +500,10 @@ export default function GetInvolved() {
                   Share Our Mission
                 </h2>
                 <p className="text-charcoal leading-relaxed mb-6">
-                  Help spread awareness by sharing our resources with your church, small group, or 
-                  professional networks. The more Christians engage with these issues, the stronger 
-                  our collective voice.
+                  Help spread awareness by sharing our resources with your
+                  church, small group, or professional networks. The more
+                  Christians engage with these issues, the stronger our
+                  collective voice.
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <a
@@ -275,7 +511,11 @@ export default function GetInvolved() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Button variant="outline" className="border-primary text-primary" data-testid="button-share-facebook">
+                    <Button
+                      variant="outline"
+                      className="border-primary text-primary"
+                      data-testid="button-share-facebook"
+                    >
                       <Facebook className="w-4 h-4 mr-2" />
                       Facebook
                     </Button>
@@ -285,7 +525,11 @@ export default function GetInvolved() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Button variant="outline" className="border-primary text-primary" data-testid="button-share-twitter">
+                    <Button
+                      variant="outline"
+                      className="border-primary text-primary"
+                      data-testid="button-share-twitter"
+                    >
                       <Twitter className="w-4 h-4 mr-2" />
                       Twitter
                     </Button>
@@ -295,18 +539,26 @@ export default function GetInvolved() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Button variant="outline" className="border-primary text-primary" data-testid="button-share-linkedin">
+                    <Button
+                      variant="outline"
+                      className="border-primary text-primary"
+                      data-testid="button-share-linkedin"
+                    >
                       <Linkedin className="w-4 h-4 mr-2" />
                       LinkedIn
                     </Button>
                   </a>
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     className="border-primary text-primary"
                     onClick={handleCopyLink}
                     data-testid="button-copy-link"
                   >
-                    {copied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
+                    {copied ? (
+                      <Check className="w-4 h-4 mr-2" />
+                    ) : (
+                      <Copy className="w-4 h-4 mr-2" />
+                    )}
                     {copied ? "Copied!" : "Copy Link"}
                   </Button>
                 </div>
@@ -320,7 +572,8 @@ export default function GetInvolved() {
                   </h3>
                 </div>
                 <p className="text-charcoal-muted mb-6">
-                  Join our mailing list for updates on resources, research, and opportunities to engage.
+                  Join our mailing list for updates on resources, research, and
+                  opportunities to engage.
                 </p>
                 <NewsletterSignup />
               </Card>
@@ -340,13 +593,18 @@ export default function GetInvolved() {
                   Give
                 </h2>
                 <p className="text-charcoal leading-relaxed mb-6">
-                  Individual giving is the backbone of our funding strategy. Your donation directly 
-                  supports curriculum development, educational grants, and the infrastructure needed 
-                  for sustainable growth. Every contribution—from monthly support to founding gifts—helps 
-                  us serve churches and represent Christian perspectives where decisions are being made.
+                  Individual giving is the backbone of our funding strategy.
+                  Your donation directly supports curriculum development,
+                  educational grants, and the infrastructure needed for
+                  sustainable growth. Every contribution—from monthly support to
+                  founding gifts—helps us serve churches and represent Christian
+                  perspectives where decisions are being made.
                 </p>
                 <Link href="/donate">
-                  <Button className="bg-primary text-cream font-semibold" data-testid="button-donate">
+                  <Button
+                    className="bg-primary text-cream font-semibold"
+                    data-testid="button-donate"
+                  >
                     Donate
                   </Button>
                 </Link>
@@ -361,7 +619,8 @@ export default function GetInvolved() {
                   </h3>
                 </div>
                 <p className="text-charcoal-muted mb-6">
-                  We answer questions and reflect on experiences in our media. Tell us what you'd like to see us cover.
+                  We answer questions and reflect on experiences in our media.
+                  Tell us what you'd like to see us cover.
                 </p>
                 {!experienceSubmitted ? (
                   <form onSubmit={handleExperienceSubmit} className="space-y-4">
@@ -371,7 +630,12 @@ export default function GetInvolved() {
                         <Input
                           id="exp-first-name"
                           value={experienceForm.firstName}
-                          onChange={(e) => setExperienceForm({ ...experienceForm, firstName: e.target.value })}
+                          onChange={(e) =>
+                            setExperienceForm({
+                              ...experienceForm,
+                              firstName: e.target.value,
+                            })
+                          }
                           required
                           placeholder="First name"
                           data-testid="input-experience-first-name"
@@ -382,7 +646,12 @@ export default function GetInvolved() {
                         <Input
                           id="exp-last-name"
                           value={experienceForm.lastName}
-                          onChange={(e) => setExperienceForm({ ...experienceForm, lastName: e.target.value })}
+                          onChange={(e) =>
+                            setExperienceForm({
+                              ...experienceForm,
+                              lastName: e.target.value,
+                            })
+                          }
                           required
                           placeholder="Last name"
                           data-testid="input-experience-last-name"
@@ -395,18 +664,30 @@ export default function GetInvolved() {
                         id="exp-email"
                         type="email"
                         value={experienceForm.email}
-                        onChange={(e) => setExperienceForm({ ...experienceForm, email: e.target.value })}
+                        onChange={(e) =>
+                          setExperienceForm({
+                            ...experienceForm,
+                            email: e.target.value,
+                          })
+                        }
                         required
                         placeholder="you@example.com"
                         data-testid="input-experience-email"
                       />
                     </div>
                     <div>
-                      <Label htmlFor="exp-experience">Your Experience or Question *</Label>
+                      <Label htmlFor="exp-experience">
+                        Your Experience or Question *
+                      </Label>
                       <Textarea
                         id="exp-experience"
                         value={experienceForm.experience}
-                        onChange={(e) => setExperienceForm({ ...experienceForm, experience: e.target.value })}
+                        onChange={(e) =>
+                          setExperienceForm({
+                            ...experienceForm,
+                            experience: e.target.value,
+                          })
+                        }
                         required
                         placeholder="Share your experience with AI or ask a question you'd like us to address..."
                         rows={4}
@@ -414,19 +695,44 @@ export default function GetInvolved() {
                       />
                     </div>
                     <div>
-                      <Label className="mb-3 block">Permission to use in our materials</Label>
+                      <Label className="mb-3 block">
+                        Permission to use in our materials
+                      </Label>
                       <RadioGroup
                         value={experienceForm.namePermission}
-                        onValueChange={(value) => setExperienceForm({ ...experienceForm, namePermission: value })}
+                        onValueChange={(value) =>
+                          setExperienceForm({
+                            ...experienceForm,
+                            namePermission: value,
+                          })
+                        }
                         className="flex flex-col gap-2"
                       >
                         <div className="flex items-center gap-2">
-                          <RadioGroupItem value="use-name" id="use-name" data-testid="radio-use-name" />
-                          <Label htmlFor="use-name" className="font-normal cursor-pointer">Use my name</Label>
+                          <RadioGroupItem
+                            value="use-name"
+                            id="use-name"
+                            data-testid="radio-use-name"
+                          />
+                          <Label
+                            htmlFor="use-name"
+                            className="font-normal cursor-pointer"
+                          >
+                            Use my name
+                          </Label>
                         </div>
                         <div className="flex items-center gap-2">
-                          <RadioGroupItem value="no-name" id="no-name" data-testid="radio-no-name" />
-                          <Label htmlFor="no-name" className="font-normal cursor-pointer">Do not use my name</Label>
+                          <RadioGroupItem
+                            value="no-name"
+                            id="no-name"
+                            data-testid="radio-no-name"
+                          />
+                          <Label
+                            htmlFor="no-name"
+                            className="font-normal cursor-pointer"
+                          >
+                            Do not use my name
+                          </Label>
                         </div>
                       </RadioGroup>
                     </div>
@@ -439,7 +745,7 @@ export default function GetInvolved() {
                       data-testid="button-experience-submit"
                       disabled={experienceSubmitting}
                     >
-                      {experienceSubmitting ? 'Submitting...' : 'Submit'}
+                      {experienceSubmitting ? "Submitting..." : "Submit"}
                     </Button>
                   </form>
                 ) : (
@@ -451,7 +757,8 @@ export default function GetInvolved() {
                       Thank You!
                     </h3>
                     <p className="text-charcoal-muted">
-                      We appreciate you sharing your experience or question with us.
+                      We appreciate you sharing your experience or question with
+                      us.
                     </p>
                   </div>
                 )}
