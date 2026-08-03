@@ -166,7 +166,7 @@ function validateEnvironment() {
     await setupVite(httpServer, app);
   }
 
-  const port = parseInt(process.env.PORT || "5000", 10);
+  const port = parseInt(process.env.PORT || "3000", 10);
   // httpServer.listen(
   //   {
   //     port,
