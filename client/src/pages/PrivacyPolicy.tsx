@@ -6,7 +6,7 @@ export default function PrivacyPolicy() {
   return (
     <div className="min-h-screen bg-cream">
       <Header />
-      <main>
+      <main id="main-content">
         <PageHero title="Privacy Policy" />
 
         <section className="py-16 md:py-24">

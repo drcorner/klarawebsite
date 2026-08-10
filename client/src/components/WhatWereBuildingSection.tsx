@@ -25,7 +25,7 @@ export default function WhatWereBuildingSection() {
   return (
     <section className="bg-cream py-14 md:py-20">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
-        <div className="mb-12">
+        <div className="mb-12 text-center">
           <p className="text-primary uppercase tracking-[0.2em] text-sm font-medium mb-4">
             Our Programs
           </p>
@@ -34,7 +34,7 @@ export default function WhatWereBuildingSection() {
           </h2>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           {items.map((item, index) => (
             <div 
               key={index} 

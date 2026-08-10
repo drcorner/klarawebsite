@@ -8,7 +8,7 @@ export default function Donate() {
   return (
     <div className="min-h-screen bg-cream">
       <Header />
-      <main>
+      <main id="main-content">
         <PageHero
           title="Donate"
           subtitle="Equipping churches. Engaging culture. Empowering the next generation."

@@ -493,7 +493,7 @@ export default function ManageDonation() {
     <div className="min-h-screen bg-cream">
       <Header />
       
-      <main className="py-16 px-4">
+      <main id="main-content" className="py-16 px-4">
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-12">
             <h1 className="font-serif text-4xl font-bold text-charcoal mb-4">

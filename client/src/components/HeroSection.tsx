@@ -13,7 +13,7 @@ export default function HeroSection() {
       <div className="absolute inset-0 z-0">
         <img 
           src={heroImage} 
-          alt="Diverse group in collaborative discussion" 
+          alt="An intergenerational group of church members in thoughtful conversation" 
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-charcoal/95 via-charcoal/75 to-charcoal/40" />
@@ -23,14 +23,13 @@ export default function HeroSection() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 py-24">
         <div className="max-w-2xl">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 backdrop-blur-sm border border-primary/30 mb-8">
-            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            <span className="text-cream text-sm font-medium">Now accepting founding partners</span>
+            <span className="text-cream text-sm font-medium">The Klara Project · Now accepting founding partners</span>
           </div>
           
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight">
             <span className="text-cream font-sans font-black">AI Is Here.</span>
             <br />
-            <span className="bg-gradient-to-r from-[hsl(220,70%,70%)] to-gold bg-clip-text text-transparent font-sans font-bold">
+            <span className="text-gold font-sans font-bold">
               Help the Church Respond.
             </span>
           </h1>
@@ -41,13 +40,13 @@ export default function HeroSection() {
           </p>
           
           <div className="mt-10 flex flex-col sm:flex-row gap-4">
-            <Link href="/get-involved">
+            <Link href="/donate">
               <Button 
                 size="lg" 
                 className="bg-primary hover:bg-primary/90 text-cream font-semibold text-base px-8 rounded-full group shadow-lg shadow-primary/25"
-                data-testid="button-hero-get-involved"
+                data-testid="button-hero-donate"
               >
-                Get Involved
+                Donate
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </Link>
@@ -66,10 +65,11 @@ export default function HeroSection() {
 
       <button 
         onClick={scrollToChallenge}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 text-cream/50 hover:text-cream transition-colors"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 p-2 text-cream/60 hover:text-cream transition-colors"
         aria-label="Scroll down"
+        data-testid="button-hero-scroll-down"
       >
-        <ChevronDown className="h-8 w-8 animate-bounce" />
+        <ChevronDown className="h-8 w-8" />
       </button>
 
     </section>

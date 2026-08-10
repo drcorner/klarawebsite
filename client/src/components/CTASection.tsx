@@ -13,22 +13,22 @@ export default function CTASection() {
           Learn more about our mission or help equip churches for the AI age.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link href="/about">
-            <Button
-              variant="outline"
-              className="bg-transparent border-cream text-cream hover:bg-cream hover:text-primary rounded-full group font-semibold px-8"
-              data-testid="button-cta-about"
-            >
-              Learn About Klara Project
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-          </Link>
           <Link href="/donate">
             <Button
-              className="bg-cream text-primary hover:bg-cream/90 rounded-full font-semibold px-8"
+              className="bg-cream text-primary hover:bg-cream/90 rounded-full font-semibold px-8 group"
               data-testid="button-cta-donate"
             >
               Donate
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Button>
+          </Link>
+          <Link href="/about">
+            <Button
+              variant="outline"
+              className="bg-transparent border-cream text-cream hover:bg-cream hover:text-primary rounded-full font-semibold px-8"
+              data-testid="button-cta-about"
+            >
+              Learn About Klara Project
             </Button>
           </Link>
         </div>
