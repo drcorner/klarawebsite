@@ -76,10 +76,10 @@ export default function CookieConsent() {
       className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6"
       data-testid="cookie-consent-banner"
     >
-      <div className="max-w-4xl mx-auto bg-white border border-slate-200 rounded-2xl shadow-lg p-4 md:p-6">
+      <div className="relative max-w-4xl mx-auto bg-cream border border-charcoal/10 rounded-2xl shadow-lg p-4 md:p-6">
         <div className="flex flex-col md:flex-row md:items-center gap-4">
           <div className="flex-1">
-            <p className="text-slate-700 text-sm md:text-base leading-relaxed">
+            <p className="text-charcoal text-sm md:text-base leading-relaxed">
               We use cookies to improve your experience and understand how our site is used. 
               By continuing, you agree to our{" "}
               <Link 
@@ -96,7 +96,7 @@ export default function CookieConsent() {
               variant="outline"
               size="sm"
               onClick={handleDecline}
-              className="text-slate-600 border-slate-300"
+              className="text-charcoal-muted border-charcoal/20 rounded-full"
               data-testid="button-decline-cookies"
             >
               Decline
@@ -104,7 +104,7 @@ export default function CookieConsent() {
             <Button
               size="sm"
               onClick={handleAccept}
-              className="bg-gradient-to-r from-primary to-primary/80 text-white"
+              className="bg-primary hover:bg-primary/90 text-cream rounded-full"
               data-testid="button-accept-cookies"
             >
               Accept
@@ -112,7 +112,7 @@ export default function CookieConsent() {
           </div>
           <button
             onClick={handleDecline}
-            className="absolute top-3 right-3 md:hidden text-slate-400 hover:text-slate-600"
+            className="absolute top-3 right-3 md:hidden p-1 text-charcoal-muted hover:text-charcoal"
             aria-label="Close"
             data-testid="button-close-cookie-banner"
           >

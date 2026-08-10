@@ -63,7 +63,7 @@ export default function About() {
   return (
     <div className="min-h-screen bg-cream">
       <Header />
-      <main>
+      <main id="main-content">
         <PageHero
           title="About"
           subtitle="Filling a gap no one else is filling"

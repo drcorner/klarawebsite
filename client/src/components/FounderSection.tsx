@@ -1,5 +1,5 @@
 import { Quote } from "lucide-react";
-import founderImage from "@assets/Pisani-SpeakingPhoto1_1765542350944.jpeg";
+import founderImage from "@assets/optimized/pisani-speaking-1000w.jpg";
 
 export default function FounderSection() {
   return (
@@ -7,14 +7,14 @@ export default function FounderSection() {
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div className="relative order-2 lg:order-1">
-            <div className="relative">
-              <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 via-primary/10 to-gold/10 rounded-3xl blur-xl" />
-              <img 
-                src={founderImage} 
-                alt="Dr. Anthony R. Pisani, Founder of Klara Project" 
-                className="relative w-full max-w-md mx-auto lg:mx-0 rounded-2xl shadow-xl"
-              />
-            </div>
+            <img 
+              src={founderImage} 
+              alt="Dr. Anthony R. Pisani, Founder of Klara Project" 
+              width={1000}
+              height={1000}
+              loading="lazy"
+              className="w-full max-w-md mx-auto lg:mx-0 rounded-2xl shadow-xl"
+            />
           </div>
           
           <div className="order-1 lg:order-2">

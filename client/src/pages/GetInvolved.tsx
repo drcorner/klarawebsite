@@ -159,7 +159,7 @@ export default function GetInvolved() {
   return (
     <div className="min-h-screen bg-cream">
       <Header />
-      <main>
+      <main id="main-content">
         <PageHero
           title="Get Involved"
           subtitle="Join us in equipping churches and engaging the culture"

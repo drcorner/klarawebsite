@@ -10,7 +10,7 @@ export default function NextGeneration() {
   return (
     <div className="min-h-screen bg-cream">
       <Header />
-      <main>
+      <main id="main-content">
         <PageHero 
           title="Investing in the Next Generation" 
           subtitle="Central to how we operate"

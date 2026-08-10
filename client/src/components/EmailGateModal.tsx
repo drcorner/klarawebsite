@@ -82,12 +82,17 @@ export default function EmailGateModal({
             />
           </div>
 
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {error && (
+            <p role="alert" className="text-sm text-destructive" data-testid="text-email-gate-error">
+              {error}
+            </p>
+          )}
 
           <Button
             className="w-full bg-primary text-cream font-semibold"
             onClick={handleSubmit}
             disabled={loading}
+            data-testid="button-email-gate-submit"
           >
             {loading ? (
               <>

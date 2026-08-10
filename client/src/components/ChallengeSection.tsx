@@ -1,3 +1,7 @@
+import { useState } from "react";
+import { ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
 const challenges = [
   {
     category: "Ministry",
@@ -42,6 +46,9 @@ const getCardColors = (index: number) => {
 };
 
 export default function ChallengeSection() {
+  const [showAll, setShowAll] = useState(false);
+  const visibleChallenges = showAll ? challenges : challenges.slice(0, 4);
+
   return (
     <section id="challenge-section" className="bg-gradient-to-b from-cream to-cream-dark py-14 md:py-20">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
@@ -49,7 +56,7 @@ export default function ChallengeSection() {
           <span className="inline-block px-4 py-1.5 rounded-full bg-coral/10 text-coral text-sm font-semibold mb-4">
             The Challenge
           </span>
-          <h2 className="font-sans text-3xl md:text-4xl font-bold text-charcoal">
+          <h2 className="font-serif text-3xl md:text-4xl font-semibold text-charcoal">
             Faithful Christians face real challenges
           </h2>
         </div>
@@ -64,7 +71,7 @@ export default function ChallengeSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {challenges.map((item, index) => {
+          {visibleChallenges.map((item, index) => {
             const colors = getCardColors(index);
             return (
               <div 
@@ -81,6 +88,21 @@ export default function ChallengeSection() {
             );
           })}
         </div>
+
+        {!showAll && (
+          <div className="mt-8 text-center">
+            <Button
+              variant="ghost"
+              onClick={() => setShowAll(true)}
+              aria-expanded={showAll}
+              className="text-primary hover:text-primary rounded-full font-medium"
+              data-testid="button-show-more-stories"
+            >
+              Read {challenges.length - visibleChallenges.length} more stories
+              <ChevronDown className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+        )}
 
         <blockquote className="mt-16 max-w-3xl mx-auto text-center">
           <p className="font-serif text-xl md:text-2xl text-charcoal italic leading-relaxed">

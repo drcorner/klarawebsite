@@ -16,6 +16,12 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 bg-cream/90 backdrop-blur-lg border-b border-charcoal/5">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[60] focus:bg-primary focus:text-cream focus:px-4 focus:py-2 focus:rounded-full focus:text-sm"
+      >
+        Skip to content
+      </a>
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="flex items-center justify-between h-16">
           <Logo />
@@ -44,7 +50,10 @@ export default function Header() {
                 </Button>
               </Link>
               <Link href="/manage-donation">
-                <span className="text-xs text-charcoal-muted hover:text-primary transition-colors mt-1">
+                <span
+                  className="inline-flex items-center px-2 py-1 mt-0.5 text-xs text-charcoal-muted hover:text-primary transition-colors"
+                  data-testid="nav-manage-giving"
+                >
                   Manage your giving
                 </span>
               </Link>
@@ -109,8 +118,9 @@ export default function Header() {
                 </Link>
                 <Link href="/manage-donation">
                   <span
-                    className="text-sm text-charcoal-muted hover:text-primary transition-colors mt-2 block"
+                    className="inline-flex items-center justify-center min-h-[44px] px-4 mt-1 text-sm text-charcoal-muted hover:text-primary transition-colors"
                     onClick={() => setIsMenuOpen(false)}
+                    data-testid="mobile-nav-manage-giving"
                   >
                     Manage your giving
                   </span>
