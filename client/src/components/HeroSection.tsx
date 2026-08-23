@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import heroImage from "@assets/istockphoto-2216206432-1024x1024_1765540381629.jpg";
+import heroImage from "@assets/iStock-1217160577.jpg";
 
 export default function HeroSection() {
   const scrollToChallenge = () => {
@@ -13,7 +13,7 @@ export default function HeroSection() {
       <div className="absolute inset-0 z-0">
         <img 
           src={heroImage} 
-          alt="An intergenerational group of church members in thoughtful conversation" 
+          alt="Diverse group of five people talking and smiling" 
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-charcoal/95 via-charcoal/75 to-charcoal/40" />
