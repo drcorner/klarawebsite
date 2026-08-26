@@ -7,6 +7,8 @@ import {
 import {
   sendVerificationEmail,
   sendDonationThankYouEmail,
+  sendUserConfirmationEmail,
+  sendOwnerNotificationEmail,
 } from "./sendgridClient";
 import {
   trackNewsletterSignup,
@@ -996,7 +998,44 @@ export async function registerRoutes(
   });
 
   // Volunteer signup endpoint
-  app.post("/api/volunteers/submit", moderateRateLimiter, async (req, res) => {
+  // app.post("/api/volunteers/submit", moderateRateLimiter, async (req, res) => {
+  //   try {
+  //     const result = volunteerSchema.safeParse(req.body);
+  //     if (!result.success) {
+  //       return res.status(400).json({
+  //         error: result.error.errors[0]?.message || "Invalid form data",
+  //       });
+  //     }
+  //     const { firstName, lastName, email, expertise, message } = result.data;
+
+  //     // Track in HubSpot
+  //     try {
+  //       await trackVolunteerSignup({
+  //         email,
+  //         firstName,
+  //         lastName,
+  //         expertise: expertise || "Not specified",
+  //         message,
+  //       });
+  //     } catch (hubspotError: any) {
+  //       console.error("HubSpot volunteer tracking error:", hubspotError);
+  //     }
+
+  //     console.log(
+  //       `Volunteer signup: ${firstName} ${lastName} (${email}) - ${expertise || "No expertise specified"
+  //       }`
+  //     );
+  //     res.json({
+  //       success: true,
+  //       message: "Thank you for your interest in volunteering!",
+  //     });
+  //   } catch (error: any) {
+  //     console.error("Error processing volunteer signup:", error);
+  //     res.status(500).json({ error: "Failed to process volunteer signup" });
+  //   }
+  // });
+
+   app.post("/api/volunteers/submit", moderateRateLimiter, async (req, res) => {
     try {
       const result = volunteerSchema.safeParse(req.body);
       if (!result.success) {
@@ -1018,10 +1057,38 @@ export async function registerRoutes(
       } catch (hubspotError: any) {
         console.error("HubSpot volunteer tracking error:", hubspotError);
       }
-
+      try {
+        await sendOwnerNotificationEmail({
+          eventType: "volunteer",
+          contactName: `${firstName} ${lastName}`,
+          contactEmail: email,
+          details: {
+            Name: `${firstName} ${lastName}`,
+            Email: email,
+            Expertise: expertise || "Not specified",
+            Message: message || "—",
+          },
+        });
+      } catch (e: any) {
+        console.error(
+          "Failed to send volunteer signup owner notification:",
+          e.message,
+        );
+      }
+      try {
+        await sendUserConfirmationEmail({
+          toEmail: email,
+          toName: `${firstName} ${lastName}`,
+          eventType: "volunteer",
+          extraDetails: { Expertise: expertise || "Not specified" },
+        });
+      } catch (e: any) {
+        console.error("Failed to send volunteer confirmation:", e.message);
+      }
       console.log(
-        `Volunteer signup: ${firstName} ${lastName} (${email}) - ${expertise || "No expertise specified"
-        }`
+        `Volunteer signup: ${firstName} ${lastName} (${email}) - ${
+          expertise || "No expertise specified"
+        }`,
       );
       res.json({
         success: true,
