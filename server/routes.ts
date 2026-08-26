@@ -1020,8 +1020,7 @@ export async function registerRoutes(
       }
 
       console.log(
-        `Volunteer signup: ${firstName} ${lastName} (${email}) - ${
-          expertise || "No expertise specified"
+        `Volunteer signup: ${firstName} ${lastName} (${email}) - ${expertise || "No expertise specified"
         }`
       );
       res.json({
