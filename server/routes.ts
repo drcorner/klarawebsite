@@ -1120,9 +1120,8 @@ export async function registerRoutes(
         console.error("Failed to send volunteer confirmation:", e.message);
       }
       console.log(
-        `Volunteer signup: ${firstName} ${lastName} (${email}) - ${
-          expertise || "No expertise specified"
-        }`,
+        `Volunteer signup: ${firstName} ${lastName} (${email}) - ${expertise || "No expertise specified"
+        }`
       );
       res.json({
         success: true,
