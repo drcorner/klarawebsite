@@ -10,6 +10,7 @@ import {
   sendOwnerNotificationEmail,
   sendUserConfirmationEmail,
 } from "./sendgridClient";
+import { ensureFixedTermCancellation } from "./fixedTermDonations";
 import {
   trackNewsletterSignup,
   // trackDonation,
@@ -842,45 +843,18 @@ export async function registerRoutes(
         duration !== "ongoing" &&
         session.subscription
       ) {
-        const months = parseInt(duration);
-        if ([3, 6, 12].includes(months)) {
-          try {
-            const subscriptionId =
-              typeof session.subscription === "string"
-                ? session.subscription
-                : session.subscription.id;
-
-            const now = new Date();
-            const originalDay = now.getDate();
-            const targetMonth = now.getMonth() + months;
-            const targetYear = now.getFullYear() + Math.floor(targetMonth / 12);
-            const normalizedMonth = targetMonth % 12;
-
-            // Create date in target month, then handle overflow
-            const cancelDate = new Date(
-              targetYear,
-              normalizedMonth,
-              originalDay,
-            );
-
-            // Handle month overflow (e.g., Jan 31 + 1 month should be Feb 28)
-            // If the date rolled over to the next month, go back to last day of intended month
-            if (cancelDate.getMonth() !== normalizedMonth) {
-              cancelDate.setDate(0); // Sets to last day of previous month (the intended month)
-            }
-
-            await stripe.subscriptions.update(subscriptionId, {
-              cancel_at: Math.floor(cancelDate.getTime() / 1000),
-            });
-            console.log(
-              `Set subscription ${subscriptionId} to cancel at ${cancelDate.toISOString()}`,
-            );
-          } catch (cancelError: any) {
-            console.error(
-              "Error setting fixed-term cancellation:",
-              cancelError,
-            );
-          }
+        // Normally handled by the checkout.session.completed webhook; this is
+        // a safe no-op if the end date is already set.
+        try {
+          const subscriptionId =
+            typeof session.subscription === "string"
+              ? session.subscription
+              : session.subscription.id;
+          const subscription =
+            await stripe.subscriptions.retrieve(subscriptionId);
+          await ensureFixedTermCancellation(stripe, subscription);
+        } catch (cancelError: any) {
+          console.error("Error setting fixed-term cancellation:", cancelError);
         }
       }
 

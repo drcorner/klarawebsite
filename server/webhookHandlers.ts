@@ -12,6 +12,7 @@ import {
   sendOwnerNotificationEmail,
   sendUserConfirmationEmail,
 } from "./sendgridClient";
+import { ensureFixedTermCancellation } from "./fixedTermDonations";
 
 // Public site address used for the "Manage Your Donation" link in receipts.
 // Webhooks have no browser request to read the host from, so it is configured.
@@ -55,6 +56,34 @@ export class WebhookHandlers {
         const meta = session.metadata || {};
 
         const donorEmail = meta.donor_email || session.customer_email;
+
+        // Fixed-term monthly gifts (3/6/12 months): schedule the end date so
+        // donors are charged only for the term they chose.
+        if (session.mode === "subscription" && session.subscription) {
+          try {
+            const stripe = getStripeClient();
+            const subscriptionId =
+              typeof session.subscription === "string"
+                ? session.subscription
+                : session.subscription.id;
+            const subscription =
+              await stripe.subscriptions.retrieve(subscriptionId);
+            const result = await ensureFixedTermCancellation(
+              stripe,
+              subscription,
+            );
+            if (result.action === "set_cancel_at") {
+              console.log(
+                `Fixed-term subscription ${subscriptionId} set to end at ${new Date(result.cancelAt * 1000).toISOString()}`,
+              );
+            }
+          } catch (err: any) {
+            console.error(
+              "Webhook: failed to set fixed-term cancellation:",
+              err.message,
+            );
+          }
+        }
 
         try {
           await trackDonation({
