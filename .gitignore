@@ -9,5 +9,3 @@ vite.config.ts.*
 .env
 .env.local
 .env.*.local
-# Donor audit output (contains personal data)
-fixed-term-donations-audit.csv
