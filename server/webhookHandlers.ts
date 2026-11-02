@@ -8,9 +8,19 @@ import {
   HUBSPOT_IDS,
 } from "./hubspotClient";
 import {
+  sendDonationThankYouEmail,
   sendOwnerNotificationEmail,
   sendUserConfirmationEmail,
 } from "./sendgridClient";
+import { ensureFixedTermCancellation } from "./fixedTermDonations";
+
+// Public site address used for the "Manage Your Donation" link in receipts.
+// Webhooks have no browser request to read the host from, so it is configured.
+const SITE_URL = (process.env.SITE_URL || "https://klaraproject.org").replace(
+  /\/+$/,
+  "",
+);
+const MANAGE_DONATION_URL = `${SITE_URL}/manage-donation`;
 
 export class WebhookHandlers {
   static async processWebhook(
@@ -47,6 +57,34 @@ export class WebhookHandlers {
 
         const donorEmail = meta.donor_email || session.customer_email;
 
+        // Fixed-term monthly gifts (3/6/12 months): schedule the end date so
+        // donors are charged only for the term they chose.
+        if (session.mode === "subscription" && session.subscription) {
+          try {
+            const stripe = getStripeClient();
+            const subscriptionId =
+              typeof session.subscription === "string"
+                ? session.subscription
+                : session.subscription.id;
+            const subscription =
+              await stripe.subscriptions.retrieve(subscriptionId);
+            const result = await ensureFixedTermCancellation(
+              stripe,
+              subscription,
+            );
+            if (result.action === "set_cancel_at") {
+              console.log(
+                `Fixed-term subscription ${subscriptionId} set to end at ${new Date(result.cancelAt * 1000).toISOString()}`,
+              );
+            }
+          } catch (err: any) {
+            console.error(
+              "Webhook: failed to set fixed-term cancellation:",
+              err.message,
+            );
+          }
+        }
+
         try {
           await trackDonation({
             email: donorEmail,
@@ -76,19 +114,21 @@ export class WebhookHandlers {
 
         // Only send these here for one-time; monthly is handled in invoice.paid
         if (!isMonthly) {
+          // Full thank-you email with tax receipt
           try {
-            await sendUserConfirmationEmail({
-              toEmail: !donorEmail ? session.customer_email : donorEmail,
-              toName: donorName,
-              eventType: "one_time_donation",
-              extraDetails: {
-                Amount: amountFormatted,
-                "Session ID": session.id,
-              },
-            });
+            if (donorEmail) {
+              await sendDonationThankYouEmail({
+                donorName,
+                donorEmail,
+                amount: session.amount_total || 0,
+                isRecurring: false,
+                date: new Date(),
+                manageUrl: MANAGE_DONATION_URL,
+              });
+            }
           } catch (e: any) {
             console.error(
-              "Failed to send one-time donor confirmation email:",
+              "Failed to send one-time donation thank-you email:",
               e.message,
             );
           }
@@ -223,18 +263,33 @@ export class WebhookHandlers {
         // Send renewal/payment confirmation email to donor
         if (customerEmail) {
           try {
-            const amountFormatted = `$${(invoice.amount_paid / 100).toFixed(2)}`;
-            await sendUserConfirmationEmail({
-              toEmail: customerEmail,
-              toName: invoice.customer_name || "Valued Donor",
-              eventType: isRenewal
-                ? "recurring_payment"
-                : "subscription_created",
-              extraDetails: {
-                Amount: amountFormatted,
-                "Invoice ID": invoice.id,
-              },
-            });
+            const donorName =
+              subscriptionMeta.donor_name ||
+              invoice.customer_name ||
+              "Valued Donor";
+            if (isRenewal) {
+              const amountFormatted = `$${(invoice.amount_paid / 100).toFixed(2)}`;
+              await sendUserConfirmationEmail({
+                toEmail: customerEmail,
+                toName: donorName,
+                eventType: "recurring_payment",
+                extraDetails: {
+                  Amount: amountFormatted,
+                  "Invoice ID": invoice.id,
+                },
+              });
+            } else {
+              // First payment of a new monthly gift: full thank-you email with tax receipt
+              await sendDonationThankYouEmail({
+                donorName,
+                donorEmail: customerEmail,
+                amount: invoice.amount_paid,
+                isRecurring: true,
+                duration,
+                date: new Date(),
+                manageUrl: MANAGE_DONATION_URL,
+              });
+            }
           } catch (e: any) {
             console.error(
               "Failed to send invoice.paid donor email:",
