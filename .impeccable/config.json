@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "bounce-easing",
+        "value": "animate-bounce",
+        "files": [
+          "client/src/components/HeroSection.tsx"
+        ],
+        "createdAt": "2026-08-23T23:09:18.790Z",
+        "reason": "Project design guidelines specify bounce on scroll hints"
+      },
+      {
+        "rule": "gradient-text",
+        "value": "*",
+        "files": [
+          "client/src/components/HeroSection.tsx"
+        ],
+        "createdAt": "2026-08-23T23:09:18.854Z",
+        "reason": "Project design guidelines specify gradient text for hero headlines"
+      }
+    ]
+  }
+}
