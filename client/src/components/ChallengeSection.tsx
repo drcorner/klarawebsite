@@ -66,7 +66,7 @@ export default function ChallengeSection() {
             AI is transforming how we work, learn, and live—faster than anyone predicted. Families wrestle with AI's influence on their children. Christians form emotional bonds with AI systems that simulate companionship. Deepfakes erode trust in truth itself. Humanoid robots may enter homes within the next decade—not just vacuuming floors, but interacting with our families in ways we're only beginning to imagine. Churches will soon face waves of members navigating technological unemployment—with young adults entering the workforce and family life amid unprecedented uncertainty.
           </p>
           <p className="text-charcoal text-lg leading-relaxed">
-            Yet many Christians—though grounded in Scripture—feel unprepared to apply biblical principles to challenges this new, and Christian voices are absent from the rooms where AI's future is being decided.
+            Yet many Christians—though grounded in Scripture—feel unprepared to apply biblical principles to these new challenges, and Christian voices are absent from the rooms where AI's future is being decided.
           </p>
         </div>
 
