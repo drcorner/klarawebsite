@@ -11,7 +11,7 @@ const stats = [
   },
   {
     value: "190 Million",
-    label: "People using AI chatbot ChatGPT daily",
+    label: "People using the AI chatbot ChatGPT daily",
     accent: "text-gold",
   },
 ];
@@ -51,7 +51,7 @@ export default function StatisticsSection() {
             "Almost all humans at almost everything"
           </p>
           <cite className="mt-4 block text-cream/60 not-italic font-medium">
-            Dario Amodei, chief executive of Anthropic, in January 2025, on whom AI could surpass within two to three years
+            What AI could surpass within two to three years, according to Dario Amodei, chief executive of Anthropic, in January 2025
           </cite>
         </blockquote>
       </div>
