@@ -19,8 +19,8 @@ const items = [
   },
   {
     icon: Lightbulb,
-    title: "Thought Leadership",
-    description: "Research and engagement that earns Christians a seat at the table.",
+    title: "Public Engagement",
+    description: "Research and outreach that earn Christians credibility with the technology industry.",
   },
 ];
 
@@ -48,7 +48,7 @@ export default function WhatYourGiftSupports() {
           "And let us consider how to stir up one another to love and good works."
         </p>
         <cite className="mt-3 block text-charcoal-muted not-italic">
-          —Hebrews 10:24
+          Hebrews 10:24
         </cite>
       </blockquote>
     </section>

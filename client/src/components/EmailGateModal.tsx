@@ -17,7 +17,7 @@ interface EmailGateModalProps {
 export default function EmailGateModal({
   isOpen,
   title = "Get the White Paper",
-  description = "Enter your email to receive instant access to our founding white paper.",
+  description = "Enter your email to download our founding white paper.",
   confirmLabel = "Continue to Download",
   onClose,
   onSubmit,

@@ -30,9 +30,8 @@ export default function PartnerSection() {
           </h2>
 
           <p className="text-cream/80 text-lg leading-relaxed mb-10 max-w-2xl mx-auto">
-            The window for Christian influence is narrow but real. Major AI companies are making
-            decisions now that will affect generations. Churches need resources now—not after
-            the crisis arrives.
+            Christians have a short time to influence how AI develops. Major AI companies are
+            making decisions now that will affect generations. Churches need resources now.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -69,7 +68,7 @@ export default function PartnerSection() {
               "And let us consider how to stir up one another to love and good works."
             </p>
             <cite className="mt-4 block text-cream/60 not-italic font-medium">
-              —Hebrews 10:24
+              Hebrews 10:24
             </cite>
           </blockquote>
         </div>

@@ -13,7 +13,7 @@ export default function HeroSection() {
       <div className="absolute inset-0 z-0">
         <img 
           src={heroImage} 
-          alt="Three people talking, one with look of surprise" 
+          alt="Three people talking, one with a look of surprise" 
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-charcoal/95 via-charcoal/75 to-charcoal/40" />

@@ -847,7 +847,7 @@ export default function ManageDonation() {
               <div className="flex items-start gap-2 p-3 bg-gold/10 rounded-md">
                 <ArrowDown className="w-4 h-4 text-gold-dark mt-0.5" />
                 <p className="text-sm text-charcoal">
-                  Even a smaller monthly gift makes a real difference. Thank you for continuing to support our mission!
+                  Even a smaller monthly gift helps. Thank you for continuing to support our mission!
                 </p>
               </div>
             )}
@@ -902,7 +902,7 @@ export default function ManageDonation() {
                   <div className="flex items-start gap-3">
                     <Users className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                     <p className="text-sm text-charcoal">
-                      <strong>Every donor counts.</strong> The number of monthly supporters speaks volumes about the Christian community's commitment to engaging with AI thoughtfully.
+                      <strong>Every donor counts.</strong> The number of monthly supporters shows the Christian community's commitment to engaging with AI thoughtfully.
                     </p>
                   </div>
                   <div className="flex items-start gap-3">

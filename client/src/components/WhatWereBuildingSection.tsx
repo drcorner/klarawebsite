@@ -6,17 +6,17 @@ const items = [
   },
   {
     title: "Conversation Guides",
-    description: "Practical frameworks for church leaders: 'When AI Takes Jobs,' 'Raising Children in the Age of AI,' 'Christian Ethics for Everyday AI Decisions,' and 'Relationships in an AI World.'",
+    description: "Practical frameworks for church leaders: \"When AI Takes Jobs,\" \"Raising Children in the Age of AI,\" \"Christian Ethics for Everyday AI Decisions,\" and \"Relationships in an AI World.\"",
     status: "In Development",
   },
   {
     title: "Family Resources",
-    description: "Guidance for parents making decisions about AI tools, educational technology, and home robotics—grounded in biblical wisdom.",
+    description: "Biblically grounded guidance for parents making decisions about AI tools, educational technology, and home robotics.",
     status: "Coming Soon",
   },
   {
     title: "Public Engagement",
-    description: "Coalition building, media presence, and thought leadership positioning Christians as constructive partners in AI development.",
+    description: "Coalition building, media presence, and research that show Christians as constructive partners in AI development.",
     status: "Coming Soon",
   },
 ];
