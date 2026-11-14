@@ -4,22 +4,22 @@ import { Card } from "@/components/ui/card";
 const items = [
   {
     icon: Video,
-    title: "Curriculum Development",
+    title: "Curriculum development",
     description: "Video-based resources that help churches think clearly about AI.",
   },
   {
     icon: GraduationCap,
-    title: "Educational Grants",
+    title: "Educational grants",
     description: "Funding for students exploring AI, faith, and ethics.",
   },
   {
     icon: Heart,
-    title: "Pastoral Resources",
+    title: "Pastoral resources",
     description: "Training for ministering to families facing technological unemployment.",
   },
   {
     icon: Lightbulb,
-    title: "Public Engagement",
+    title: "Public engagement",
     description: "Research and outreach that earn Christians credibility with the technology industry.",
   },
 ];
@@ -28,7 +28,7 @@ export default function WhatYourGiftSupports() {
   return (
     <section className="py-12">
       <h2 className="font-serif text-2xl md:text-3xl font-semibold text-charcoal mb-8 text-center">
-        What Your Gift Supports
+        What your gift supports
       </h2>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

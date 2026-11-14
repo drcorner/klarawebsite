@@ -49,7 +49,7 @@ export default function DonateThankYou() {
           </div>
 
           <h1 className="font-serif text-4xl md:text-5xl font-bold text-charcoal mb-6">
-            Thank You for Your Gift
+            Thank you for your gift
           </h1>
 
           <p className="text-charcoal leading-relaxed text-lg mb-8">

@@ -22,7 +22,7 @@ export default function FounderSection() {
               Leadership
             </span>
             <h2 className="font-sans text-3xl md:text-4xl font-bold text-charcoal mb-6">
-              About the Founder
+              About the founder
             </h2>
             
             <div className="relative mb-6 p-6 rounded-2xl bg-gradient-to-br from-primary/5 to-transparent border border-primary/10">

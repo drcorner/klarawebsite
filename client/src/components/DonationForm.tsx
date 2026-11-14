@@ -377,7 +377,7 @@ export default function DonationForm({
       {showFoundingGifts && (
         <Card className="p-6 md:p-8 bg-cream-dark border-gold/30">
           <h3 className="font-serif text-2xl font-semibold text-charcoal mb-4">
-            Founding Gifts
+            Founding gifts
           </h3>
           <p className="text-charcoal-muted mb-6">
             Founding gifts of $1,000 or more provide the stable foundation this

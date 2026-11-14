@@ -176,7 +176,7 @@ export default function GetInvolved() {
                 <Church className="h-10 w-10 text-cream" />
               </div>
               <h2 className="font-serif text-3xl md:text-4xl font-semibold text-cream mb-6">
-                Bring Us to Your Church
+                Bring us to your church
               </h2>
               <p className="text-cream/80 leading-relaxed text-lg mb-8">
                 Interested in hosting a workshop, speaker, or pilot program?
@@ -346,7 +346,7 @@ export default function GetInvolved() {
                   <Users className="h-8 w-8 text-primary" />
                 </div>
                 <h2 className="font-serif text-3xl font-semibold text-charcoal mb-6">
-                  Volunteer Your Expertise
+                  Volunteer your expertise
                 </h2>
                 <p className="text-charcoal leading-relaxed mb-6">
                   We're seeking professionals with backgrounds in AI,
@@ -476,7 +476,7 @@ export default function GetInvolved() {
                       <Check className="h-8 w-8 text-primary" />
                     </div>
                     <h3 className="font-serif text-xl font-semibold text-charcoal mb-2">
-                      Thank You!
+                      Thank you!
                     </h3>
                     <p className="text-charcoal-muted">
                       We've received your interest and will be in touch soon.
@@ -497,7 +497,7 @@ export default function GetInvolved() {
                   <Share2 className="h-8 w-8 text-primary" />
                 </div>
                 <h2 className="font-serif text-3xl font-semibold text-charcoal mb-6">
-                  Share Our Mission
+                  Share our mission
                 </h2>
                 <p className="text-charcoal leading-relaxed mb-6">
                   Share our resources with your church, small group, or professional
@@ -568,7 +568,7 @@ export default function GetInvolved() {
                 <div className="flex items-center gap-4 mb-6">
                   <Mail className="h-6 w-6 text-primary" />
                   <h3 className="font-serif text-2xl font-semibold text-charcoal">
-                    Stay Informed
+                    Stay informed
                   </h3>
                 </div>
                 <p className="text-charcoal-muted mb-6">
@@ -614,7 +614,7 @@ export default function GetInvolved() {
                 <div className="flex items-center gap-4 mb-6">
                   <MessageSquare className="h-6 w-6 text-primary" />
                   <h3 className="font-serif text-2xl font-semibold text-charcoal">
-                    Share Your Experience or Questions
+                    Share your experience or questions
                   </h3>
                 </div>
                 <p className="text-charcoal-muted mb-6">
@@ -753,7 +753,7 @@ export default function GetInvolved() {
                       <Check className="h-8 w-8 text-primary" />
                     </div>
                     <h3 className="font-serif text-xl font-semibold text-charcoal mb-2">
-                      Thank You!
+                      Thank you!
                     </h3>
                     <p className="text-charcoal-muted">
                       We appreciate you sharing your experience or question with

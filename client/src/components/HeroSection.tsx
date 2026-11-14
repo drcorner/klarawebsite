@@ -27,10 +27,10 @@ export default function HeroSection() {
           </div>
           
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight">
-            <span className="text-cream font-sans font-black">AI Is Here.</span>
+            <span className="text-cream font-sans font-black">AI is here.</span>
             <br />
             <span className="text-gold font-sans font-bold">
-              Help the Church Respond.
+              Help the church respond.
             </span>
           </h1>
           

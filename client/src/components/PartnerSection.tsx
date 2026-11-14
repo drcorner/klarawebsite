@@ -26,7 +26,7 @@ export default function PartnerSection() {
       <div className="relative max-w-7xl mx-auto px-4 md:px-8">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="font-sans text-3xl md:text-5xl font-bold text-cream mb-6">
-            Partner With Us
+            Partner with us
           </h2>
 
           <p className="text-cream/80 text-lg leading-relaxed mb-10 max-w-2xl mx-auto">

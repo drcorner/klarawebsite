@@ -75,7 +75,7 @@ export default function About() {
           <div className="max-w-7xl mx-auto px-6 md:px-10">
             <div className="max-w-3xl mx-auto">
               <h2 className="font-serif text-3xl font-semibold text-charcoal mb-6">
-                Klara's Contribution
+                Klara's contribution
               </h2>
               <p className="text-charcoal leading-relaxed mb-4">
                 Most faith-based technology initiatives focus on policy advocacy or
@@ -103,7 +103,7 @@ export default function About() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <Card className="p-8 bg-card border-l-4 border-l-primary">
                 <h3 className="font-serif text-2xl font-semibold text-charcoal mb-4">
-                  Our Mission
+                  Our mission
                 </h3>
                 <ul className="space-y-3 text-charcoal">
                   <li>
@@ -122,7 +122,7 @@ export default function About() {
               </Card>
               <Card className="p-8 bg-card border-l-4 border-l-gold">
                 <h3 className="font-serif text-2xl font-semibold text-charcoal mb-4">
-                  Our Vision
+                  Our vision
                 </h3>
                 <p className="text-charcoal leading-relaxed">
                   A future where Christians have both a voice and real choices in AI and
@@ -167,7 +167,7 @@ export default function About() {
           <div className="max-w-7xl mx-auto px-6 md:px-10">
             <div className="max-w-3xl mx-auto">
               <h2 className="font-serif text-3xl font-semibold text-charcoal mb-6">
-                What Christians Bring
+                What Christians bring
               </h2>
               <p className="text-charcoal leading-relaxed mb-4">
                 Technology companies and policymakers should listen to Christians
@@ -234,7 +234,7 @@ export default function About() {
           <div className="max-w-7xl mx-auto px-6 md:px-10">
             <div className="max-w-3xl mx-auto">
               <h2 className="font-serif text-3xl font-semibold text-charcoal mb-6">
-                Investing in the Next Generation
+                Investing in the next generation
               </h2>
               <p className="text-charcoal leading-relaxed mb-4">
                 Investing in the next generation is part of our mission and central to
@@ -261,7 +261,7 @@ export default function About() {
           <div className="max-w-7xl mx-auto px-6 md:px-10">
             <div className="max-w-3xl mx-auto">
               <h2 className="font-serif text-3xl font-semibold text-charcoal mb-6">
-                Statement of Faith
+                Statement of faith
               </h2>
               <div className="space-y-4 text-charcoal leading-relaxed">
                 <p>

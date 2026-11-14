@@ -61,7 +61,7 @@ export default function NewsletterSignup({
         className={`bg-cream-dark border border-border rounded-lg p-6 ${className}`}
       >
         <h3 className="font-serif text-xl font-semibold text-charcoal mb-2">
-          Stay Informed
+          Stay informed
         </h3>
         <p className="text-charcoal-muted mb-4">
           Join our mailing list for updates on resources, research, and

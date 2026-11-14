@@ -12,7 +12,7 @@ export default function NextGeneration() {
       <Header />
       <main id="main-content">
         <PageHero 
-          title="Investing in the Next Generation" 
+          title="Investing in the next generation" 
           subtitle="Central to how we operate"
         />
 
@@ -94,7 +94,7 @@ export default function NextGeneration() {
             <Card className="max-w-3xl mx-auto p-8 md:p-12 bg-cream">
               <div className="w-16 h-1 bg-coral rounded-full mb-6"></div>
               <h2 className="font-serif text-3xl font-semibold text-charcoal mb-6">
-                How We Develop Young Leaders
+                How we develop young leaders
               </h2>
               <p className="text-charcoal leading-relaxed mb-6">
                 The church needs these voices, and The Klara Project is structured to develop them. 
@@ -127,7 +127,7 @@ export default function NextGeneration() {
             <div className="max-w-3xl mx-auto">
               <div className="w-16 h-1 bg-gold rounded-full mb-6"></div>
               <h2 className="font-serif text-3xl font-semibold text-charcoal mb-6">
-                Future Programs
+                Future programs
               </h2>
               <p className="text-charcoal leading-relaxed mb-8">
                 As funding allows, we're building programs that invest directly in emerging Christian voices.
@@ -137,7 +137,7 @@ export default function NextGeneration() {
                 <Card className="p-6 bg-card border-card-border">
                   <div className="flex items-start justify-between gap-4 mb-3">
                     <h3 className="font-serif text-xl font-semibold text-charcoal">
-                      Student Essay Competition
+                      Student essay competition
                     </h3>
                     <span className="text-xs font-semibold px-3 py-1 rounded-full bg-charcoal/5 text-charcoal-muted shrink-0">
                       Coming Soon
@@ -152,7 +152,7 @@ export default function NextGeneration() {
                 <Card className="p-6 bg-card border-card-border">
                   <div className="flex items-start justify-between gap-4 mb-3">
                     <h3 className="font-serif text-xl font-semibold text-charcoal">
-                      Educational Grants
+                      Educational grants
                     </h3>
                     <span className="text-xs font-semibold px-3 py-1 rounded-full bg-charcoal/5 text-charcoal-muted shrink-0">
                       Coming Soon
