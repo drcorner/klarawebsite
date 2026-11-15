@@ -1,22 +1,22 @@
 const items = [
   {
-    title: "Video-Based Curriculum",
+    title: "Video-based curriculum",
     description: "A 13-week series for small groups and Sunday school. Each session introduces key concepts, then guides participants in applying biblical principles to AI challenges in their families and workplaces.",
     status: "In Development",
   },
   {
-    title: "Conversation Guides",
-    description: "Practical frameworks for church leaders: 'When AI Takes Jobs,' 'Raising Children in the Age of AI,' 'Christian Ethics for Everyday AI Decisions,' and 'Relationships in an AI World.'",
+    title: "Conversation guides",
+    description: "Practical frameworks for church leaders: \"When AI Takes Jobs,\" \"Raising Children in the Age of AI,\" \"Christian Ethics for Everyday AI Decisions,\" and \"Relationships in an AI World.\"",
     status: "In Development",
   },
   {
-    title: "Family Resources",
-    description: "Guidance for parents making decisions about AI tools, educational technology, and home robotics—grounded in biblical wisdom.",
+    title: "Family resources",
+    description: "Biblically grounded guidance for parents making decisions about AI tools, educational technology, and home robotics.",
     status: "Coming Soon",
   },
   {
-    title: "Public Engagement",
-    description: "Coalition building, media presence, and thought leadership positioning Christians as constructive partners in AI development.",
+    title: "Public engagement",
+    description: "Coalition building, media presence, and research that show Christians as constructive partners in AI development.",
     status: "Coming Soon",
   },
 ];
@@ -30,7 +30,7 @@ export default function WhatWereBuildingSection() {
             Our Programs
           </p>
           <h2 className="font-serif text-3xl md:text-4xl font-normal text-charcoal">
-            What We're Building
+            What we're building
           </h2>
         </div>
         

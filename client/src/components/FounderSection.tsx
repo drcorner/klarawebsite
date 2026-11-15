@@ -22,14 +22,14 @@ export default function FounderSection() {
               Leadership
             </span>
             <h2 className="font-sans text-3xl md:text-4xl font-bold text-charcoal mb-6">
-              About the Founder
+              About the founder
             </h2>
             
             <div className="relative mb-6 p-6 rounded-2xl bg-gradient-to-br from-primary/5 to-transparent border border-primary/10">
               <Quote className="absolute top-4 left-4 h-8 w-8 text-primary/20" />
               <p className="text-charcoal leading-relaxed pl-8 italic">
                 The idea for Klara Project was born when Dr. Pisani taught a Sunday school class 
-                on faith and AI and watched people young and old leave encouraged—strengthened in their 
+                on faith and AI and watched people young and old leave encouraged, strengthened in their 
                 faith and in the reality that the core of our humanity is relationship with God.
               </p>
             </div>
@@ -50,7 +50,7 @@ export default function FounderSection() {
             <div className="p-4 rounded-xl bg-charcoal/5 border border-charcoal/5">
               <p className="text-charcoal-muted text-sm">
                 Klara Project is co-located with SafeSide's full-service production studio, 
-                providing immediate access to professional video production infrastructure.
+                which gives it immediate access to professional video production.
               </p>
             </div>
           </div>

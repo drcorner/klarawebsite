@@ -1,17 +1,17 @@
 const stats = [
   {
     value: "2026–2030",
-    label: "Leading AI companies predict human-level capabilities within this timeframe",
+    label: "When the leaders of OpenAI, Anthropic, and Google DeepMind have predicted AI will match human abilities",
     accent: "text-[hsl(220,70%,75%)]",
   },
   {
     value: "92 Million",
-    label: "Jobs eliminated by AI by 2030—even as new ones emerge",
+    label: "Jobs the World Economic Forum projects will be displaced by 2030, even as new ones emerge",
     accent: "text-coral",
   },
   {
     value: "190 Million",
-    label: "People using AI chatbot ChatGPT daily",
+    label: "People using the AI chatbot ChatGPT daily",
     accent: "text-gold",
   },
 ];
@@ -25,7 +25,7 @@ export default function StatisticsSection() {
             The Urgency
           </p>
           <h2 className="font-serif text-3xl md:text-4xl font-normal text-cream">
-            The transformation is happening now
+            AI is already changing work and daily life
           </h2>
         </div>
         
@@ -51,7 +51,7 @@ export default function StatisticsSection() {
             "Almost all humans at almost everything"
           </p>
           <cite className="mt-4 block text-cream/60 not-italic font-medium">
-            — Dario Amodei, CEO of Anthropic, on AI capabilities within 2–3 years
+            What AI could surpass within two to three years, according to Dario Amodei, chief executive of Anthropic, in January 2025
           </cite>
         </blockquote>
       </div>

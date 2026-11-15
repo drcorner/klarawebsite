@@ -12,7 +12,7 @@ export default function NextGeneration() {
       <Header />
       <main id="main-content">
         <PageHero 
-          title="Investing in the Next Generation" 
+          title="Investing in the next generation" 
           subtitle="Central to how we operate"
         />
 
@@ -20,8 +20,8 @@ export default function NextGeneration() {
           <div className="max-w-7xl mx-auto px-6 md:px-10">
             <div className="max-w-3xl mx-auto">
               <p className="text-charcoal leading-relaxed text-lg mb-8">
-                Investing in the next generation is not just part of The Klara Project's mission—it is 
-                central to how we operate. Two generations will be most shaped by AI and robotics: 
+                Investing in the next generation is part of The Klara Project's mission
+                and central to how we operate. Two generations will be most shaped by AI and robotics: 
                 Generation Z (born 1997–2012) and Generation Alpha (born 2013–2025). We create resources 
                 to serve them and their parents, and we build our organization by developing young 
                 leaders from within.
@@ -38,20 +38,21 @@ export default function NextGeneration() {
                 Generation Z
               </h2>
               <p className="text-charcoal leading-relaxed mb-4">
-                Gen Z grew up with smartphones and social media—technologies that shaped them in both 
-                challenging and positive ways. They are values-driven, digitally fluent, adaptable, and 
+                Gen Z grew up with smartphones and social media, technologies that
+                shaped them in both challenging and positive ways. They are values-driven, digitally fluent, adaptable, and 
                 pragmatic. They prioritize mental health and continuous learning, and they are looking 
                 for purpose-driven institutions that align with their values.
               </p>
               <p className="text-charcoal leading-relaxed mb-4">
-                Yet this generation also faces real struggles: rates of anxiety and depression have surged, 
-                and many carry deep uncertainty about the future. They are entering the workforce at a 
-                pivotal moment, as AI reshapes the economy in real time.
+                Yet this generation also struggles. Rates of anxiety and depression have
+                risen, and many are uncertain about the future. They are entering the
+                workforce as AI reshapes the economy.
               </p>
               <p className="text-charcoal leading-relaxed font-medium">
-                No generation will be more affected by the job disruptions ahead—but in a few years, 
-                Gen Z will also receive the largest wealth transfer in history. They are not just the 
-                people we serve; they are our future partners and donors.
+                No generation will be more affected by the job disruptions ahead. Yet in
+                the coming decades, Gen Z will also share in the largest wealth transfer
+                in history. They are the people we serve, and they are our future
+                partners and donors.
               </p>
             </div>
           </div>
@@ -65,26 +66,24 @@ export default function NextGeneration() {
                 Generation Alpha
               </h2>
               <p className="text-charcoal leading-relaxed mb-4">
-                Gen Alpha is the first generation that will never know a world without AI assistants—and 
-                many will grow up or experience adolescence with robots in their homes. They bring real 
-                strengths: deep digital fluency, comfort with visual and interactive learning, creativity 
+                Gen Alpha is the first generation that will never know a world without
+                AI assistants, and many may grow up or experience adolescence with
+                robots in their homes. Their strengths include digital fluency, comfort with visual and interactive learning, creativity 
                 with technology, global awareness, and an early sense of agency and voice.
               </p>
               <p className="text-charcoal leading-relaxed mb-4">
-                But they are also showing signs of real struggle: shortened attention spans, rising anxiety 
+                They are also showing signs of struggle: shortened attention spans, rising anxiety 
                 even among young children, difficulty tolerating frustration, and loneliness despite constant 
                 digital connection.
               </p>
               <p className="text-charcoal leading-relaxed mb-4">
                 These patterns pose a particular challenge for the church. Scripture study requires patience 
-                and concentration. The Bible calls believers to meditate on God's Word, to chew on it—but 
-                when any question can be answered instantly and any text summarized by AI, the habits of 
+                and concentration. The Bible calls believers to meditate on God's Word, to chew on it. But when any question can be answered instantly and any text summarized by AI, the habits of 
                 slow, deep reflection don't develop naturally.
               </p>
               <p className="text-charcoal leading-relaxed font-medium">
                 Gen Alpha will need patient discipleship that helps them build capacities the digital world 
-                doesn't cultivate. The decisions being made now about AI values and design will define the 
-                world they inherit.
+                doesn't cultivate. The decisions being made now about AI values and design will shape the world they inherit.
               </p>
             </div>
           </div>
@@ -95,11 +94,11 @@ export default function NextGeneration() {
             <Card className="max-w-3xl mx-auto p-8 md:p-12 bg-cream">
               <div className="w-16 h-1 bg-coral rounded-full mb-6"></div>
               <h2 className="font-serif text-3xl font-semibold text-charcoal mb-6">
-                How We Develop Young Leaders
+                How we develop young leaders
               </h2>
               <p className="text-charcoal leading-relaxed mb-6">
                 The church needs these voices, and The Klara Project is structured to develop them. 
-                Hiring and mentoring young leaders is a pillar of our approach—not an afterthought.
+                Hiring and mentoring young leaders is a core part of our approach.
               </p>
               <ul className="space-y-4 text-charcoal mb-8">
                 <li className="flex items-start gap-3">
@@ -116,7 +115,8 @@ export default function NextGeneration() {
                 </li>
               </ul>
               <p className="text-charcoal leading-relaxed font-medium text-lg">
-                We don't just serve these generations; we platform and develop them.
+                We serve these generations, give them a platform, and develop them as
+                leaders.
               </p>
             </Card>
           </div>
@@ -127,7 +127,7 @@ export default function NextGeneration() {
             <div className="max-w-3xl mx-auto">
               <div className="w-16 h-1 bg-gold rounded-full mb-6"></div>
               <h2 className="font-serif text-3xl font-semibold text-charcoal mb-6">
-                Future Programs
+                Future programs
               </h2>
               <p className="text-charcoal leading-relaxed mb-8">
                 As funding allows, we're building programs that invest directly in emerging Christian voices.
@@ -137,7 +137,7 @@ export default function NextGeneration() {
                 <Card className="p-6 bg-card border-card-border">
                   <div className="flex items-start justify-between gap-4 mb-3">
                     <h3 className="font-serif text-xl font-semibold text-charcoal">
-                      Student Essay Competition
+                      Student essay competition
                     </h3>
                     <span className="text-xs font-semibold px-3 py-1 rounded-full bg-charcoal/5 text-charcoal-muted shrink-0">
                       Coming Soon
@@ -145,25 +145,21 @@ export default function NextGeneration() {
                   </div>
                   <p className="text-charcoal-muted leading-relaxed">
                     An annual competition inviting students from Christian colleges to write original essays on
-                    what the church needs in the age of AI. Students must use AI in their writing process and
-                    submit their complete AI conversations—judged on both the final product and their discernment
-                    in using these tools.
+                    what the church needs in the age of AI. Students must use AI in their writing process and submit their complete AI conversations. Judges will assess both the final essay and the student's discernment in using these tools.
                   </p>
                 </Card>
 
                 <Card className="p-6 bg-card border-card-border">
                   <div className="flex items-start justify-between gap-4 mb-3">
                     <h3 className="font-serif text-xl font-semibold text-charcoal">
-                      Educational Grants
+                      Educational grants
                     </h3>
                     <span className="text-xs font-semibold px-3 py-1 rounded-full bg-charcoal/5 text-charcoal-muted shrink-0">
                       Coming Soon
                     </span>
                   </div>
                   <p className="text-charcoal-muted leading-relaxed">
-                    Small research grants for undergraduate and graduate students exploring questions at the
-                    intersection of AI, faith, and ethics. These grants cultivate the next generation of
-                    Christian voices in technology while producing scholarship that benefits the broader community.
+                    Small research grants for undergraduate and graduate students exploring questions about AI, faith, and ethics. These grants will develop the next generation of Christian voices in technology and produce scholarship that benefits the broader community.
                   </p>
                 </Card>
               </div>

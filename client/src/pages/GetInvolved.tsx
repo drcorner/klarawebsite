@@ -153,7 +153,7 @@ export default function GetInvolved() {
 
   const shareUrl = encodeURIComponent("https://klaraproject.org");
   const shareText = encodeURIComponent(
-    "Check out Klara Project - equipping churches for the AI age.",
+    "Klara Project equips churches for the AI age.",
   );
 
   return (
@@ -176,12 +176,12 @@ export default function GetInvolved() {
                 <Church className="h-10 w-10 text-cream" />
               </div>
               <h2 className="font-serif text-3xl md:text-4xl font-semibold text-cream mb-6">
-                Bring Us to Your Church
+                Bring us to your church
               </h2>
               <p className="text-cream/80 leading-relaxed text-lg mb-8">
                 Interested in hosting a workshop, speaker, or pilot program?
                 We're looking for church partners to help us develop and test
-                our resources in real congregational settings.
+                our resources with congregations.
               </p>
 
               {!inquirySubmitted ? (
@@ -346,7 +346,7 @@ export default function GetInvolved() {
                   <Users className="h-8 w-8 text-primary" />
                 </div>
                 <h2 className="font-serif text-3xl font-semibold text-charcoal mb-6">
-                  Volunteer Your Expertise
+                  Volunteer your expertise
                 </h2>
                 <p className="text-charcoal leading-relaxed mb-6">
                   We're seeking professionals with backgrounds in AI,
@@ -476,7 +476,7 @@ export default function GetInvolved() {
                       <Check className="h-8 w-8 text-primary" />
                     </div>
                     <h3 className="font-serif text-xl font-semibold text-charcoal mb-2">
-                      Thank You!
+                      Thank you!
                     </h3>
                     <p className="text-charcoal-muted">
                       We've received your interest and will be in touch soon.
@@ -497,11 +497,11 @@ export default function GetInvolved() {
                   <Share2 className="h-8 w-8 text-primary" />
                 </div>
                 <h2 className="font-serif text-3xl font-semibold text-charcoal mb-6">
-                  Share Our Mission
+                  Share our mission
                 </h2>
                 <p className="text-charcoal leading-relaxed mb-6">
-                  Help spread awareness by sharing our resources with your
-                  church, small group, or professional networks. The more
+                  Share our resources with your church, small group, or professional
+                  networks. The more
                   Christians engage with these issues, the stronger our
                   collective voice.
                 </p>
@@ -568,7 +568,7 @@ export default function GetInvolved() {
                 <div className="flex items-center gap-4 mb-6">
                   <Mail className="h-6 w-6 text-primary" />
                   <h3 className="font-serif text-2xl font-semibold text-charcoal">
-                    Stay Informed
+                    Stay informed
                   </h3>
                 </div>
                 <p className="text-charcoal-muted mb-6">
@@ -593,11 +593,10 @@ export default function GetInvolved() {
                   Give
                 </h2>
                 <p className="text-charcoal leading-relaxed mb-6">
-                  Individual giving is the backbone of our funding strategy.
-                  Your donation directly supports curriculum development,
-                  educational grants, and the infrastructure needed for
-                  sustainable growth. Every contribution—from monthly support to
-                  founding gifts—helps us serve churches and represent Christian
+                  Individual giving is the main part of our funding strategy. Your
+                  donation supports curriculum development, educational grants, and the
+                  infrastructure needed for sustainable growth. Every contribution, from
+                  monthly support to founding gifts, helps us serve churches and represent Christian
                   perspectives where decisions are being made.
                 </p>
                 <Link href="/donate">
@@ -615,7 +614,7 @@ export default function GetInvolved() {
                 <div className="flex items-center gap-4 mb-6">
                   <MessageSquare className="h-6 w-6 text-primary" />
                   <h3 className="font-serif text-2xl font-semibold text-charcoal">
-                    Share Your Experience or Questions
+                    Share your experience or questions
                   </h3>
                 </div>
                 <p className="text-charcoal-muted mb-6">
@@ -754,7 +753,7 @@ export default function GetInvolved() {
                       <Check className="h-8 w-8 text-primary" />
                     </div>
                     <h3 className="font-serif text-xl font-semibold text-charcoal mb-2">
-                      Thank You!
+                      Thank you!
                     </h3>
                     <p className="text-charcoal-muted">
                       We appreciate you sharing your experience or question with
@@ -770,7 +769,7 @@ export default function GetInvolved() {
         <section className="bg-primary py-16 md:py-24">
           <div className="max-w-7xl mx-auto px-6 md:px-10 text-center">
             <h2 className="font-serif text-2xl font-semibold text-cream mb-6">
-              Ready to make a difference?
+              Help equip churches for the AI age
             </h2>
             <Link href="/donate">
               <Button

@@ -18,8 +18,7 @@ export default function Donate() {
           <div className="max-w-3xl mx-auto px-6 md:px-10">
             <p className="text-charcoal leading-relaxed text-lg mb-12 text-center">
               Your donation helps us create practical resources for churches and ensure Christian 
-              perspectives shape AI development. Every gift—monthly support or one-time contribution—moves 
-              this mission forward.
+              perspectives shape AI development. Every gift, monthly or one-time, moves this mission forward.
             </p>
             
             <DonationForm />

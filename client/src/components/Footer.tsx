@@ -62,9 +62,9 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <Logo variant="light" />
             <p className="mt-4 text-cream/70 text-sm leading-relaxed max-w-md">
-              <strong className="text-cream/90">Equip.</strong> Churches with practical resources for the AI age.{" "}
-              <strong className="text-cream/90">Engage.</strong> Culture to shape technology development.{" "}
-              <strong className="text-cream/90">Empower.</strong> The next generation to lead with wisdom and faith.
+              <strong className="text-cream/90">Equip</strong> churches with practical resources for the AI age.{" "}
+              <strong className="text-cream/90">Engage</strong> culture to shape technology development.{" "}
+              <strong className="text-cream/90">Empower</strong> the next generation to lead with wisdom and faith.
             </p>
           </div>
 

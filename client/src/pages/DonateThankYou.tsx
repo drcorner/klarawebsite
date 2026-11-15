@@ -36,7 +36,7 @@ export default function DonateThankYou() {
 
   const shareUrl = encodeURIComponent("https://klaraproject.org");
   const shareText = encodeURIComponent(
-    "I just supported Klara Project - equipping churches for the AI age. Join me!",
+    "I just supported Klara Project, which equips churches for the AI age. Join me!",
   );
 
   return (
@@ -49,19 +49,18 @@ export default function DonateThankYou() {
           </div>
 
           <h1 className="font-serif text-4xl md:text-5xl font-bold text-charcoal mb-6">
-            Thank You for Your Gift
+            Thank you for your gift
           </h1>
 
           <p className="text-charcoal leading-relaxed text-lg mb-8">
             Your generosity helps us equip churches with practical AI resources
             and ensure Christian perspectives shape technology development.
-            You're making a difference for congregations and families navigating
-            this transformative era.
+            Your gift will help congregations and families respond to AI.
           </p>
 
           <Card className="p-6 bg-cream-dark border-card-border mb-8">
             <p className="text-charcoal-muted text-sm">
-              A confirmation email has been sent to your address. If you have
+              We've sent a confirmation email to your address. If you have
               any questions about your donation, please contact us at{" "}
               <a
                 href="mailto:info@klaraproject.org"
@@ -69,6 +68,7 @@ export default function DonateThankYou() {
               >
                 info@klaraproject.org
               </a>
+              .
             </p>
           </Card>
 

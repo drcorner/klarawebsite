@@ -9,11 +9,11 @@ const challenges = [
   },
   {
     category: "Parenting",
-    story: "A father learns his teenage son has been using AI to complete school assignments. Is this cheating—or just using a new tool? He wants his son to develop his own thinking, but he also uses AI at work. Where's the line?",
+    story: "A father learns his teenage son has been using AI to complete school assignments. Is this cheating, or just using a new tool? He wants his son to develop his own thinking, but he also uses AI at work. Where's the line?",
   },
   {
     category: "AI Advice",
-    story: "A husband shares that he's been processing his marriage problems with an AI chatbot rather than the church counselor. His pastor wonders what marital counsel he'll get from a chatbot that only knows what you tell it.",
+    story: "A husband shares that he's been processing his marriage problems with an AI chatbot rather than the church counselor. His pastor wonders what marital counsel he'll get from a chatbot that only knows what he tells it.",
   },
   {
     category: "Employment",
@@ -29,11 +29,11 @@ const challenges = [
   },
   {
     category: "Ethics",
-    story: "A software engineer is building AI systems at work. She's proud of what she's creating—but lately wonders if she should be. She doesn't know how to think Christianly about it, and no one at church has asked.",
+    story: "A software engineer is building AI systems at work. She's proud of what she's creating, but lately wonders if she should be. She doesn't know how to think Christianly about it, and no one at church has asked.",
   },
   {
     category: "AI Grief",
-    story: "A widow discovers an app that lets her 'talk' to a chatbot trained on her late husband's texts and emails. She knows it isn't him. She doesn't tell anyone—she knows they'd think it's weird—but she enjoys it and tells herself it's just a more technologically advanced version of looking at photos.",
+    story: "A widow discovers an app that lets her \"talk\" to a chatbot trained on her late husband's texts and emails. She knows it isn't him. She doesn't tell anyone because she knows they'd think it's weird. But she enjoys it and tells herself it's just a more technologically advanced version of looking at photos.",
   },
 ];
 
@@ -57,16 +57,16 @@ export default function ChallengeSection() {
             The Challenge
           </span>
           <h2 className="font-serif text-3xl md:text-4xl font-semibold text-charcoal">
-            Faithful Christians face real challenges
+            Faithful Christians face new challenges
           </h2>
         </div>
 
         <div className="max-w-4xl mx-auto mb-12">
           <p className="text-charcoal text-lg leading-relaxed mb-4">
-            AI is transforming how we work, learn, and live—faster than anyone predicted. Families wrestle with AI's influence on their children. Christians form emotional bonds with AI systems that simulate companionship. Deepfakes erode trust in truth itself. Humanoid robots may enter homes within the next decade—not just vacuuming floors, but interacting with our families in ways we're only beginning to imagine. Churches will soon face waves of members navigating technological unemployment—with young adults entering the workforce and family life amid unprecedented uncertainty.
+            AI is changing how we work, learn, and live faster than most people expected. Families wrestle with AI's influence on their children. Christians form emotional bonds with AI systems that simulate companionship. Deepfakes make it harder to trust what we see and hear. Humanoid robots may enter homes within the next decade, where they would do chores and interact with our families. Churches will soon serve many members who have lost work to AI, while young adults start careers and families in an uncertain economy.
           </p>
           <p className="text-charcoal text-lg leading-relaxed">
-            Yet many Christians—though grounded in Scripture—feel unprepared to apply biblical principles to challenges this new, and Christian voices are absent from the rooms where AI's future is being decided.
+            Yet many Christians, though grounded in Scripture, feel unprepared to apply biblical principles to these new challenges. Few Christian voices are heard where AI's future is being decided.
           </p>
         </div>
 
@@ -109,7 +109,7 @@ export default function ChallengeSection() {
             "See to it that no one takes you captive by philosophy and empty deceit, according to human tradition, according to the elemental spirits of the world, and not according to Christ."
           </p>
           <cite className="mt-4 block text-charcoal-muted not-italic font-medium">
-            —Colossians 2:8
+            Colossians 2:8
           </cite>
         </blockquote>
       </div>

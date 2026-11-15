@@ -497,7 +497,7 @@ export default function ManageDonation() {
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-12">
             <h1 className="font-serif text-4xl font-bold text-charcoal mb-4">
-              Manage Your Giving
+              Manage your giving
             </h1>
             <p className="text-charcoal-muted text-lg mb-4">
               View your giving history and update your recurring donations
@@ -515,7 +515,7 @@ export default function ManageDonation() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Mail className="w-5 h-5 text-primary" />
-                  Enter Your Email
+                  Enter your email
                 </CardTitle>
                 <CardDescription>
                   We'll send you a verification code to access your donor account
@@ -558,7 +558,7 @@ export default function ManageDonation() {
           {step === "code" && (
             <Card className="bg-card border-card-border">
               <CardHeader>
-                <CardTitle>Enter Verification Code</CardTitle>
+                <CardTitle>Enter verification code</CardTitle>
                 <CardDescription>
                   We sent a 6-digit code to {email}
                 </CardDescription>
@@ -635,7 +635,7 @@ export default function ManageDonation() {
                       <div>
                         <CardTitle className="flex items-center gap-2">
                           <Calendar className="w-5 h-5 text-primary" />
-                          Recurring Donations
+                          Recurring donations
                         </CardTitle>
                       </div>
                       <Button
@@ -718,7 +718,7 @@ export default function ManageDonation() {
                     <CardHeader className="flex flex-row items-center justify-between gap-4">
                       <CardTitle className="flex items-center gap-2">
                         <DollarSign className="w-5 h-5 text-primary" />
-                        Giving History
+                        Giving history
                       </CardTitle>
                       {donationData.charges.length > 0 && (
                         <Button
@@ -802,7 +802,7 @@ export default function ManageDonation() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Pencil className="w-5 h-5 text-primary" />
-              Adjust Recurring Donation
+              Adjust recurring donation
             </DialogTitle>
             <DialogDescription>
               Update your monthly giving amount. Changes take effect on your next billing date.
@@ -847,7 +847,7 @@ export default function ManageDonation() {
               <div className="flex items-start gap-2 p-3 bg-gold/10 rounded-md">
                 <ArrowDown className="w-4 h-4 text-gold-dark mt-0.5" />
                 <p className="text-sm text-charcoal">
-                  Even a smaller monthly gift makes a real difference. Thank you for continuing to support our mission!
+                  Even a smaller monthly gift helps. Thank you for continuing to support our mission!
                 </p>
               </div>
             )}
@@ -891,7 +891,7 @@ export default function ManageDonation() {
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
                   <Heart className="w-5 h-5 text-primary" />
-                  Before You Go...
+                  Before you cancel
                 </DialogTitle>
               </DialogHeader>
               <div className="space-y-4 py-4">
@@ -902,7 +902,7 @@ export default function ManageDonation() {
                   <div className="flex items-start gap-3">
                     <Users className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                     <p className="text-sm text-charcoal">
-                      <strong>Every donor counts.</strong> The number of monthly supporters speaks volumes about the Christian community's commitment to engaging with AI thoughtfully.
+                      <strong>Every donor counts.</strong> The number of monthly supporters shows the Christian community's commitment to engaging with AI thoughtfully.
                     </p>
                   </div>
                   <div className="flex items-start gap-3">
@@ -940,7 +940,7 @@ export default function ManageDonation() {
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
                   <XCircle className="w-5 h-5 text-destructive" />
-                  Confirm Cancellation
+                  Confirm cancellation
                 </DialogTitle>
                 <DialogDescription>
                   Your recurring donation will end after the current billing period. You won't be charged again.

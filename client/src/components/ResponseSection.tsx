@@ -20,7 +20,7 @@ export default function ResponseSection() {
             <div className="w-12 h-1 bg-primary rounded-full mb-6"></div>
             <h3 className="font-bold text-xl text-charcoal mb-3">Equip</h3>
             <p className="text-charcoal-muted leading-relaxed">
-              Churches with practical resources for the AI age.
+              We equip churches with practical resources for the AI age.
             </p>
           </div>
 
@@ -28,7 +28,7 @@ export default function ResponseSection() {
             <div className="w-12 h-1 bg-gold rounded-full mb-6"></div>
             <h3 className="font-bold text-xl text-charcoal mb-3">Engage</h3>
             <p className="text-charcoal-muted leading-relaxed">
-              Culture to shape technology development.
+              We engage culture to shape technology development.
             </p>
           </div>
 
@@ -36,7 +36,7 @@ export default function ResponseSection() {
             <div className="w-12 h-1 bg-coral rounded-full mb-6"></div>
             <h3 className="font-bold text-xl text-charcoal mb-3">Empower</h3>
             <p className="text-charcoal-muted leading-relaxed">
-              The next generation to lead with wisdom and faith.
+              We empower the next generation to lead with wisdom and faith.
             </p>
           </div>
         </div>
