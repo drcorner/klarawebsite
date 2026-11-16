@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Lock, Calendar, Loader2 } from "lucide-react";
+import { Lock, Calendar, Loader2, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,6 +18,27 @@ const impactStatements: Record<number, string> = {
   100: "Enables one pastor conversation guide to reach 10 churches",
   250: "Sponsors one student essay competition prize",
 };
+
+const FOUNDER_EMAIL = "tony.pisani@klaraproject.org";
+
+// Opens the visitor's email app with a draft they can edit and send.
+const founderEmailLink =
+  `mailto:${FOUNDER_EMAIL}` +
+  `?subject=${encodeURIComponent("A conversation about the Klara Project")}` +
+  `&body=${encodeURIComponent(
+    [
+      "Dr. Pisani,",
+      "",
+      "I would like to learn more about the Klara Project before giving. Could we find a time to talk?",
+      "",
+      "Days and times that work for me:",
+      "",
+      "Best phone number to reach me:",
+      "",
+      "Thank you,",
+      "",
+    ].join("\r\n"),
+  )}`;
 
 interface DonationFormProps {
   showFoundingGifts?: boolean;
@@ -414,12 +435,26 @@ export default function DonationForm({
           </p>
 
           <Button
+            asChild
             variant="outline"
             className="border-primary text-primary"
-            data-testid="button-schedule-conversation"
           >
-            Schedule a Conversation with Our Founder
+            <a
+              href={founderEmailLink}
+              data-testid="button-schedule-conversation"
+            >
+              <Mail className="w-4 h-4 mr-2" />
+              Email Our Founder
+            </a>
           </Button>
+
+          <p className="text-charcoal-muted text-sm mt-3">
+            Or write to{" "}
+            <a href={founderEmailLink} className="text-primary underline">
+              {FOUNDER_EMAIL}
+            </a>
+            .
+          </p>
         </div>
       )}
     </div>
