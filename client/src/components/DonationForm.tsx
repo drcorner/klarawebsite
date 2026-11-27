@@ -414,11 +414,16 @@ export default function DonationForm({
           </p>
 
           <Button
+            asChild
             variant="outline"
-            className="border-primary text-primary"
-            data-testid="button-schedule-conversation"
+            className="border-primary text-primary max-w-full whitespace-normal text-center"
           >
-            Schedule a Conversation with Our Founder
+            <a
+              href="mailto:info@klaraproject.org?subject=Conversation%20with%20the%20founder"
+              data-testid="button-schedule-conversation"
+            >
+              Schedule a Conversation with Our Founder
+            </a>
           </Button>
         </div>
       )}
